@@ -2,8 +2,8 @@
 
 public enum BuildingType
 {
-    Wall, 
-    Tower, 
-    Trap,
-    TreeWall
+    Tower = 1, 
+    Wall = 2, 
+    Trap = 3,
+    TreeWall = 4
 }

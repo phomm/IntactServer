@@ -42,12 +42,20 @@ INSERT INTO [dbo].[ProtoWarriors] ([Id] ,[Number] ,[FactionId] ,[Force] ,[AssetI
 ('Giant',23,'Mages',/*force*/5,'GiantAsset',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,4/*Life*/,2/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,6/*Cost*/)     ,
 ('Genie',24,'Mages',/*force*/3,'GenieAsset',1/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,1/*Immune*/,2/*Life*/,4/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,0/*Cost*/)     ,
 
-('Goblin',25,'Orcs',/*force*/1,'GoblinAsset',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,2/*Cost*/)     ,
-('Orc',26,'Orcs',/*force*/2,'OrcAsset',0/*Hero*/,1/*Ranged*/,0/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,2/*Shots*/,3/*Cost*/)        ,
-('Wyvern',27,'Orcs',/*force*/3,'WyvernAsset',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,4/*Moves*/,1/*Acts*/,0/*Shots*/,4/*Cost*/)     ,
-('Rider',28,'Orcs',/*force*/4,'RiderAsset',0/*Hero*/,0/*Ranged*/,1/*Melee*/,1/*BlockFree*/,0/*Immune*/,2/*Life*/,0/*Mana*/,3/*Moves*/,1/*Acts*/,0/*Shots*/,5/*Cost*/)      ,
-('Ogre',29,'Orcs',/*force*/5,'OgreAsset',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,4/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,6/*Cost*/)       ,
-('Cyclop',30,'Orcs',/*force*/2,'CyclopAsset',1/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,0/*Cost*/)
+('Goblin',25,'Horde',/*force*/1,'GoblinAsset',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,2/*Cost*/)     ,
+('Orc',26,'Horde',/*force*/2,'OrcAsset',0/*Hero*/,1/*Ranged*/,0/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,2/*Shots*/,3/*Cost*/)        ,
+('Wyvern',27,'Horde',/*force*/3,'WyvernAsset',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,4/*Moves*/,1/*Acts*/,0/*Shots*/,4/*Cost*/)     ,
+('Rider',28,'Horde',/*force*/4,'RiderAsset',0/*Hero*/,0/*Ranged*/,1/*Melee*/,1/*BlockFree*/,0/*Immune*/,2/*Life*/,0/*Mana*/,3/*Moves*/,1/*Acts*/,0/*Shots*/,5/*Cost*/)      ,
+('Ogre',29,'Horde',/*force*/5,'OgreAsset',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,4/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,6/*Cost*/)       ,
+('Cyclop',30,'Horde',/*force*/2,'CyclopAsset',1/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,0/*Cost*/)
+
+INSERT INTO [dbo].[ProtoBuildings] ([Id] ,[Number] ,[InLife] ,[AssetId],[BuildingType]) VALUES
+('Tower',1,4,'TowerAsset',1),
+('Wall',2,2,'WallAsset',2),
+('Trap',3,2,'TrapAsset',3),
+('TreeWall',4,2,'TreeWallAsset',4),
+('Tree',5,2,'TreeAsset',4)
+
 
 INSERT INTO [dbo].[Localizations] ([TermId] ,[LanguageCode] ,[Value]) VALUES
 ('HumansFactionName','English','Humans'),
@@ -58,8 +66,19 @@ INSERT INTO [dbo].[Localizations] ([TermId] ,[LanguageCode] ,[Value]) VALUES
 ('NecrosFactionDescription','English','Necros are magically stabilized organisms, that could be revived by hero-Vampire, with strong infantry and frightening monsters as allies'),
 ('MagesFactionName','English','Mages'),
 ('MagesFactionDescription','English','Mages are powered with magic and antimagic abilities, they have elemental and mechanical creatures and hero - powerful Genie'),
-('OrcsFactionName','English','Orcs'),
-('OrcsFactionDescription','English','Warriors of the steppes and deserts are distinguished by endurance and mobility and the absolute non-recognition of higher magic'),
+('HordeFactionName','English','Horde'),
+('HordeFactionDescription','English','Warriors of the steppes and deserts are distinguished by endurance and mobility and the absolute non-recognition of higher magic'),
+
+('HumansFactionName','Russian',N'Люди'),
+('HumansFactionDescription','Russian',N'У людей сильная кавалерия и смелая дисциплинированная армия, верная своему могучему Герою - Рыцарю с тактическими навыками и святыми силами'),
+('ElvesFactionName','Russian',N'Эльфы'),
+('ElvesFactionDescription','Russian',N'У эльфов есть сильные лучники, и зачарованные создания леса, Герой - Друид помогает им раскрыть силы природы'),
+('NecrosFactionName','Russian',N'Некры'),
+('NecrosFactionDescription','Russian',N'Нежить - поднятые из могил и призванные слуги Героя - Вампира, могущего звать и отзывать силу Смерти'),
+('MagesFactionName','Russian',N'Маги'),
+('MagesFactionDescription','Russian',N'Маги и волшебники в совершенстве владеют магическими и антимагическими способностями, у них есть стихийные и механические существа и Герой - могущественный Джинн'),
+('HordeFactionName','Russian',N'Орда'),
+('HordeFactionDescription','Russian',N'Воинов степей и пустынь отличает выносливость и мобильность и абсолютное непризнание высшей магии'),
 
 ('PikemanWarriorName','English','Pikeman'),
 ('PikemanWarriorDescription','English','Pikeman is good infantry, always ready to fight bravely'),
@@ -70,9 +89,22 @@ INSERT INTO [dbo].[Localizations] ([TermId] ,[LanguageCode] ,[Value]) VALUES
 ('HorsemanWarriorName','English','Horseman'),
 ('HorsemanWarriorDescription','English','Horseman is strong cavalry, with jousting he fights fast and effective'),
 ('ElephantWarriorName','English','Elephant'),
-('ElephantWarriorDescription','Elephant','Elefant is wellknown for its strength and toughness, it is able to crush fortifications, its natural rage makes him fearless and unstopable'),
+('ElephantWarriorDescription','English','Elefant is wellknown for its strength and toughness, it is able to crush fortifications, its natural rage makes him fearless and unstopable'),
 ('KnightWarriorName','English','Knight'),
 ('KnightWarriorDescription','English','Knight is a horseman with crossbow and spear, has jousting, casts holy light spell that stuns enemies, and heals his allies'),
+
+('PikemanWarriorName','Russian',N'Копейщик'),
+('PikemanWarriorDescription','Russian',N'Копейщики - отличные пехотинцы, доблестно сражающиеся и храбро защищающие своих'),
+('ArcherWarriorName','Russian',N'Лучник'),
+('ArcherWarriorDescription','Russian',N'Лучники - высоко дисциплинированы, и сосредоточены на исполнении боевого приказа'),
+('EagleWarriorName','Russian',N'Орел'),
+('EagleWarriorDescription','Russian',N'Орлы очень быстры, они - лучшие хищники и тренированы людьми для избегания сражений, но их защищенность мала'),
+('HorsemanWarriorName','Russian',N'Конник'),
+('HorsemanWarriorDescription','Russian',N'Мощная кавалерия из дворян, тренированные для турнирных разящих забегов'),
+('ElephantWarriorName','Russian',N'Слон'),
+('ElephantWarriorDescription','Russian',N'Слон - могучее и сильное животное, приучено людьми к войне и осадным приемам, природная ярость делает его бесстрашным и неостановимым'),
+('KnightWarriorName','Russian',N'Рыцарь'),
+('KnightWarriorDescription','Russian',N'Рыцарь - конный воин с копьем для разящих наскоков и арбалетом для стрельбы, возносит молитвы Свету для лечения воинов и раскрывает для Света себя - излучая слепящий \"Ореол\", что лишает противника боеспособности'),
 
 
 ('ScoutWarriorName','English','Scout'),
@@ -88,6 +120,20 @@ INSERT INTO [dbo].[Localizations] ([TermId] ,[LanguageCode] ,[Value]) VALUES
 ('DruidWarriorName','English','Druid'),
 ('DruidWarriorDescription','English','Druid is a well-trained Elven prince with ranged and melee weapons, with his extraagility he dodges shots or jousting strikes, calls to Nature to grow ''Treewall'' and ''Roots'' and able to shoot ''Chanted arrow'''),
 
+('ScoutWarriorName','Russian',N'Скаут'),
+('ScoutWarriorDescription','Russian',N'Скауты - бойцы с 2 клинками с неимоверной ловкостью, их реакция позволяет наносить им 2 удара и позволяет увернуться от разящих ударов с разгона'),
+('SniperWarriorName','Russian',N'Снайпер'),
+('SniperWarriorDescription','Russian',N'Снайперы Эльфов - лучшие стрелки, стреляющие чаще, чем остальные'),
+('DryadWarriorName','Russian',N'Дриада'),
+('DryadWarriorDescription','Russian',N'Дриады - мистические духи леса, сгустки энергии в телесной оболочке, способные поглощать магические потоки и передавать их Друиду'),
+('UnicornWarriorName','Russian',N'Единорог'),
+('UnicornWarriorDescription','Russian',N'Единорог - легендарное животное, защищающее дружественных существ Лесных эльфов от враждебной магии'),
+('EntWarriorName','Russian',N'Энт'),
+('EntWarriorDescription','Russian',N'Энты - уникальные Древние создания Природы, способные опутывать своими корнями врагов и обладающие огромной силой, способной разрушать объекты'),
+('DruidWarriorName','Russian',N'Друид'),
+('DruidWarriorDescription','Russian',N'Друид - высший Эльф королевских кровей. Прекрасный стрелок и боец, может ускользать от Наскока и вражеских стрел, зачаровывать свои стрелы, и, взывая к природе, в миг растить ''Стены леса'' и ''Корни'''),
+
+
 ('GhoulWarriorName','English','Ghoul'),
 ('GhoulWarriorDescription','English','Ghoul is raised undead, projectiles have no effect piercing its flesh, they do not feel pain'),
 ('LichWarriorName','English','Lich'),
@@ -100,6 +146,20 @@ INSERT INTO [dbo].[Localizations] ([TermId] ,[LanguageCode] ,[Value]) VALUES
 ('MutantWarriorDescription','English','Mutant is huge agglomerate of undead flesh, that smashes everything nearby, gathers and swallows dead bodies healing himself'),
 ('VampireWarriorName','English','Vampire'),
 ('VampireWarriorDescription','English','Vampire exchanged poor existence to Eternal Life, granted by constant draining others live powers. He paralyses enemies with hypnotic Fear and can rise Undead, for they to serve Death'),
+
+('GhoulWarriorName','Russian',N'Упырь'),
+('GhoulWarriorDescription','Russian',N'Упыри - поднятая Вампиром нежить, не чувствующая боли и не получающая никакого урона от обычных стрел'),
+('LichWarriorName','Russian',N'Лич'),
+('LichWarriorDescription','Russian',N'Лич - Колдун, обманувший саму Смерть, полностью неуязвимый к магии и способный насылать чары ''Замедление'', отнимающие силы врага'),
+('GhostWarriorName','Russian',N'Призрак'),
+('GhostWarriorDescription','Russian',N'Призрак - дух мертвого, имеющий полуматериальное тело, просачивающийся сквозь объекты, но уязвимый к оружию и магии, ибо то освобождает его от загробных оков, и больше оно не возвращается к жизни'),
+('NightmareWarriorName','Russian',N'Кошмар'),
+('NightmareWarriorDescription','Russian',N'Полумёртвое подобие оборотня, способное издавать ужасающие вопли ужаса, заставляющие врагов замереть в страхе от близкой смерти'),
+('MutantWarriorName','Russian',N'Мутант'),
+('MutantWarriorDescription','Russian',N'Огромная  тварь, гора мертвых тел плоти, крушащая всё на своем пути, и затягивающая в себя трупы для восстановления жизни'),
+('VampireWarriorName','Russian',N'Вампир'),
+('VampireWarriorDescription','Russian',N'Вампир поменял никчёмную смертную жизнь на бессмертие, даруемое постоянным поглощением чужой крови. Помимо изъятия чужих жизней, он парализует врагов гипнотическим ужасом и способен поднимать мертвых, дабы они служили Смерти'),
+
 
 ('GolemWarriorName','English','Golem'),
 ('GolemWarriorDescription','English','Golem is magically animated fighting mechanism, that magic counters any other magic aimed on Golem, dismatled Golem looses all magic and becomes useless'),
@@ -114,6 +174,20 @@ INSERT INTO [dbo].[Localizations] ([TermId] ,[LanguageCode] ,[Value]) VALUES
 ('GenieWarriorName','English','Genie'),
 ('GenieWarriorDescription','English','Genie is the Master of Magic. He causes destructible Earthquakes and fires a ray of pure magic into enemies. With his mercy he grants his allies with haste and shares with them his antimagic protection for a while'),
 
+('GolemWarriorName','Russian',N'Голем'),
+('GolemWarriorDescription','Russian',N'Голем - магически оживленный боевой механизм из мастерских магов, он неуязвим к магическим воздействиям из-за магии внутри, но разрушенный механизм теряет магию'),
+('MageWarriorName','Russian',N'Маг'),
+('MageWarriorDescription','Russian',N'Маг - чародей, потративший большую часть жизни на изучение законов магии. В бою обрушивает на врагов всю ярость магических потоков и способен защитить союзников от выстрелов противника'),
+('GargoyleWarriorName','Russian',N'Горгулья'),
+('GargoyleWarriorDescription','Russian',N'Горгулья - Магический сплав духа и каменной оболочки. К большому сожалению магов, связь между телом и духом весьма хрупкая и часто рвется. К счастью, союзники-Гиганты способны легко вернуть безжизненных, но не разрушенных Горгулий, в строй'),
+('LionWarriorName','Russian',N'Лев'),
+('LionWarriorDescription','Russian',N'Лев - Царь зверей, прирученный магами, послушно выполняющий любые их приказы. Совершающий на разгоне огромные прыжки даже через фронт врага, он внушает беспокойство любым противникам'),
+('GiantWarriorName','Russian',N'Гигант'),
+('GiantWarriorDescription','Russian',N'Гигант - Ровесник самих Богов, чья жизнь уходит в саму Вечность. Его дух не скован тесными рамками тела и способен вселяться в механические тела Горгулий, возвращая контроль над ними магам'),
+('GenieWarriorName','Russian',N'Джинн'),
+('GenieWarriorDescription','Russian',N'Джинн - Повелитель магии. Ради развлечения вызывает разрушительные землятресения и поражает врагов смертоносным лучом чистейшей магической энергии. В знак особой милости наделяет своих слуг Ускорением и делится на время своей абсолютной защитой от магии'),
+
+
 ('GoblinWarriorName','English','Goblin'),
 ('GoblinWarriorDescription','English','Goblins are good'),
 ('OrcWarriorName','English','Orc'),
@@ -125,4 +199,39 @@ INSERT INTO [dbo].[Localizations] ([TermId] ,[LanguageCode] ,[Value]) VALUES
 ('OgreWarriorName','English','Ogre'),
 ('OgreWarriorDescription','English','Ogres are good'),
 ('CyclopWarriorName','English','Cyclop'),
-('CyclopWarriorDescription','English','Cyclop is Orcish hero')
+('CyclopWarriorDescription','English','Cyclop is Orcish hero'),
+
+('GoblinWarriorName','Russian',N'Гоблин'),
+('GoblinWarriorDescription','Russian',N'Гоблины - пешие воины, храбро сражающиеся за Орду'),
+('OrcWarriorName','Russian',N'Орк'),
+('OrcWarriorDescription','Russian',N'Орки благодаря своей силе и ловкости точно метают топоры во врагов'),
+('WyvernWarriorName','Russian',N'Виверна'),
+('WyvernWarriorDescription','Russian',N'Виверна'),
+('RaiderWarriorName','Russian',N'Наездник'),
+('RaiderWarriorDescription','Russian',N'Наездники на варгах могут очень быстро преодолевать большие расстояния'),
+('OgreWarriorName','Russian',N'Огр'),
+('OgreWarriorDescription','Russian',N'Огр'),
+('CyclopWarriorName','Russian',N'Циклоп'),
+('CyclopWarriorDescription','Russian',N'Циклоп'),
+
+('TowerBuildingName','English','Tower'),
+('TowerBuildingDescription','English','Tower'),
+('WallBuildingName','English','Wall'),
+('WallBuildingDescription','English','Wall'),
+('TrapBuildingName','English','Trap'),
+('TrapBuildingDescription','English','Trap'),
+('TreeWallBuildingName','English','Tree Wall'),
+('TreeWallBuildingDescription','English','Tree Wall'),
+('TreeBuildingName','English','Tree'),
+('TreeBuildingDescription','English','Tree'),
+
+('TowerBuildingName','Russian',N'Башня'),
+('TowerBuildingDescription','Russian',N'Башня'),
+('WallBuildingName','Russian',N'Стена'),
+('WallBuildingDescription','Russian',N'Стена'),
+('TrapBuildingName','Russian',N'Ловушка'),
+('TrapBuildingDescription','Russian',N'Ловушка'),
+('TreeWallBuildingName','Russian',N'Стена Леса'),
+('TreeWallBuildingDescription','Russian',N'Стена Леса'),
+('TreeBuildingName','Russian',N'Дерево'),
+('TreeBuildingDescription','Russian',N'Дерево')
