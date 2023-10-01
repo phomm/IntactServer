@@ -9,4 +9,8 @@ public record Faction
     public IReadOnlyDictionary<string, string> Name { get; set; }
     public IReadOnlyDictionary<string, string> Description { get; set; }
     public IReadOnlyList<string> Units { get; set; }
+    public int TotalCount { get; set; }
+    public int UnitCount { get; set; }
+    public int HeroCount { get; set; }
+
 }

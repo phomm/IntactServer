@@ -11,7 +11,7 @@ INSERT INTO [dbo].[Factions] ([Id] ,[Number]) VALUES
 ('Elves' ,2),
 ('Necros' ,3),
 ('Mages' ,4),
-('Orcs' ,5)
+('Horde' ,5)
 
 INSERT INTO [dbo].[ProtoWarriors] ([Id] ,[Number] ,[FactionId] ,[Force] ,[AssetId],[IsHero],[IsRanged],[IsMelee],[IsBlockFree],[IsImmune],[InLife],[InMana],[InMoves],[InActs],[InShots],[Cost]) VALUES 
 ('Pikeman',1,'Humans',/*force*/1,'PikemanAsset',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,2/*Cost*/)   ,

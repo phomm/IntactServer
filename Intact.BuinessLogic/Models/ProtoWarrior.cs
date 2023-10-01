@@ -1,7 +1,7 @@
-﻿using Intact.BusinessLogic.Data.Enums;
-using System.Text.Json.Serialization;
+﻿#pragma warning disable 8618
 
-#pragma warning disable 8618
+using Intact.BusinessLogic.Data.Enums;
+using System.Text.Json.Serialization;
 
 namespace Intact.BusinessLogic.Models;
 

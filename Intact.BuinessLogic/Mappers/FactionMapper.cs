@@ -18,7 +18,11 @@ public partial class FactionMapper
             var model = mapper.Map(d);
             model.Name = localizations.Map(d.TermName, model.Id);
             model.Description = localizations.Map(d.TermDescription, model.Id);
-            model.Units = warriorDaos.Where(x => x.FactionId == d.Id).OrderBy(x => x.Number).Select(x => x.Id).ToList();
+            var factionWarriors = warriorDaos.Where(x => x.FactionId == d.Id).ToList();
+            model.Units = factionWarriors.OrderBy(x => x.Number).Select(x => x.Id).ToList();
+            model.TotalCount = factionWarriors.Count;
+            model.UnitCount = factionWarriors.Count(x => !x.IsHero);
+            model.HeroCount = factionWarriors.Count(x => x.IsHero);
             return model;
         }).OrderBy(x => x.Number).ToList();
     }
