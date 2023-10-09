@@ -1,4 +1,6 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Intact.BusinessLogic.Data.Redis;
+using Intact.BusinessLogic.Data.RedisDI;
+using Microsoft.OpenApi.Models;
 
 namespace Intact.API.Bootstrap;
 
@@ -50,17 +52,15 @@ public static class InfrastructureExtensions
         return serviceCollection;
     }
         
-    /*
+    
     public static IServiceCollection AddRedis(this IServiceCollection serviceCollection, RedisSettings redisSettings)
     {
-        //Redis
-        serviceCollection.AddSingleton<IRedisSettings, RedisConfiguration>();
         serviceCollection.RegisterRedisServices(redisSettings.UseInMemoryCache);
-        serviceCollection.AddScoped<IRedisCacheRepository, RedisCacheRepository>();
 
         return serviceCollection;
     }
-
+    
+    /*
     public static IServiceCollection AddValidation(this IServiceCollection services)
     {
         services.AddValidatorsFromAssemblyContaining<Program>()

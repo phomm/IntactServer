@@ -32,12 +32,10 @@ namespace Intact.BusinessLogic.Data.Redis
     public class RedisConnectionFactory : IRedisConnectionFactory
     {
         private readonly RedisSettings _redisSettings;
-        private readonly string _password;
-
+        
         public RedisConnectionFactory(IOptions<RedisSettings> redisSettings)
         {
             _redisSettings = redisSettings.Value;
-            _password = _redisSettings.Password;
         }
 
         /// <inheritdoc />
@@ -52,7 +50,7 @@ namespace Intact.BusinessLogic.Data.Redis
         private void SetConnectionConfiguration(string configurationOptionsString)
         {
             var configurationOptions = ConfigurationOptions.Parse(configurationOptionsString);
-            configurationOptions.Password = _password;
+            configurationOptions.Password = _redisSettings.Password;
             RedisConnection = ConnectionMultiplexer.Connect(configurationOptions);
         }
     }

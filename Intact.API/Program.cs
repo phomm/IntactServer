@@ -1,9 +1,12 @@
 using Intact.API.Bootstrap;
 using Intact.BusinessLogic.Data.Config;
+using Intact.BusinessLogic.Data.Redis;
+using Intact.BusinessLogic.Data.RedisDI;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.SetupConfiguration();
+builder.Services.AddConfigOptionsAndBind<RedisSettings>(builder.Configuration, nameof(RedisSettings), out var redisSettings);
 
 builder.AddConfigOptions<DbSettings>();
 
@@ -12,6 +15,7 @@ builder.AddConfigOptions<DbSettings>();
 builder.Services.AddControllers();
 builder.Services.AddSwagger();
 builder.Services.AddInternalServices(builder.Configuration);
+builder.Services.AddRedis(redisSettings);
 
 var app = builder.Build();
 
@@ -33,5 +37,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.StartRedisInfrastructure(redisSettings.UseInMemoryCache);
 
 app.Run();
