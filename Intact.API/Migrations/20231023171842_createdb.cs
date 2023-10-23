@@ -36,6 +36,57 @@ namespace Intact.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MapBuildings",
+                columns: table => new
+                {
+                    MapId = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    Proto = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    X = table.Column<int>(type: "int", nullable: false),
+                    Y = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MapBuildings", x => new { x.MapId, x.Number });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Maps",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    Version = table.Column<int>(type: "int", nullable: false),
+                    TermName = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false, computedColumnSql: "[Id] + 'MapName'"),
+                    TermDescription = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false, computedColumnSql: "[Id] + 'MapDescription'"),
+                    Width = table.Column<int>(type: "int", nullable: false),
+                    Height = table.Column<int>(type: "int", nullable: false),
+                    Factions = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    SceneBackground = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Maps", x => new { x.Id, x.Version });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PlayerOptions",
+                columns: table => new
+                {
+                    MapId = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    Money = table.Column<int>(type: "int", nullable: false),
+                    Color = table.Column<int>(type: "int", nullable: false),
+                    Left = table.Column<int>(type: "int", nullable: false),
+                    Right = table.Column<int>(type: "int", nullable: false),
+                    Top = table.Column<int>(type: "int", nullable: false),
+                    Bottom = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerOptions", x => new { x.MapId, x.Number });
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProtoBuildings",
                 columns: table => new
                 {
@@ -88,6 +139,15 @@ namespace Intact.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Localizations");
+
+            migrationBuilder.DropTable(
+                name: "MapBuildings");
+
+            migrationBuilder.DropTable(
+                name: "Maps");
+
+            migrationBuilder.DropTable(
+                name: "PlayerOptions");
 
             migrationBuilder.DropTable(
                 name: "ProtoBuildings");

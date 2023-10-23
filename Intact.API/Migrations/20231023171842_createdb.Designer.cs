@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Intact.API.Migrations
 {
     [DbContext(typeof(IntactDbContext))]
-    [Migration("20230928154546_createdb")]
+    [Migration("20231023171842_createdb")]
     partial class createdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,6 +69,106 @@ namespace Intact.API.Migrations
                     b.HasKey("TermId", "LanguageCode");
 
                     b.ToTable("Localizations");
+                });
+
+            modelBuilder.Entity("Intact.BusinessLogic.Data.Models.MapBuildingDao", b =>
+                {
+                    b.Property<string>("MapId")
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Proto")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<int>("X")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Y")
+                        .HasColumnType("int");
+
+                    b.HasKey("MapId", "Number");
+
+                    b.ToTable("MapBuildings");
+                });
+
+            modelBuilder.Entity("Intact.BusinessLogic.Data.Models.MapDao", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Factions")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SceneBackground")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TermDescription")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)")
+                        .HasComputedColumnSql("[Id] + 'MapDescription'");
+
+                    b.Property<string>("TermName")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)")
+                        .HasComputedColumnSql("[Id] + 'MapName'");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id", "Version");
+
+                    b.ToTable("Maps");
+                });
+
+            modelBuilder.Entity("Intact.BusinessLogic.Data.Models.PlayerOptionsDao", b =>
+                {
+                    b.Property<string>("MapId")
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Bottom")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Color")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Left")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Money")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Right")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Top")
+                        .HasColumnType("int");
+
+                    b.HasKey("MapId", "Number");
+
+                    b.ToTable("PlayerOptions");
                 });
 
             modelBuilder.Entity("Intact.BusinessLogic.Data.Models.ProtoBuildingDao", b =>

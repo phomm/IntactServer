@@ -5,6 +5,9 @@ truncate table [dbo].[Factions]
 truncate table [dbo].[ProtoWarriors]
 truncate table [dbo].[ProtoBuildings]
 truncate table [dbo].[Localizations]
+truncate table [dbo].[Maps]
+truncate table [dbo].[MapBuildings]
+truncate table [dbo].[PlayerOptions]
 */
 INSERT INTO [dbo].[Factions] ([Id] ,[Number]) VALUES
 ('Humans' ,1),
@@ -234,4 +237,39 @@ INSERT INTO [dbo].[Localizations] ([TermId] ,[LanguageCode] ,[Value]) VALUES
 ('TreeWallBuildingName','Russian',N'Стена Леса'),
 ('TreeWallBuildingDescription','Russian',N'Стена Леса'),
 ('TreeBuildingName','Russian',N'Дерево'),
-('TreeBuildingDescription','Russian',N'Дерево')
+('TreeBuildingDescription','Russian',N'Дерево'),
+
+
+('IntactBasicMapName','English','Intact Basic'),
+('IntactBasicMapDescription','English','Intact Basic'),
+('IntactBasicMapName','Russian',N'Интакт Базовая'),
+('IntactBasicMapDescription','Russian',N'Интакт Базовая'),
+('SiegeBasicMapName','English','Siege Basic'),
+('SiegeBasicMapDescription','English','Siege Basic'),
+('SiegeBasicMapName','Russian',N'Осада Базовая'),
+('SiegeBasicMapDescription','Russian',N'Осада Базовая'),
+('EdgeTowersMapName','English','Edge Towers'),
+('EdgeTowersMapDescription','English','Edge Towers'),
+('EdgeTowersMapName','Russian',N'Башни в углу'),
+('EdgeTowersMapDescription','Russian',N'Башни в углу'),
+('TwilightForestMapName','English','Twilight Forest'),
+('TwilightForestMapDescription','English','Twilight Forest'),
+('TwilightForestMapName','Russian',N'Сумеречный Лес'),
+('TwilightForestMapDescription','Russian',N'Сумеречный Лес')
+
+
+INSERT INTO [dbo].[Maps] ([Id], [Version], [Width], [Height], [Factions], [SceneBackground]) VALUES
+('IntactBasic', 1, 15, 15, 'Humans,Elves,Necros,Mages,Horde', 'grass_light'),
+('SiegeBasic', 1, 15, 10, 'Humans,Elves,Necros,Mages,Horde', 'cmbksnmt'),
+('EdgeTowers', 1, 10, 10, 'Humans,Elves,Necros,Mages,Horde', 'cmbksnmt'),
+('TwilightForest', 1, 20, 20, 'Humans,Elves,Necros,Mages,Horde', 'grass_dark')
+
+INSERT INTO [dbo].[PlayerOptions] ([MapId], [Number], [Money], [Color], [Left], [Right], [Top], [Bottom]) VALUES
+('IntactBasic', 1, 40, 255, 1, 3, 1, 7),
+('IntactBasic', 2, 40, 16711935, 13, 15, 9, 15),
+('SiegeBasic', 1, 45, 255, 1, 3, 1, 10),
+('SiegeBasic', 2, 30, 16711935, 14, 15, 1, 10),
+('EdgeTowers', 1, 40, 255, 1, 2, 1, 10),
+('EdgeTowers', 2, 40, 16711935, 9, 10, 1, 10),
+('TwilightForest', 1, 40, 255, 1, 4, 1, 6),
+('TwilightForest', 2, 40, 16711935, 17, 20, 15, 20)
