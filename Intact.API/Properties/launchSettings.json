@@ -3,7 +3,7 @@
     "Intact.API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger/index.html#/ProtoBase/GetProtoBase",
+      "launchUrl": "swagger/index.html#/Maps/GetMaps",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

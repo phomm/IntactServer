@@ -10,6 +10,7 @@ namespace Intact.API.Bootstrap
         public static IServiceCollection AddInternalServices(this IServiceCollection services, ConfigurationManager configuration)
         {
             services.AddTransient<IProtoBaseService, ProtoBaseService>();
+            services.AddTransient<IMapsService, MapsService>();
             services.AddTransient<ICacheService, CacheService>();
 
             var connectionString = configuration.GetSection(nameof(DbSettings)).Get<DbSettings>().ConnectionString;
