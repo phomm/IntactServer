@@ -1,3 +1,4 @@
+using Intact.BusinessLogic.Models;
 using Intact.BusinessLogic.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,18 +8,18 @@ namespace Intact.API.Controllers;
 [Route("api/[controller]")]
 public class ProtoBaseController : ControllerBase
 {
-    private readonly ILogger<ProtoBaseController> _logger;
     private readonly IProtoBaseService _protoBaseService;
 
-    public ProtoBaseController(ILogger<ProtoBaseController> logger, IProtoBaseService protoBaseService)
+    public ProtoBaseController(IProtoBaseService protoBaseService)
     {
-        _logger = logger;
         _protoBaseService = protoBaseService;
     }
 
     [HttpGet("", Name = "GetProtoBase")]
-    public async Task<IActionResult> GetProtoBase([FromQuery] IEnumerable<string> languageCodes, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ProtoBase), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetProtoBaseAsync([FromQuery] string languagesString, CancellationToken cancellationToken)
     {
-        return Ok(await _protoBaseService.GetProtoBaseAsync(cancellationToken));
+        var languages = languagesString.Split(',', StringSplitOptions.RemoveEmptyEntries);
+        return Ok(await _protoBaseService.GetProtoBaseAsync(languages, cancellationToken));
     }
 }

@@ -9,7 +9,7 @@ namespace Intact.BusinessLogic.Services
 {
     public interface IProtoBaseService
     {
-        Task<ProtoBase> GetProtoBaseAsync(CancellationToken cancellationToken);
+        Task<ProtoBase> GetProtoBaseAsync(IEnumerable<string> languages, CancellationToken cancellationToken);
     }
 
     public class ProtoBaseService : IProtoBaseService
@@ -23,7 +23,7 @@ namespace Intact.BusinessLogic.Services
             _redisCache = redisCache;
         }
 
-        public async Task<ProtoBase> GetProtoBaseAsync(CancellationToken cancellationToken)
+        public async Task<ProtoBase> GetProtoBaseAsync(IEnumerable<string> languages, CancellationToken cancellationToken)
         {
             const string cacheSet = nameof(ProtoBase);
             const string key = nameof(ProtoBase);
@@ -31,7 +31,7 @@ namespace Intact.BusinessLogic.Services
             if (protoBase is not null)
             {
                 protoBase.FromCache = true;
-                return protoBase;
+                return FilterByLanguages(protoBase, languages);
             }
 
             List<LocalizationDao> localizations = null!;
@@ -73,7 +73,13 @@ namespace Intact.BusinessLogic.Services
 
             await _redisCache.AddAsync(cacheSet, key, protoBase);
 
-            return protoBase;
+            return FilterByLanguages(protoBase, languages);
+        }
+
+        private static ProtoBase FilterByLanguages(ProtoBase full, IEnumerable<string> languages)
+        {
+            // TODO
+            return full;
         }
     }
 }
