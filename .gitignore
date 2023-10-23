@@ -245,4 +245,4 @@ logs/
 /loadtests/loadtest_*.csv
 
 #secrets
-secrets.json
+secrets*.json

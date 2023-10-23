@@ -1,6 +1,4 @@
-﻿#pragma warning disable 8618
-
-namespace Intact.BusinessLogic.Models;
+﻿namespace Intact.BusinessLogic.Models;
 
 public record ProtoBase
 {

@@ -1,6 +1,4 @@
-﻿#pragma warning disable 8618
-
-namespace Intact.BusinessLogic.Data.Redis;
+﻿namespace Intact.BusinessLogic.Data.Redis;
 
 public class RedisSettings
 {

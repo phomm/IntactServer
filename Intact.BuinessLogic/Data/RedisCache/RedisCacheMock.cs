@@ -11,15 +11,15 @@ public class RedisCacheMock : IRedisCache
         _memoryCache = memoryCache;
     }
 
-    public async Task<bool> AddAsync<T>(string cacheSet, string key, T value)
+    public Task<bool> AddAsync<T>(string cacheSet, string key, T value)
     {
         _memoryCache.Set(key, value);
-        return true;
+        return Task.FromResult(true);
     }
 
-    public async Task<T> GetAsync<T>(string cacheSet, string key) where T : class
+    public Task<T?> GetAsync<T>(string cacheSet, string key) where T : class
     {
-        return _memoryCache.Get<T>(key);
+        return Task.FromResult(_memoryCache.Get<T>(key));
     }
 
     public async Task RemoveAsync(string cacheSet, string key)
@@ -27,20 +27,20 @@ public class RedisCacheMock : IRedisCache
         _memoryCache.Remove(key);
     }
 
-    public async Task<bool> ExistsAsync(string cacheSet, string key)
+    public Task<bool> ExistsAsync(string cacheSet, string key)
     {
-        return _memoryCache.TryGetValue(key, out var data);
+        return Task.FromResult(_memoryCache.TryGetValue(key, out _));
     }
 
-    public async Task<bool> AddStringAsync<T>(string cacheSet, string key, T value, TimeSpan expiration)
+    public  Task<bool> AddStringAsync<T>(string cacheSet, string key, T value, TimeSpan expiration)
     {
         _memoryCache.Set(key, value);
-        return true;
+        return Task.FromResult(true);
     }
 
-    public async Task<T> GetStringAsync<T>(string cacheSet, string key) where T : class
+    public Task<T?> GetStringAsync<T>(string cacheSet, string key) where T : class
     {
-        return _memoryCache.Get<T>(key);
+        return Task.FromResult(_memoryCache.Get<T>(key));
     }
 
     public async Task RemoveStringAsync(string cacheSet, string key)
@@ -48,8 +48,8 @@ public class RedisCacheMock : IRedisCache
         _memoryCache.Remove(key);
     }
 
-    public async Task<bool> StringExistsAsync(string cacheSet, string key)
+    public Task<bool> StringExistsAsync(string cacheSet, string key)
     {
-        return _memoryCache.TryGetValue(key, out var data);
+        return Task.FromResult(_memoryCache.TryGetValue(key, out _));
     }
 }

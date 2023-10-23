@@ -26,16 +26,13 @@ public class RedisCache : IRedisCache
           
     }
 
-    public async Task<T> GetAsync<T>(string cacheSet, string key) where T : class
+    public async Task<T?> GetAsync<T>(string cacheSet, string key) where T : class
     {
         var data =  await _database.Value.HashGetAsync(cacheSet, key).ConfigureAwait(false);
 
         _logger.LogDebug("GetAsync from cacheSet={cacheSet} with key={key}. Result={@result}", cacheSet, key, data);
 
-        if (string.IsNullOrEmpty(data))
-            return null;
-
-        return JsonSerializer.Deserialize<T>(data);
+        return data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<T>(data!);
     }
 
     public async Task RemoveAsync(string cacheSet, string key)
@@ -59,14 +56,14 @@ public class RedisCache : IRedisCache
         return await _database.Value.StringSetAsync(CreateStringKey(cacheSet, key), serialized, expiration).ConfigureAwait(false);
     }
 
-    public async Task<T> GetStringAsync<T>(string cacheSet, string key) where T : class
+    public async Task<T?> GetStringAsync<T>(string cacheSet, string key) where T : class
     {
         var data = await _database.Value.StringGetAsync(CreateStringKey(cacheSet, key)).ConfigureAwait(false);
 
         if (data.IsNullOrEmpty)
             return null;
 
-        var result = JsonSerializer.Deserialize<T>(data);
+        var result = JsonSerializer.Deserialize<T>(data!);
 
         _logger.LogDebug("GetStringAsync from {cacheSet}:{key}. Returns {@result}", cacheSet, key, result);
 
@@ -87,7 +84,7 @@ public class RedisCache : IRedisCache
         return !data.IsNull;
     }
 
-    private string CreateStringKey(string cacheSet, string key)
+    private static string CreateStringKey(string cacheSet, string key)
     {
         return $"{cacheSet}:{key}";
     }

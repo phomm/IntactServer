@@ -1,8 +1,6 @@
 ﻿using Intact.BusinessLogic.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 
-#pragma warning disable 8618
-
 namespace Intact.BusinessLogic.Data.Models;
 
 public class ProtoWarriorDao

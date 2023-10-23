@@ -10,7 +10,7 @@ namespace Intact.BusinessLogic.Data.RedisDI
         {
             if (!useInMemoryCache)
             {
-                builder.ApplicationServices.GetService<IStartRedisInfrastructureService>().Start(); 
+                builder.ApplicationServices.GetRequiredService<IStartRedisInfrastructureService>().Start(); 
             }
         }
     }

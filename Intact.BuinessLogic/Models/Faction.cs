@@ -1,6 +1,4 @@
-﻿#pragma warning disable 8618
-
-namespace Intact.BusinessLogic.Models;
+﻿namespace Intact.BusinessLogic.Models;
 
 public record Faction
 {
@@ -12,5 +10,4 @@ public record Faction
     public int TotalCount { get; set; }
     public int UnitCount { get; set; }
     public int HeroCount { get; set; }
-
 }

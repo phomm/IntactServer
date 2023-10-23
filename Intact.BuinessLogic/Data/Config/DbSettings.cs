@@ -1,6 +1,4 @@
-﻿#pragma warning disable 8618
-
-namespace Intact.BusinessLogic.Data.Config;
+﻿namespace Intact.BusinessLogic.Data.Config;
 
 public record DbSettings
 {

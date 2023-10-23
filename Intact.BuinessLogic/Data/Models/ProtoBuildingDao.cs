@@ -1,7 +1,4 @@
-﻿#pragma warning disable 8618
-
-using Intact.BusinessLogic.Data.Enums;
-using System.ComponentModel;
+﻿using Intact.BusinessLogic.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Intact.BusinessLogic.Data.Models;

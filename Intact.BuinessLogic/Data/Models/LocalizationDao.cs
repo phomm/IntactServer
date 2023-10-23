@@ -1,7 +1,4 @@
-﻿#pragma warning disable 8618
-
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Intact.BusinessLogic.Data.Models;
 
