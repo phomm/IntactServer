@@ -1,6 +1,4 @@
-﻿#pragma warning disable 8618
-
-using Intact.BusinessLogic.Data.Models;
+﻿using Intact.BusinessLogic.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Intact.BusinessLogic.Data
@@ -13,6 +11,9 @@ namespace Intact.BusinessLogic.Data
         public DbSet<FactionDao> Factions { get; set; }
         public DbSet<ProtoBuildingDao> ProtoBuildings { get; set; }
         public DbSet<ProtoWarriorDao> ProtoWarriors { get; set; }
+        public DbSet<MapDao> Maps { get; set; }
+        public DbSet<MapBuildingDao> MapBuildings { get; set; }
+        public DbSet<PlayerOptionsDao> PlayerOptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,6 +35,11 @@ namespace Intact.BusinessLogic.Data
             modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.IsRanged).HasDefaultValue(0);
             modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.IsBlockFree).HasDefaultValue(0);
             modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.IsImmune).HasDefaultValue(0);
+            modelBuilder.Entity<MapDao>().Property(p => p.TermName).HasComputedColumnSql("[Id] + 'MapName'");
+            modelBuilder.Entity<MapDao>().Property(p => p.TermDescription).HasComputedColumnSql("[Id] + 'MapDescription'");
+            modelBuilder.Entity<MapDao>().HasKey(x => new { x.Id, x.Version });
+            modelBuilder.Entity<PlayerOptionsDao>().HasKey(x => new { x.MapId, x.Number });
+            modelBuilder.Entity<MapBuildingDao>().HasKey(x => new { x.MapId, x.Number });
         }
     }
 }
