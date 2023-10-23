@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Intact.BusinessLogic.Models;
 using Intact.BusinessLogic.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,9 @@ public class ProtoBaseController : ControllerBase
 
     [HttpGet("", Name = "GetProtoBase")]
     [ProducesResponseType(typeof(ProtoBase), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetProtoBaseAsync([FromQuery] string languagesString, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetProtoBaseAsync([FromQuery] string? languagesString, CancellationToken cancellationToken)
     {
-        var languages = languagesString.Split(',', StringSplitOptions.RemoveEmptyEntries);
+        var languages = (languagesString?? "").Split(',', StringSplitOptions.RemoveEmptyEntries);
         return Ok(await _protoBaseService.GetProtoBaseAsync(languages, cancellationToken));
     }
 }
