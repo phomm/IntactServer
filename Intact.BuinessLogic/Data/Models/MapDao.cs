@@ -2,7 +2,7 @@
 
 namespace Intact.BusinessLogic.Data.Models;
 
-public record MapDao
+public record MapDao : LocalizableDao
 {
     [Key]
     [StringLength(16)]
@@ -10,9 +10,6 @@ public record MapDao
     [Key]
     public int Version { get; set; }
     [StringLength(32)]
-    public string TermName { get; set; }
-    [StringLength(32)]
-    public string TermDescription { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
     [StringLength(128)]

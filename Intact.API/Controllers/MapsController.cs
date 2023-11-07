@@ -1,7 +1,6 @@
 using Intact.BusinessLogic.Models;
 using Intact.BusinessLogic.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.InteropServices;
 
 namespace Intact.API.Controllers;
 
