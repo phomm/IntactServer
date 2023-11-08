@@ -5,6 +5,8 @@ namespace Intact.BusinessLogic.Data
 {
     public class IntactDbContext : DbContext
     {
+        private bool IsSqlServer => Database.IsSqlServer();
+
         public IntactDbContext(DbContextOptions<IntactDbContext> options) : base(options) { }
 
         public DbSet<LocalizationDao> Localizations { get; set; }
@@ -15,31 +17,36 @@ namespace Intact.BusinessLogic.Data
         public DbSet<MapBuildingDao> MapBuildings { get; set; }
         public DbSet<PlayerOptionsDao> PlayerOptions { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            modelBuilder.Entity<LocalizationDao>().HasKey(x => new { x.TermId, x.LanguageCode});
-            modelBuilder.Entity<FactionDao>().Property(p => p.TermName).HasComputedColumnSql("[Id] + 'FactionName'");
-            modelBuilder.Entity<FactionDao>().Property(p => p.TermDescription).HasComputedColumnSql("[Id] + 'FactionDescription'");
-            modelBuilder.Entity<ProtoBuildingDao>().Property(p => p.TermName).HasComputedColumnSql("[Id] + 'BuildingName'");
-            modelBuilder.Entity<ProtoBuildingDao>().Property(p => p.TermDescription).HasComputedColumnSql("[Id] + 'BuildingDescription'");
-            modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.TermName).HasComputedColumnSql("[Id] + 'WarriorName'");
-            modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.TermDescription).HasComputedColumnSql("[Id] + 'WarriorDescription'");
-            modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.InLife).HasDefaultValue(1);
-            modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.InMana).HasDefaultValue(0);
-            modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.InMoves).HasDefaultValue(1);
-            modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.InActs).HasDefaultValue(1);
-            modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.InShots).HasDefaultValue(0);
-            modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.Cost).HasDefaultValue(0);
-            modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.IsHero).HasDefaultValue(0);
-            modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.IsMelee).HasDefaultValue(0);
-            modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.IsRanged).HasDefaultValue(0);
-            modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.IsBlockFree).HasDefaultValue(0);
-            modelBuilder.Entity<ProtoWarriorDao>().Property(p => p.IsImmune).HasDefaultValue(0);
-            modelBuilder.Entity<MapDao>().Property(p => p.TermName).HasComputedColumnSql("[Id] + 'MapName'");
-            modelBuilder.Entity<MapDao>().Property(p => p.TermDescription).HasComputedColumnSql("[Id] + 'MapDescription'");
-            modelBuilder.Entity<MapDao>().HasKey(x => new { x.Id, x.Version });
-            modelBuilder.Entity<PlayerOptionsDao>().HasKey(x => new { x.MapId, x.Number });
-            modelBuilder.Entity<MapBuildingDao>().HasKey(x => new { x.MapId, x.Number });
+            AddComputedLocalizableColumns<FactionDao>(builder);
+            AddComputedLocalizableColumns<ProtoBuildingDao>(builder);
+            AddComputedLocalizableColumns<ProtoWarriorDao>(builder);
+            AddComputedLocalizableColumns<MapDao>(builder);
+            
+            builder.Entity<LocalizationDao>().HasKey(x => new { x.TermId, x.LanguageCode});
+            builder.Entity<ProtoWarriorDao>().Property(p => p.InLife).HasDefaultValue(1);
+            builder.Entity<ProtoWarriorDao>().Property(p => p.InMana).HasDefaultValue(0);
+            builder.Entity<ProtoWarriorDao>().Property(p => p.InMoves).HasDefaultValue(1);
+            builder.Entity<ProtoWarriorDao>().Property(p => p.InActs).HasDefaultValue(1);
+            builder.Entity<ProtoWarriorDao>().Property(p => p.InShots).HasDefaultValue(0);
+            builder.Entity<ProtoWarriorDao>().Property(p => p.Cost).HasDefaultValue(0);
+            builder.Entity<ProtoWarriorDao>().Property(p => p.IsHero).HasDefaultValue(0);
+            builder.Entity<ProtoWarriorDao>().Property(p => p.IsMelee).HasDefaultValue(0);
+            builder.Entity<ProtoWarriorDao>().Property(p => p.IsRanged).HasDefaultValue(0);
+            builder.Entity<ProtoWarriorDao>().Property(p => p.IsBlockFree).HasDefaultValue(0);
+            builder.Entity<ProtoWarriorDao>().Property(p => p.IsImmune).HasDefaultValue(0);
+            builder.Entity<MapDao>().HasKey(x => new { x.Id, x.Version });
+            builder.Entity<PlayerOptionsDao>().HasKey(x => new { x.MapId, x.Number });
+            builder.Entity<MapBuildingDao>().HasKey(x => new { x.MapId, x.Number });
+        }
+
+        private void AddComputedLocalizableColumns<T>(ModelBuilder builder) where T : LocalizableDao
+        {
+            var name = typeof(T).Name.Replace("Dao", "").Replace("Proto", "");
+            var prefix = IsSqlServer ? "Id +" : "\"Id\" ||"; // postgres otherwise
+            builder.Entity<T>().Property(p => p.TermName).HasComputedColumnSql($"{prefix} '{name}Name'", !IsSqlServer);
+            builder.Entity<T>().Property(p => p.TermDescription).HasComputedColumnSql($"{prefix} '{name}Description'", !IsSqlServer);
         }
     }
 }

@@ -2,8 +2,8 @@
 using Intact.BusinessLogic.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -17,32 +17,32 @@ namespace Intact.API.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.22")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Intact.BusinessLogic.Data.Models.FactionDao", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .HasColumnType("character varying(16)");
 
                     b.Property<int>("Number")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("TermDescription")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)")
-                        .HasComputedColumnSql("[Id] + 'FactionDescription'");
+                        .HasColumnType("character varying(32)")
+                        .HasComputedColumnSql("\"Id\" || 'FactionDescription'", true);
 
                     b.Property<string>("TermName")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)")
-                        .HasComputedColumnSql("[Id] + 'FactionName'");
+                        .HasColumnType("character varying(32)")
+                        .HasComputedColumnSql("\"Id\" || 'FactionName'", true);
 
                     b.HasKey("Id");
 
@@ -53,16 +53,16 @@ namespace Intact.API.Migrations
                 {
                     b.Property<string>("TermId")
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
+                        .HasColumnType("character varying(32)");
 
                     b.Property<string>("LanguageCode")
                         .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .HasColumnType("character varying(16)");
 
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasMaxLength(950)
-                        .HasColumnType("nvarchar(950)");
+                        .HasColumnType("character varying(950)");
 
                     b.HasKey("TermId", "LanguageCode");
 
@@ -73,21 +73,21 @@ namespace Intact.API.Migrations
                 {
                     b.Property<string>("MapId")
                         .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .HasColumnType("character varying(16)");
 
                     b.Property<int>("Number")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Proto")
                         .IsRequired()
                         .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .HasColumnType("character varying(16)");
 
                     b.Property<int>("X")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Y")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("MapId", "Number");
 
@@ -98,39 +98,40 @@ namespace Intact.API.Migrations
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .HasColumnType("character varying(16)");
 
                     b.Property<int>("Version")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Factions")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("character varying(128)");
 
                     b.Property<int>("Height")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("SceneBackground")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("TermDescription")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)")
-                        .HasComputedColumnSql("[Id] + 'MapDescription'");
+                        .HasColumnType("character varying(32)")
+                        .HasComputedColumnSql("\"Id\" || 'MapDescription'", true);
 
                     b.Property<string>("TermName")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)")
-                        .HasComputedColumnSql("[Id] + 'MapName'");
+                        .HasColumnType("character varying(32)")
+                        .HasComputedColumnSql("\"Id\" || 'MapName'", true);
 
                     b.Property<int>("Width")
-                        .HasColumnType("int");
+                        .HasMaxLength(32)
+                        .HasColumnType("integer");
 
                     b.HasKey("Id", "Version");
 
@@ -141,28 +142,28 @@ namespace Intact.API.Migrations
                 {
                     b.Property<string>("MapId")
                         .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .HasColumnType("character varying(16)");
 
                     b.Property<int>("Number")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Bottom")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Color")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Left")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Money")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Right")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Top")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("MapId", "Number");
 
@@ -173,35 +174,35 @@ namespace Intact.API.Migrations
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .HasColumnType("character varying(16)");
 
                     b.Property<string>("AssetId")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
+                        .HasColumnType("character varying(32)");
 
                     b.Property<int>("BuildingType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<byte>("InLife")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("smallint");
 
                     b.Property<int>("Number")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("TermDescription")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)")
-                        .HasComputedColumnSql("[Id] + 'BuildingDescription'");
+                        .HasColumnType("character varying(32)")
+                        .HasComputedColumnSql("\"Id\" || 'BuildingDescription'", true);
 
                     b.Property<string>("TermName")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)")
-                        .HasComputedColumnSql("[Id] + 'BuildingName'");
+                        .HasColumnType("character varying(32)")
+                        .HasComputedColumnSql("\"Id\" || 'BuildingName'", true);
 
                     b.HasKey("Id");
 
@@ -212,92 +213,92 @@ namespace Intact.API.Migrations
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .HasColumnType("character varying(16)");
 
                     b.Property<string>("AssetId")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
+                        .HasColumnType("character varying(32)");
 
                     b.Property<byte>("Cost")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint")
+                        .HasColumnType("smallint")
                         .HasDefaultValue((byte)0);
 
                     b.Property<string>("FactionId")
                         .IsRequired()
                         .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .HasColumnType("character varying(16)");
 
                     b.Property<int>("Force")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<byte>("InActs")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint")
+                        .HasColumnType("smallint")
                         .HasDefaultValue((byte)1);
 
                     b.Property<byte>("InLife")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint")
+                        .HasColumnType("smallint")
                         .HasDefaultValue((byte)1);
 
                     b.Property<byte>("InMana")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint")
+                        .HasColumnType("smallint")
                         .HasDefaultValue((byte)0);
 
                     b.Property<byte>("InMoves")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint")
+                        .HasColumnType("smallint")
                         .HasDefaultValue((byte)1);
 
                     b.Property<byte>("InShots")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint")
+                        .HasColumnType("smallint")
                         .HasDefaultValue((byte)0);
 
                     b.Property<bool>("IsBlockFree")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<bool>("IsHero")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<bool>("IsImmune")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<bool>("IsMelee")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<bool>("IsRanged")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<int>("Number")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("TermDescription")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)")
-                        .HasComputedColumnSql("[Id] + 'WarriorDescription'");
+                        .HasColumnType("character varying(32)")
+                        .HasComputedColumnSql("\"Id\" || 'WarriorDescription'", true);
 
                     b.Property<string>("TermName")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)")
-                        .HasComputedColumnSql("[Id] + 'WarriorName'");
+                        .HasColumnType("character varying(32)")
+                        .HasComputedColumnSql("\"Id\" || 'WarriorName'", true);
 
                     b.HasKey("Id");
 
