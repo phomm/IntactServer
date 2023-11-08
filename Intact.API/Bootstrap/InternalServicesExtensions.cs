@@ -14,9 +14,14 @@ namespace Intact.API.Bootstrap
             services.AddTransient<ICacheService, CacheService>();
 
             var connectionString = configuration.GetSection(nameof(DbSettings)).Get<DbSettings>().ConnectionString;
-            
+
+            //services.AddDbContextFactory<IntactDbContext>(
+            //    options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly($"{nameof(Intact)}.{nameof(API)}")));
+
+            var pgConnectionString = configuration.GetSection(nameof(DbSettings)).Get<DbSettings>().PgConnectionString;
+
             services.AddDbContextFactory<IntactDbContext>(
-                options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly($"{nameof(Intact)}.{nameof(API)}")));
+                options => options.UseNpgsql(pgConnectionString, b => b.MigrationsAssembly($"{nameof(Intact)}.{nameof(API)}")));
 
             return services;
         }

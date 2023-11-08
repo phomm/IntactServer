@@ -8,7 +8,7 @@ public static class InfrastructureExtensions
 {
     public static ConfigurationManager SetupConfiguration(this ConfigurationManager manager)
     {
-        manager.AddJsonFile($"secrets.json", true, true);
+        manager.AddJsonFile("secrets.json", true, true);
         return manager;
     }
 
