@@ -1,66 +1,64 @@
-USE [Intact_]
-GO
 /*
-truncate table [dbo].[Factions]
-truncate table [dbo].[ProtoWarriors]
-truncate table [dbo].[ProtoBuildings]
-truncate table [dbo].[Localizations]
-truncate table [dbo].[Maps]
-truncate table [dbo].[MapBuildings]
-truncate table [dbo].[PlayerOptions]
+truncate "Factions";
+truncate "ProtoWarriors";
+truncate "ProtoBuildings";
+truncate "Localizations";
+truncate "Maps";
+truncate "MapBuildings";
+truncate "PlayerOptions";
 */
-INSERT INTO [dbo].[Factions] ([Id] ,[Number]) VALUES
+INSERT INTO "Factions" ("Id" ,"Number") VALUES
 ('Humans' ,1),
 ('Elves' ,2),
 ('Necros' ,3),
 ('Mages' ,4),
 ('Horde' ,5)
+;
+INSERT INTO "ProtoWarriors" ("Id" ,"Number" ,"FactionId" ,"Force" ,"AssetId","IsHero","IsRanged","IsMelee","IsBlockFree","IsImmune","InLife","InMana","InMoves","InActs","InShots","Cost") VALUES 
+('Pikeman',1,'Humans',/*force*/1,'Pikeman',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,2/*Cost*/)   ,
+('Archer',2,'Humans',/*force*/2,'Archer',false/*Hero*/,true/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,2/*Shots*/,3/*Cost*/)    ,
+('Eagle',3,'Humans',/*force*/3,'Eagle',false/*Hero*/,false/*Ranged*/,true/*Melee*/,true/*BlockFree*/,false/*Immune*/,1/*Life*/,0/*Mana*/,4/*Moves*/,1/*Acts*/,0/*Shots*/,4/*Cost*/)     ,
+('Horseman',4,'Humans',/*force*/4,'Horseman',false/*Hero*/,false/*Ranged*/,true/*Melee*/,true/*BlockFree*/,false/*Immune*/,2/*Life*/,0/*Mana*/,3/*Moves*/,1/*Acts*/,0/*Shots*/,5/*Cost*/)  ,
+('Elephant',5,'Humans',/*force*/5,'Elephant',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,4/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,6/*Cost*/)  ,
+('Knight',6,'Humans',/*force*/4,'Knight',true/*Hero*/,true/*Ranged*/,true/*Melee*/,true/*BlockFree*/,false/*Immune*/,2/*Life*/,3/*Mana*/,3/*Moves*/,1/*Acts*/,2/*Shots*/,0/*Cost*/)    ,
 
-INSERT INTO [dbo].[ProtoWarriors] ([Id] ,[Number] ,[FactionId] ,[Force] ,[AssetId],[IsHero],[IsRanged],[IsMelee],[IsBlockFree],[IsImmune],[InLife],[InMana],[InMoves],[InActs],[InShots],[Cost]) VALUES 
-('Pikeman',1,'Humans',/*force*/1,'Pikeman',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,2/*Cost*/)   ,
-('Archer',2,'Humans',/*force*/2,'Archer',0/*Hero*/,1/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,2/*Shots*/,3/*Cost*/)    ,
-('Eagle',3,'Humans',/*force*/3,'Eagle',0/*Hero*/,0/*Ranged*/,1/*Melee*/,1/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,4/*Moves*/,1/*Acts*/,0/*Shots*/,4/*Cost*/)     ,
-('Horseman',4,'Humans',/*force*/4,'Horseman',0/*Hero*/,0/*Ranged*/,1/*Melee*/,1/*BlockFree*/,0/*Immune*/,2/*Life*/,0/*Mana*/,3/*Moves*/,1/*Acts*/,0/*Shots*/,5/*Cost*/)  ,
-('Elephant',5,'Humans',/*force*/5,'Elephant',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,4/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,6/*Cost*/)  ,
-('Knight',6,'Humans',/*force*/4,'Knight',1/*Hero*/,1/*Ranged*/,1/*Melee*/,1/*BlockFree*/,0/*Immune*/,2/*Life*/,3/*Mana*/,3/*Moves*/,1/*Acts*/,2/*Shots*/,0/*Cost*/)    ,
+('Scout',7,'Elves',/*force*/1,'Scout',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,2/*Acts*/,0/*Shots*/,2/*Cost*/)      ,
+('Sniper',8,'Elves',/*force*/2,'Sniper',false/*Hero*/,true/*Ranged*/,false/*Melee*/,false/*BlockFree*/,false/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,3/*Shots*/,3/*Cost*/)     ,
+('Dryad',9,'Elves',/*force*/3,'Dryad',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,4/*Cost*/)      ,
+('Unicorn',10,'Elves',/*force*/4,'Unicorn',false/*Hero*/,false/*Ranged*/,true/*Melee*/,true/*BlockFree*/,false/*Immune*/,2/*Life*/,0/*Mana*/,3/*Moves*/,1/*Acts*/,0/*Shots*/,5/*Cost*/)   ,
+('Ent',11,'Elves',/*force*/5,'Ent',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,4/*Life*/,2/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,6/*Cost*/)       ,
+('Druid',12,'Elves',/*force*/2,'Druid',true/*Hero*/,true/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,2/*Life*/,3/*Mana*/,1/*Moves*/,1/*Acts*/,3/*Shots*/,0/*Cost*/)     ,
 
-('Scout',7,'Elves',/*force*/1,'Scout',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,2/*Acts*/,0/*Shots*/,2/*Cost*/)      ,
-('Sniper',8,'Elves',/*force*/2,'Sniper',0/*Hero*/,1/*Ranged*/,0/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,3/*Shots*/,3/*Cost*/)     ,
-('Dryad',9,'Elves',/*force*/3,'Dryad',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,4/*Cost*/)      ,
-('Unicorn',10,'Elves',/*force*/4,'Unicorn',0/*Hero*/,0/*Ranged*/,1/*Melee*/,1/*BlockFree*/,0/*Immune*/,2/*Life*/,0/*Mana*/,3/*Moves*/,1/*Acts*/,0/*Shots*/,5/*Cost*/)   ,
-('Ent',11,'Elves',/*force*/5,'Ent',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,4/*Life*/,2/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,6/*Cost*/)       ,
-('Druid',12,'Elves',/*force*/2,'Druid',1/*Hero*/,1/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,2/*Life*/,3/*Mana*/,1/*Moves*/,1/*Acts*/,3/*Shots*/,0/*Cost*/)     ,
+('Ghoul',13,'Necros',/*force*/1,'Ghoul',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,2/*Cost*/)    ,
+('Lich',14,'Necros',/*force*/2,'Lich',false/*Hero*/,true/*Ranged*/,false/*Melee*/,false/*BlockFree*/,true/*Immune*/,1/*Life*/,2/*Mana*/,1/*Moves*/,1/*Acts*/,2/*Shots*/,3/*Cost*/)     ,
+('Ghost',15,'Necros',/*force*/3,'Ghost',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,1/*Life*/,0/*Mana*/,4/*Moves*/,1/*Acts*/,0/*Shots*/,4/*Cost*/)    ,
+('Nightmare',16,'Necros',/*force*/4,'Nightmare',false/*Hero*/,false/*Ranged*/,true/*Melee*/,true/*BlockFree*/,false/*Immune*/,2/*Life*/,3/*Mana*/,3/*Moves*/,1/*Acts*/,0/*Shots*/,5/*Cost*/),
+('Mutant',17,'Necros',/*force*/5,'Mutant',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,4/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,6/*Cost*/)   ,
+('Vampire',18,'Necros',/*force*/1,'Vampire',true/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,2/*Life*/,3/*Mana*/,2/*Moves*/,1/*Acts*/,0/*Shots*/,0/*Cost*/)  ,
 
-('Ghoul',13,'Necros',/*force*/1,'Ghoul',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,2/*Cost*/)    ,
-('Lich',14,'Necros',/*force*/2,'Lich',0/*Hero*/,1/*Ranged*/,0/*Melee*/,0/*BlockFree*/,1/*Immune*/,1/*Life*/,2/*Mana*/,1/*Moves*/,1/*Acts*/,2/*Shots*/,3/*Cost*/)     ,
-('Ghost',15,'Necros',/*force*/3,'Ghost',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,4/*Moves*/,1/*Acts*/,0/*Shots*/,4/*Cost*/)    ,
-('Nightmare',16,'Necros',/*force*/4,'Nightmare',0/*Hero*/,0/*Ranged*/,1/*Melee*/,1/*BlockFree*/,0/*Immune*/,2/*Life*/,3/*Mana*/,3/*Moves*/,1/*Acts*/,0/*Shots*/,5/*Cost*/),
-('Mutant',17,'Necros',/*force*/5,'Mutant',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,4/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,6/*Cost*/)   ,
-('Vampire',18,'Necros',/*force*/1,'Vampire',1/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,2/*Life*/,3/*Mana*/,2/*Moves*/,1/*Acts*/,0/*Shots*/,0/*Cost*/)  ,
+('Golem',19,'Mages',/*force*/1,'Golem',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,true/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,2/*Cost*/)     ,
+('Mage',20,'Mages',/*force*/2,'Mage',false/*Hero*/,true/*Ranged*/,false/*Melee*/,false/*BlockFree*/,false/*Immune*/,1/*Life*/,2/*Mana*/,1/*Moves*/,1/*Acts*/,2/*Shots*/,3/*Cost*/)      ,
+('Gargoyle',21,'Mages',/*force*/3,'Gargoyle',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,1/*Life*/,0/*Mana*/,4/*Moves*/,1/*Acts*/,0/*Shots*/,4/*Cost*/)  ,
+('Lion',22,'Mages',/*force*/4,'Lion',false/*Hero*/,false/*Ranged*/,true/*Melee*/,true/*BlockFree*/,false/*Immune*/,2/*Life*/,0/*Mana*/,3/*Moves*/,1/*Acts*/,0/*Shots*/,5/*Cost*/)      ,
+('Giant',23,'Mages',/*force*/5,'Giant',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,4/*Life*/,2/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,6/*Cost*/)     ,
+('Genie',24,'Mages',/*force*/3,'Genie',true/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,true/*Immune*/,2/*Life*/,4/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,0/*Cost*/)     ,
 
-('Golem',19,'Mages',/*force*/1,'Golem',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,1/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,2/*Cost*/)     ,
-('Mage',20,'Mages',/*force*/2,'Mage',0/*Hero*/,1/*Ranged*/,0/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,2/*Mana*/,1/*Moves*/,1/*Acts*/,2/*Shots*/,3/*Cost*/)      ,
-('Gargoyle',21,'Mages',/*force*/3,'Gargoyle',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,4/*Moves*/,1/*Acts*/,0/*Shots*/,4/*Cost*/)  ,
-('Lion',22,'Mages',/*force*/4,'Lion',0/*Hero*/,0/*Ranged*/,1/*Melee*/,1/*BlockFree*/,0/*Immune*/,2/*Life*/,0/*Mana*/,3/*Moves*/,1/*Acts*/,0/*Shots*/,5/*Cost*/)      ,
-('Giant',23,'Mages',/*force*/5,'Giant',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,4/*Life*/,2/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,6/*Cost*/)     ,
-('Genie',24,'Mages',/*force*/3,'Genie',1/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,1/*Immune*/,2/*Life*/,4/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,0/*Cost*/)     ,
-
-('Goblin',25,'Horde',/*force*/1,'Goblin',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,2/*Cost*/)     ,
-('Orc',26,'Horde',/*force*/2,'Orc',0/*Hero*/,1/*Ranged*/,0/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,2/*Shots*/,3/*Cost*/)        ,
-('Wyvern',27,'Horde',/*force*/3,'Wyvern',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,4/*Moves*/,1/*Acts*/,0/*Shots*/,4/*Cost*/)     ,
-('Rider',28,'Horde',/*force*/4,'Rider',0/*Hero*/,0/*Ranged*/,1/*Melee*/,1/*BlockFree*/,0/*Immune*/,2/*Life*/,0/*Mana*/,3/*Moves*/,1/*Acts*/,0/*Shots*/,5/*Cost*/)      ,
-('Ogre',29,'Horde',/*force*/5,'Ogre',0/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,4/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,6/*Cost*/)       ,
-('Cyclop',30,'Horde',/*force*/2,'Cyclop',1/*Hero*/,0/*Ranged*/,1/*Melee*/,0/*BlockFree*/,0/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,0/*Cost*/)
-
-INSERT INTO [dbo].[ProtoBuildings] ([Id] ,[Number] ,[InLife] ,[AssetId],[BuildingType]) VALUES
+('Goblin',25,'Horde',/*force*/1,'Goblin',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,2/*Cost*/)     ,
+('Orc',26,'Horde',/*force*/2,'Orc',false/*Hero*/,true/*Ranged*/,false/*Melee*/,false/*BlockFree*/,false/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,2/*Shots*/,3/*Cost*/)        ,
+('Wyvern',27,'Horde',/*force*/3,'Wyvern',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,1/*Life*/,0/*Mana*/,4/*Moves*/,1/*Acts*/,0/*Shots*/,4/*Cost*/)     ,
+('Rider',28,'Horde',/*force*/4,'Rider',false/*Hero*/,false/*Ranged*/,true/*Melee*/,true/*BlockFree*/,false/*Immune*/,2/*Life*/,0/*Mana*/,3/*Moves*/,1/*Acts*/,0/*Shots*/,5/*Cost*/)      ,
+('Ogre',29,'Horde',/*force*/5,'Ogre',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,4/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,6/*Cost*/)       ,
+('Cyclop',30,'Horde',/*force*/2,'Cyclop',true/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,0/*Cost*/)
+;
+INSERT INTO "ProtoBuildings" ("Id" ,"Number" ,"InLife" ,"AssetId","BuildingType") VALUES
 ('Tower',1,4,'Tower',1),
 ('Wall',2,2,'WallHorizontal',2),
 ('Trap',3,2,'Trap',3),
 ('TreeWall',4,2,'TreeWall',4),
 ('Tree',5,2,'Tree',4)
 
-
-INSERT INTO [dbo].[Localizations] ([TermId] ,[LanguageCode] ,[Value]) VALUES
+;
+INSERT INTO "Localizations" ("TermId" ,"LanguageCode" ,"Value") VALUES
 ('HumansFactionName','English','Humans'),
 ('HumansFactionDescription','English','Humans have strong cavalry and brave disciplined army, loyal to their mighty hero-Knight with tactical skills and holy powers'),
 ('ElvesFactionName','English','Elves'),
@@ -257,14 +255,14 @@ INSERT INTO [dbo].[Localizations] ([TermId] ,[LanguageCode] ,[Value]) VALUES
 ('TwilightForestMapName','Russian',N'Сумеречный Лес'),
 ('TwilightForestMapDescription','Russian',N'Сумеречный Лес')
 
-
-INSERT INTO [dbo].[Maps] ([Id], [Version], [Width], [Height], [Factions], [SceneBackground]) VALUES
+;
+INSERT INTO "Maps" ("Id", "Version", "Width", "Height", "Factions", "SceneBackground") VALUES
 ('IntactBasic', 1, 15, 15, 'Humans,Elves,Necros,Mages,Horde', 'grass_light'),
 ('SiegeBasic', 1, 15, 10, 'Humans,Elves,Necros,Mages,Horde', 'cmbksnmt'),
 ('EdgeTowers', 1, 10, 10, 'Humans,Elves,Necros,Mages,Horde', 'cmbksnmt'),
 ('TwilightForest', 1, 20, 20, 'Humans,Elves,Necros,Mages,Horde', 'grass_dark')
-
-INSERT INTO [dbo].[PlayerOptions] ([MapId], [Number], [Money], [Color], [Left], [Right], [Top], [Bottom]) VALUES
+;
+INSERT INTO "PlayerOptions" ("MapId", "Number", "Money", "Color", "Left", "Right", "Top", "Bottom") VALUES
 ('IntactBasic', 1, 40, 255, 1, 3, 1, 7),
 ('IntactBasic', 2, 40, 16711935, 13, 15, 9, 15),
 ('SiegeBasic', 1, 45, 255, 1, 3, 1, 10),
@@ -273,3 +271,89 @@ INSERT INTO [dbo].[PlayerOptions] ([MapId], [Number], [Money], [Color], [Left], 
 ('EdgeTowers', 2, 40, 16711935, 9, 10, 1, 10),
 ('TwilightForest', 1, 40, 255, 1, 4, 1, 6),
 ('TwilightForest', 2, 40, 16711935, 17, 20, 15, 20)
+;
+INSERT INTO "MapBuildings" ("MapId" ,"Number" ,"Proto" ,"X" ,"Y") VALUES
+('EdgeTowers', 0, 'Tower', 1, 1),
+('EdgeTowers', 1, 'Tower', 1, 10),
+('EdgeTowers', 2, 'Tower', 10, 1),
+('EdgeTowers', 3, 'Tower', 10, 10),
+('EdgeTowers', 4, 'Wall', 4, 3),
+('EdgeTowers', 5, 'Wall', 5, 3),
+('EdgeTowers', 6, 'Wall', 6, 3),
+('EdgeTowers', 7, 'Wall', 7, 3),
+('EdgeTowers', 8, 'Wall', 4, 8),
+('EdgeTowers', 9, 'Wall', 5, 8),
+('EdgeTowers', 10, 'Wall', 6, 8),
+('EdgeTowers', 11, 'Wall', 7, 8),
+('EdgeTowers', 12, 'Wall', 3, 4),
+('EdgeTowers', 13, 'Wall', 3, 5),
+('EdgeTowers', 14, 'Wall', 3, 6),
+('EdgeTowers', 15, 'Wall', 3, 7),
+('EdgeTowers', 16, 'Wall', 8, 4),
+('EdgeTowers', 17, 'Wall', 8, 5),
+('EdgeTowers', 18, 'Wall', 8, 6),
+('EdgeTowers', 19, 'Wall', 8, 7),
+('EdgeTowers', 20, 'Tree', 5, 1),
+('EdgeTowers', 21, 'Tree', 6, 10),
+('IntactBasic', 0, 'Tower', 6, 8),
+('IntactBasic', 1, 'Wall', 4, 4),
+('IntactBasic', 2, 'Wall', 5, 4),
+('IntactBasic', 3, 'Wall', 6, 4),
+('IntactBasic', 4, 'Wall', 10, 4),
+('IntactBasic', 5, 'Wall', 11, 4),
+('IntactBasic', 6, 'Wall', 12, 4),
+('IntactBasic', 7, 'Wall', 4, 12),
+('IntactBasic', 8, 'Wall', 5, 12),
+('IntactBasic', 9, 'Wall', 6, 12),
+('IntactBasic', 10, 'Wall', 10, 12),
+('IntactBasic', 11, 'Wall', 11, 12),
+('IntactBasic', 12, 'Wall', 12, 12),
+('IntactBasic', 13, 'Tower', 10, 8),
+('SiegeBasic', 0, 'Trap', 11, 1),
+('SiegeBasic', 1, 'Tower', 12, 1),
+('SiegeBasic', 2, 'Trap', 11, 2),
+('SiegeBasic', 3, 'Wall', 12, 2),
+('SiegeBasic', 4, 'Trap', 11, 3),
+('SiegeBasic', 5, 'Wall', 12, 3),
+('SiegeBasic', 6, 'Wall', 12, 4),
+('SiegeBasic', 7, 'Trap', 11, 5),
+('SiegeBasic', 8, 'Tower', 14, 5),
+('SiegeBasic', 9, 'Trap', 11, 6),
+('SiegeBasic', 10, 'Tower', 14, 6),
+('SiegeBasic', 11, 'Wall', 12, 7),
+('SiegeBasic', 12, 'Trap', 11, 8),
+('SiegeBasic', 13, 'Wall', 12, 8),
+('SiegeBasic', 14, 'Trap', 11, 9),
+('SiegeBasic', 15, 'Wall', 12, 9),
+('SiegeBasic', 16, 'Trap', 11, 10),
+('SiegeBasic', 17, 'Tower', 12, 10),
+('SiegeBasic', 18, 'Trap', 11, 4),
+('SiegeBasic', 19, 'Trap', 11, 7),
+('TwilightForest', 0, 'Tree', 12, 4),
+('TwilightForest', 1, 'Tree', 17, 5),
+('TwilightForest', 2, 'Tree', 6, 4),
+('TwilightForest', 3, 'Tree', 12, 5),
+('TwilightForest', 4, 'Tree', 8, 19),
+('TwilightForest', 5, 'Tree', 7, 15),
+('TwilightForest', 6, 'Tree', 16, 3),
+('TwilightForest', 7, 'Tree', 14, 6),
+('TwilightForest', 8, 'Tree', 11, 20),
+('TwilightForest', 9, 'Tree', 11, 4),
+('TwilightForest', 10, 'Tree', 12, 14),
+('TwilightForest', 11, 'Tree', 4, 12),
+('TwilightForest', 12, 'Tree', 5, 18),
+('TwilightForest', 13, 'Tree', 16, 19),
+('TwilightForest', 14, 'Tree', 10, 12),
+('TwilightForest', 15, 'Tree', 12, 16),
+('TwilightForest', 16, 'Tree', 14, 18),
+('TwilightForest', 17, 'Tree', 4, 20),
+('TwilightForest', 18, 'Tree', 1, 14),
+('TwilightForest', 19, 'Tree', 18, 14),
+('TwilightForest', 20, 'Tree', 20, 5),
+('TwilightForest', 21, 'Tree', 8, 1),
+('TwilightForest', 22, 'Tree', 16, 1),
+('TwilightForest', 23, 'Tree', 1, 10),
+('TwilightForest', 24, 'Tree', 7, 7),
+('TwilightForest', 25, 'Tree', 11, 9),
+('TwilightForest', 26, 'Tree', 16, 11)
+;
