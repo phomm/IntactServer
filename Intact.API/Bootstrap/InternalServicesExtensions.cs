@@ -15,13 +15,13 @@ namespace Intact.API.Bootstrap
 
             var connectionString = configuration.GetSection(nameof(DbSettings)).Get<DbSettings>().ConnectionString;
 
-            //services.AddDbContextFactory<IntactDbContext>(
-            //    options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly($"{nameof(Intact)}.{nameof(API)}")));
+            services.AddDbContextFactory<IntactDbContext>(
+                options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly($"{nameof(Intact)}.{nameof(API)}")));
 
             var pgConnectionString = configuration.GetSection(nameof(DbSettings)).Get<DbSettings>().PgConnectionString;
 
-            services.AddDbContextFactory<IntactDbContext>(
-                options => options.UseNpgsql(pgConnectionString, b => b.MigrationsAssembly($"{nameof(Intact)}.{nameof(API)}")));
+            //services.AddDbContextFactory<IntactDbContext>(
+            //    options => options.UseNpgsql(pgConnectionString, b => b.MigrationsAssembly($"{nameof(Intact)}.{nameof(API)}")));
 
             return services;
         }
