@@ -13,15 +13,16 @@ namespace Intact.API.Bootstrap
             services.AddTransient<IMapsService, MapsService>();
             services.AddTransient<ICacheService, CacheService>();
 
-            var connectionString = configuration.GetSection(nameof(DbSettings)).Get<DbSettings>().ConnectionString;
+            const bool usePostgres = true;
+            const string assemblyName = $"{nameof(Intact)}.{nameof(API)}";
+
+            var dbSettings = configuration.GetSection(nameof(DbSettings)).Get<DbSettings>();
+            var connectionString = usePostgres ? dbSettings.PgConnectionString : dbSettings.ConnectionString;
 
             services.AddDbContextFactory<IntactDbContext>(
-                options => options.UseSqlServer(connectionString, b => b.MigrationsAssembly($"{nameof(Intact)}.{nameof(API)}")));
-
-            var pgConnectionString = configuration.GetSection(nameof(DbSettings)).Get<DbSettings>().PgConnectionString;
-
-            //services.AddDbContextFactory<IntactDbContext>(
-            //    options => options.UseNpgsql(pgConnectionString, b => b.MigrationsAssembly($"{nameof(Intact)}.{nameof(API)}")));
+                options => _ = usePostgres ? 
+                    options.UseNpgsql(connectionString, b => b.MigrationsAssembly(assemblyName))
+                    : options.UseSqlServer(connectionString, b => b.MigrationsAssembly(assemblyName)));
 
             return services;
         }
