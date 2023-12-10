@@ -14,10 +14,10 @@ namespace Intact.BusinessLogic.Services
 
     public class ProtoBaseService : IProtoBaseService
     {
-        private readonly IDbContextFactory<IntactDbContext> _dbContextFactory;
+        private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
         private readonly IRedisCache _redisCache;
 
-        public ProtoBaseService(IDbContextFactory<IntactDbContext> dbContextFactory, IRedisCache redisCache)
+        public ProtoBaseService(IDbContextFactory<AppDbContext> dbContextFactory, IRedisCache redisCache)
         {
             _dbContextFactory = dbContextFactory;
             _redisCache = redisCache;

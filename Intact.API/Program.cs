@@ -14,7 +14,8 @@ builder.AddConfigOptions<DbSettings>();
 
 builder.Services.AddControllers();
 builder.Services.AddSwagger();
-builder.Services.AddInternalServices(builder.Configuration);
+builder.Services.AddInternalServices();
+builder.Services.AddDbServices(builder.Configuration);
 builder.Services.AddRedis(redisSettings);
 
 var app = builder.Build();

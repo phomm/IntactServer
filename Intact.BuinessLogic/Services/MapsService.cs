@@ -14,10 +14,10 @@ namespace Intact.BusinessLogic.Services
 
     public class MapsService : IMapsService
     {
-        private readonly IDbContextFactory<IntactDbContext> _dbContextFactory;
+        private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
         private readonly IRedisCache _redisCache;
 
-        public MapsService(IDbContextFactory<IntactDbContext> dbContextFactory, IRedisCache redisCache)
+        public MapsService(IDbContextFactory<AppDbContext> dbContextFactory, IRedisCache redisCache)
         {
             _dbContextFactory = dbContextFactory;
             _redisCache = redisCache;
