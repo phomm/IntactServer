@@ -2,6 +2,6 @@
 
 public record DbSettings
 {
-    public string ConnectionString { get; set; }
-    public string PgConnectionString { get; set; }
+    public string ConnectionString { get; init; }
+    public string PgConnectionString { get; init; }
 }

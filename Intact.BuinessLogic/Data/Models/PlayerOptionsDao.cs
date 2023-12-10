@@ -6,13 +6,13 @@ public record PlayerOptionsDao
 {
     [Key]
     [StringLength(16)]
-    public string MapId { get; set; }
+    public string MapId { get; init; }
     [Key]
-    public int Number { get; set; }
-    public int Money { get; set; }
-    public int Color { get; set; }
-    public int Left { get; set; }
-    public int Right { get; set; }
-    public int Top { get; set; }
-    public int Bottom { get; set; }
+    public int Number { get; init; }
+    public int Money { get; init; }
+    public int Color { get; init; }
+    public int Left { get; init; }
+    public int Right { get; init; }
+    public int Top { get; init; }
+    public int Bottom { get; init; }
 }

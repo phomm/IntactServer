@@ -6,10 +6,10 @@ public record LocalizationDao
 {
     [Key]
     [StringLength(32)]
-    public string TermId { get; set; }
+    public string TermId { get; init; }
     [Key]
     [StringLength(16)]
-    public string LanguageCode { get; set; }
+    public string LanguageCode { get; init; }
     [StringLength(950)]
-    public string Value { get; set; }
+    public string Value { get; init; }
 }
