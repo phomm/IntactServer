@@ -2,6 +2,7 @@ using Intact.API.Bootstrap;
 using Intact.BusinessLogic.Data.Config;
 using Intact.BusinessLogic.Data.Redis;
 using Intact.BusinessLogic.Data.RedisDI;
+using Intact.BusinessLogic.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.Services.AddSwagger();
 builder.Services.AddInternalServices();
 builder.Services.AddDbServices(builder.Configuration);
 builder.Services.AddRedis(redisSettings);
+
+builder.Services.AddAuth();
 
 var app = builder.Build();
 
@@ -36,6 +39,8 @@ app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.MapIdentityApi<User>();
 
 app.MapControllers();
 

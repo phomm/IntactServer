@@ -29,6 +29,7 @@ namespace Intact.API.Bootstrap
                 : options.UseSqlServer(connectionString, b => b.MigrationsAssembly(assemblyName));
             
             services.AddDbContextFactory<AppDbContext>(optionsAction);
+            services.AddDbContext<AppIdentityDbContext>(optionsAction);
             
             return services;
         }
