@@ -47,11 +47,31 @@ public static class InfrastructureExtensions
                     Version = version
                 });
             options.IncludeXmlComments(Path.ChangeExtension(typeof(Program).Assembly.Location, "xml"));
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                In = ParameterLocation.Header,
+                Scheme = "Bearer"
+            });
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
         });
 
         return serviceCollection;
     }
-        
     
     public static IServiceCollection AddRedis(this IServiceCollection serviceCollection, RedisSettings redisSettings)
     {

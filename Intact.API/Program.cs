@@ -19,7 +19,8 @@ builder.Services.AddInternalServices();
 builder.Services.AddDbServices(builder.Configuration);
 builder.Services.AddRedis(redisSettings);
 
-builder.Services.AddAuth();
+builder.Services.CustomizeAuthorization();
+builder.Services.CustomizeAuthentication();
 
 var app = builder.Build();
 
