@@ -40,7 +40,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapIdentityApi<User>();
+app.MapGroup("api").MapIdentityApi<User>();
 
 app.MapControllers();
 
