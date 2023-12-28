@@ -1,8 +1,12 @@
 using Intact.API.Bootstrap;
+using Intact.API.Health;
 using Intact.BusinessLogic.Data.Config;
 using Intact.BusinessLogic.Data.Redis;
 using Intact.BusinessLogic.Data.RedisDI;
 using Intact.BusinessLogic.Models;
+
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +16,8 @@ builder.Services.AddConfigOptionsAndBind<RedisSettings>(builder.Configuration, n
 builder.AddConfigOptions<DbSettings>();
 
 // Add services to the container.
+builder.Services.AddHealthChecks()
+    .AddCheck<ApiHealthCheck>("Api");
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
@@ -24,6 +30,11 @@ builder.Services.CustomizeAuthorization();
 builder.Services.CustomizeAuthentication();
 
 var app = builder.Build();
+
+app.MapHealthChecks("/_health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.UseDeveloperExceptionPage();
 
