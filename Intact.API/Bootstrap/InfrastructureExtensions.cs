@@ -1,4 +1,6 @@
-﻿using Intact.BusinessLogic.Data.Redis;
+﻿using Intact.API.Health;
+using Intact.BusinessLogic.Data.Config;
+using Intact.BusinessLogic.Data.Redis;
 using Intact.BusinessLogic.Data.RedisDI;
 using Microsoft.OpenApi.Models;
 
@@ -79,7 +81,19 @@ public static class InfrastructureExtensions
 
         return serviceCollection;
     }
-    
+
+    public static IServiceCollection AddHealth(this IServiceCollection serviceCollection, IConfiguration configuration)
+    {
+        const string pgConnectionStringName = nameof(DbSettings.PgConnectionString);
+        const string dbSettingsPgConnectionStringName = $"{nameof(DbSettings)}:{pgConnectionStringName}";
+
+        serviceCollection.AddHealthChecks()
+            .AddNpgSql(configuration[pgConnectionStringName] ?? configuration[dbSettingsPgConnectionStringName]!)
+            .AddCheck<ApiHealthCheck>("Api");
+
+        return serviceCollection;
+    }
+
     /*
     public static IServiceCollection AddValidation(this IServiceCollection services)
     {

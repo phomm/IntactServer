@@ -16,9 +16,7 @@ builder.Services.AddConfigOptionsAndBind<RedisSettings>(builder.Configuration, n
 builder.AddConfigOptions<DbSettings>();
 
 // Add services to the container.
-builder.Services.AddHealthChecks()
-    .AddCheck<ApiHealthCheck>("Api");
-
+builder.Services.AddHealth(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
 builder.Services.AddSwagger();
