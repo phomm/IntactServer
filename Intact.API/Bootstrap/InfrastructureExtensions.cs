@@ -3,6 +3,7 @@ using Intact.BusinessLogic.Data.Config;
 using Intact.BusinessLogic.Data.Redis;
 using Intact.BusinessLogic.Data.RedisDI;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Intact.API.Bootstrap;
 
@@ -88,7 +89,8 @@ public static class InfrastructureExtensions
         const string dbSettingsPgConnectionStringName = $"{nameof(DbSettings)}:{pgConnectionStringName}";
 
         serviceCollection.AddHealthChecks()
-            .AddNpgSql(configuration[pgConnectionStringName] ?? configuration[dbSettingsPgConnectionStringName]!)
+            .AddNpgSql(configuration[pgConnectionStringName] ?? configuration[dbSettingsPgConnectionStringName]!,
+                failureStatus: HealthStatus.Degraded)
             .AddCheck<ApiHealthCheck>("Api");
 
         return serviceCollection;

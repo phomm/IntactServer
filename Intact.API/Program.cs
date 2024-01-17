@@ -1,5 +1,4 @@
 using Intact.API.Bootstrap;
-using Intact.API.Health;
 using Intact.BusinessLogic.Data.Config;
 using Intact.BusinessLogic.Data.Redis;
 using Intact.BusinessLogic.Data.RedisDI;
