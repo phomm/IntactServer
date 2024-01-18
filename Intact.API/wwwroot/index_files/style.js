@@ -1,0 +1,27 @@
+//document.write("<base href = http://phomm.narod.ru/>");
+document.write("<link rel='stylesheet' href='./css_neon/neonstyle.css' type='text/css'>");
+picb1 = new Image();
+picb1.src=neon_blue1.png;
+picb2 = new Image();
+picb2.src=neon_blue2.png;
+picb3 = new Image();
+picb3.src=neon_blue3.png;
+picr1 = new Image();
+picr1.src=neon_red1.png;
+picr2 = new Image();
+picr2.src=neon_red2.png;
+picr2 = new Image();
+picr2.src=neon_red2.png;
+pico1 = new Image();
+pico1.src=neon_orange1.png;
+pico2 = new Image();
+pico2.src=neon_orange2.png;
+pico3 = new Image();
+pico3.src=neon_orange3.png;
+picv1 = new Image();
+picv1.src=neon_violet1.png;
+picv2 = new Image();
+picv2.src=neon_violet2.png;
+picv3 = new Image();
+picv3.src=neon_violet3.png;
+

@@ -1,0 +1,91 @@
+body {
+	background-image: url(bg.gif); background-repeat: repeat; color: #999999; font-family: Tahoma , Verdana ; margin-left: 100; margin-right:100; 
+}
+.bgcenter{ background-image: url(bg_mid.gif); background-repeat: repeat-y; background-position: center top
+
+}
+h1 {
+	FONT-SIZE: 30px; COLOR: #a273ff; FONT-FAMILY: Tahoma ; text-align : Center 
+}
+h2 {
+	FONT-SIZE: 20px; COLOR: #a273ff; FONT-FAMILY: Verdana ; text-align : Center 
+}
+h3 {
+	FONT-SIZE: 20px; FONT-FAMILY: Verdana ; text-align : Center 
+}
+A:link {
+	COLOR: #006400; FONT-STYLE: normal; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+A:visited {
+	COLOR: #006400; FONT-STYLE: normal; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+A:hover {
+	COLOR: #009900; FONT-STYLE: normal; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+A:active {
+	COLOR: #00ff00; FONT-STYLE: normal; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+
+.nav1{background-image: url(neon_blue1.png); background-repeat: repeat-x; 
+}
+.nav1:hover{background-image: url(neon_blue2.png); background-repeat: repeat-x;
+}
+.nav1:active{background-image: url(neon_blue3.png); background-repeat: repeat-x;
+}
+
+.nav2{background-image: url(neon_red1.png); background-repeat: repeat-x; 
+}
+.nav2:hover{background-image: url(neon_red2.png); background-repeat: repeat-x;
+}
+.nav2:active{background-image: url(neon_red3.png); background-repeat: repeat-x;
+}
+
+.nav3{background-image: url(neon_green1.png); background-repeat: repeat-x; 
+}
+.nav3:hover{background-image: url(neon_green2.png); background-repeat: repeat-x;
+}
+.nav3:active{background-image: url(neon_green3.png); background-repeat: repeat-x;
+}
+
+.nav4{background-image: url(neon_orange1.png); background-repeat: repeat-x; 
+}
+.nav4:hover{background-image: url(neon_orange2.png); background-repeat: repeat-x;
+}
+.nav4:active{background-image: url(neon_orange3.png); background-repeat: repeat-x;
+}
+
+.nav5{background-image: url(neon_violet1.png); background-repeat: repeat-x; 
+}
+.nav5:hover{background-image: url(neon_violet2.png); background-repeat: repeat-x;
+}
+.nav5:active{background-image: url(neon_violet3.png); background-repeat: repeat-x;
+}
+
+.nav { vertical-align : top ; height : 40
+}
+
+A.neonlink {
+	COLOR: #cccccc; FONT-weight: bold; FONT-SIZE: 13px; FONT-FAMILY: verdana; text-decoration : none 
+}
+UL {
+	MARGIN-TOP: 0px; FONT-SIZE: 13px; COLOR: #000099; FONT-STYLE: normal; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+OL {
+	MARGIN-TOP: 0px; FONT-SIZE: 13px; COLOR: #000099; FONT-STYLE: normal; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+LI {
+	MARGIN-TOP: 0px; FONT-SIZE: 13px; COLOR: #000099; FONT-FAMILY: Arial, Helvetica, sans-serif
+}
+.small {
+	FONT-SIZE: 11px
+}
+.center {
+	TEXT-ALIGN: center
+}
+.small-center {
+	FONT-SIZE: 11px; TEXT-ALIGN: center
+}
+#white {
+	COLOR: #ffffff
+}
