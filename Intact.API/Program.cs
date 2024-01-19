@@ -26,18 +26,6 @@ builder.Services.AddRedis(redisSettings);
 builder.Services.CustomizeAuthorization();
 builder.Services.CustomizeAuthentication();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("CustomCorsPolicy", config =>
-    {
-        config
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials()
-            .SetIsOriginAllowed(_ => true);
-    });
-});
-
 var app = builder.Build();
 
 app.UseDefaultFiles();
@@ -62,8 +50,6 @@ app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();
-
-app.UseCors("CustomCorsPolicy");
 
 app.UseAuthorization();
 
