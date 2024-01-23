@@ -6,11 +6,11 @@ public record MapBuildingDao
 {
     [Key]
     [StringLength(16)]
-    public string MapId { get; set; }
+    public string MapId { get; init; }
     [Key] 
-    public int Number { get; set; }
+    public int Number { get; init; }
     [StringLength(16)]
-    public string Proto { get; set; }
-    public int X { get; set; }
-    public int Y { get; set; }
+    public string Proto { get; init; }
+    public int X { get; init; }
+    public int Y { get; init; }
 }

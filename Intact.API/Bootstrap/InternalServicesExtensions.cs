@@ -3,28 +3,35 @@ using Intact.BusinessLogic.Data.Config;
 using Intact.BusinessLogic.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace Intact.API.Bootstrap
+namespace Intact.API.Bootstrap;
+
+public static class InternalServicesExtensions
 {
-    public static class InternalServicesExtensions
+    public static IServiceCollection AddInternalServices(this IServiceCollection services)
     {
-        public static IServiceCollection AddInternalServices(this IServiceCollection services, ConfigurationManager configuration)
-        {
-            services.AddTransient<IProtoBaseService, ProtoBaseService>();
-            services.AddTransient<IMapsService, MapsService>();
-            services.AddTransient<ICacheService, CacheService>();
+        services.AddTransient<IProtoBaseService, ProtoBaseService>();
+        services.AddTransient<IMapsService, MapsService>();
+        services.AddTransient<ICacheService, CacheService>();
+        
+        return services;
+    }
 
-            const bool usePostgres = true;
-            const string assemblyName = $"{nameof(Intact)}.{nameof(API)}";
+    public static IServiceCollection AddDbServices(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        const bool usePostgres = true;
+        const string assemblyName = $"{nameof(Intact)}.{nameof(API)}";
 
-            var dbSettings = configuration.GetSection(nameof(DbSettings)).Get<DbSettings>();
-            var connectionString = usePostgres ? dbSettings.PgConnectionString : dbSettings.ConnectionString;
+        var pgConnectionString = configuration[nameof(DbSettings.PgConnectionString)];
+        var dbSettings = configuration.GetSection(nameof(DbSettings)).Get<DbSettings>()!;
+        var connectionString = usePostgres ? pgConnectionString ?? dbSettings.PgConnectionString : dbSettings.ConnectionString;
 
-            services.AddDbContextFactory<IntactDbContext>(
-                options => _ = usePostgres ? 
-                    options.UseNpgsql(connectionString, b => b.MigrationsAssembly(assemblyName))
-                    : options.UseSqlServer(connectionString, b => b.MigrationsAssembly(assemblyName)));
+        services.AddDbContextFactory<AppDbContext>(GetOptions);
+        services.AddDbContext<AppIdentityDbContext>(GetOptions);
+        
+        return services;
 
-            return services;
-        }
+        void GetOptions(DbContextOptionsBuilder options) => _ = usePostgres
+            ? options.UseNpgsql(connectionString, b => b.MigrationsAssembly(assemblyName))
+            : options.UseSqlServer(connectionString, b => b.MigrationsAssembly(assemblyName));
     }
 }

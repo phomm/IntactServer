@@ -1,4 +1,6 @@
+using Intact.API.Bootstrap;
 using Intact.BusinessLogic.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Intact.API.Controllers;
@@ -14,8 +16,9 @@ public class CacheController : ControllerBase
         _cacheService = cacheService;
     }
 
-    [HttpDelete("", Name = "ClearCache")]
-    public async Task<IActionResult> GetMapsAsync(CancellationToken cancellationToken)
+    [HttpDelete("clear", Name = "ClearCache")]
+    //[Authorize(Policies.Admin)]
+    public async Task<IActionResult> ClearCacheAsync(CancellationToken cancellationToken)
     {
         await _cacheService.ClearCache(cancellationToken);
         return Ok();
