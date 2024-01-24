@@ -91,13 +91,12 @@ public static class InfrastructureExtensions
 
     public static IServiceCollection AddHealth(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
-        const string pgConnectionStringName = nameof(DbSettings.PgConnectionString);
-        const string dbSettingsPgConnectionStringName = $"{nameof(DbSettings)}:{pgConnectionStringName}";
-
         serviceCollection.AddHealthChecks()
-            .AddNpgSql(configuration[pgConnectionStringName] ?? configuration[dbSettingsPgConnectionStringName]!,
+            .AddCheck<ApiHealthCheck>("Api")
+            .AddNpgSql(configuration[$"{nameof(DbSettings)}:{nameof(DbSettings.PgConnectionString)}"]!,
                 failureStatus: HealthStatus.Degraded)
-            .AddCheck<ApiHealthCheck>("Api");
+            .AddRedis(configuration[$"{nameof(RedisSettings)}:{nameof(RedisSettings.ConnectionString)}"]!,
+                failureStatus: HealthStatus.Degraded);
 
         return serviceCollection;
     }
