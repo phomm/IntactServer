@@ -16,8 +16,6 @@ namespace Intact.BusinessLogic.Data.RedisDI
             }
             else
             {
-                services.AddSingleton<IRedisPingService, RedisPingService>();
-                services.AddSingleton<IStartRedisInfrastructureService, StartRedisInfrastructureService>();
                 services.AddSingleton<IRedisCache, RedisCache.RedisCache>();
                 services.AddSingleton<IRedisConnectionFactory, RedisConnectionFactory>();
             }

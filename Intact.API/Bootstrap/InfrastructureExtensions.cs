@@ -83,6 +83,12 @@ public static class InfrastructureExtensions
         return serviceCollection;
     }
 
+    public static void StartRedis(this IApplicationBuilder applicationBuilder, bool useInMemoryCache)
+    {
+        if (!useInMemoryCache)
+            applicationBuilder.ApplicationServices.GetRequiredService<IRedisConnectionFactory>().Start(); 
+    }
+
     public static IServiceCollection AddHealth(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         const string pgConnectionStringName = nameof(DbSettings.PgConnectionString);

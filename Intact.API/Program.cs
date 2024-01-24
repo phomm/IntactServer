@@ -57,6 +57,6 @@ app.MapGroup("api").MapIdentityApi<User>();
 
 app.MapControllers();
 
-app.StartRedisInfrastructure(redisSettings.UseInMemoryCache);
+app.StartRedis(redisSettings.UseInMemoryCache);
 
 app.Run();
