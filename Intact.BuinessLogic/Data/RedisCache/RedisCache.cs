@@ -13,7 +13,7 @@ public class RedisCache : IRedisCache
     public RedisCache(IRedisConnectionFactory redisConnectionFactory, ILogger<RedisCache> logger)
     {
         _logger = logger;
-        _database = new Lazy<IDatabase>(() => redisConnectionFactory.RedisConnection.GetDatabase());
+        _database = new Lazy<IDatabase>(() => redisConnectionFactory.Database);
     }
 
     public async Task<bool> AddAsync<T>(string cacheSet, string key, T value)

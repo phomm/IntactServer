@@ -19,7 +19,8 @@ namespace Intact.BusinessLogic.Data.Redis
         /// <value>
         /// The redis connection.
         /// </value>
-        IConnectionMultiplexer RedisConnection { get; }
+        //IConnectionMultiplexer RedisConnection { get; }
+        IDatabase Database { get; }
 
         /// <summary>
         /// Sets configuration and Starts the connection.
@@ -39,17 +40,14 @@ namespace Intact.BusinessLogic.Data.Redis
         }
 
         /// <inheritdoc />
-        public IConnectionMultiplexer RedisConnection { get; private set; }
+        private IConnectionMultiplexer RedisConnection { get; set; }
+
+        public IDatabase Database => RedisConnection.GetDatabase();
 
         /// <inheritdoc />
         public void Start()
         {
-            SetConnectionConfiguration(_redisSettings.ConnectionString);
-        }
-
-        private void SetConnectionConfiguration(string configurationOptionsString)
-        {
-            var configurationOptions = ConfigurationOptions.Parse(configurationOptionsString);
+            var configurationOptions = ConfigurationOptions.Parse(_redisSettings.ConnectionString);
             configurationOptions.Password = _redisSettings.Password;
             RedisConnection = ConnectionMultiplexer.Connect(configurationOptions);
         }

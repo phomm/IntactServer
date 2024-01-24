@@ -21,9 +21,8 @@ public static class InternalServicesExtensions
         const bool usePostgres = true;
         const string assemblyName = $"{nameof(Intact)}.{nameof(API)}";
 
-        var pgConnectionString = configuration[nameof(DbSettings.PgConnectionString)];
         var dbSettings = configuration.GetSection(nameof(DbSettings)).Get<DbSettings>()!;
-        var connectionString = usePostgres ? pgConnectionString ?? dbSettings.PgConnectionString : dbSettings.ConnectionString;
+        var connectionString = usePostgres ? dbSettings.PgConnectionString : dbSettings.ConnectionString;
 
         services.AddDbContextFactory<AppDbContext>(GetOptions);
         services.AddDbContext<AppIdentityDbContext>(GetOptions);
