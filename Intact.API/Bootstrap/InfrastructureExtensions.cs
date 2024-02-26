@@ -39,6 +39,7 @@ public static class InfrastructureExtensions
     public static IServiceCollection AddSwagger(this IServiceCollection serviceCollection)
     {
         const string version = "v1";
+        const string scheme = "Bearer";
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         serviceCollection.AddEndpointsApiExplorer();
         serviceCollection.AddSwaggerGen(options =>
@@ -50,12 +51,12 @@ public static class InfrastructureExtensions
                     Version = version
                 });
             options.IncludeXmlComments(Path.ChangeExtension(typeof(Program).Assembly.Location, "xml"));
-            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            options.AddSecurityDefinition(scheme, new OpenApiSecurityScheme
             {
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey,
                 In = ParameterLocation.Header,
-                Scheme = "Bearer"
+                Scheme = scheme
             });
             options.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
@@ -65,7 +66,7 @@ public static class InfrastructureExtensions
                         Reference = new OpenApiReference
                         {
                             Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
+                            Id = scheme
                         }
                     },
                     Array.Empty<string>()
@@ -91,7 +92,8 @@ public static class InfrastructureExtensions
 
     public static IServiceCollection AddHealth(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
-        serviceCollection.AddHealthChecks()
+        serviceCollection
+            .AddHealthChecks()
             .AddCheck<ApiHealthCheck>("Api")
             .AddNpgSql(configuration[$"{nameof(DbSettings)}:{nameof(DbSettings.PgConnectionString)}"]!,
                 failureStatus: HealthStatus.Degraded)

@@ -1,9 +1,7 @@
 using Intact.API.Bootstrap;
 using Intact.BusinessLogic.Data.Config;
 using Intact.BusinessLogic.Data.Redis;
-using Intact.BusinessLogic.Data.RedisDI;
 using Intact.BusinessLogic.Models;
-
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
 
@@ -36,9 +34,9 @@ app.MapHealthChecks("/_health", new HealthCheckOptions
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
-app.UseDeveloperExceptionPage();
+if (app.Environment.IsDevelopment())
+    app.UseDeveloperExceptionPage();
 
-// Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
