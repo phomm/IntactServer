@@ -9,17 +9,6 @@ namespace Intact.BusinessLogic.Data.Redis
     /// </summary>
     public interface IRedisConnectionFactory
     {
-        /// <summary>
-        /// Gets the redis connection.
-        /// https://github.com/StackExchange/StackExchange.Redis/blob/master/docs/Basics.md
-        /// Because the ConnectionMultiplexer does a lot, it is designed to be shared and reused between callers.
-        /// You should not create a ConnectionMultiplexer per operation.
-        /// It is fully thread-safe and ready for this usage.
-        /// </summary>
-        /// <value>
-        /// The redis connection.
-        /// </value>
-        //IConnectionMultiplexer RedisConnection { get; }
         IDatabase Database { get; }
 
         /// <summary>
@@ -39,17 +28,23 @@ namespace Intact.BusinessLogic.Data.Redis
             _redisSettings = redisSettings.Value;
         }
 
-        /// <inheritdoc />
-        private IConnectionMultiplexer RedisConnection { get; set; }
+        /// <summary>
+        /// Gets the redis connection.
+        /// https://github.com/StackExchange/StackExchange.Redis/blob/master/docs/Basics.md
+        /// Because the ConnectionMultiplexer does a lot, it is designed to be shared and reused between callers.
+        /// You should not create a ConnectionMultiplexer per operation.
+        /// It is fully thread-safe and ready for this usage.
+        /// </summary>
+        private ConnectionMultiplexer ConnectionMultiplexer { get; set; }
 
-        public IDatabase Database => RedisConnection.GetDatabase();
+        public IDatabase Database => ConnectionMultiplexer.GetDatabase();
 
         /// <inheritdoc />
         public void Start()
         {
             var configurationOptions = ConfigurationOptions.Parse(_redisSettings.ConnectionString);
-            configurationOptions.Password = _redisSettings.Password;
-            RedisConnection = ConnectionMultiplexer.Connect(configurationOptions);
+            configurationOptions.Password ??= _redisSettings.Password;
+            ConnectionMultiplexer = ConnectionMultiplexer.Connect(configurationOptions);
         }
     }
 }

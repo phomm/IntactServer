@@ -4,25 +4,32 @@ using Intact.BusinessLogic.Data.Redis;
 using Intact.BusinessLogic.Models;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.SetupConfiguration();
 builder.Services.AddConfigOptionsAndBind<RedisSettings>(builder.Configuration, nameof(RedisSettings), out var redisSettings);
-
 builder.AddConfigOptions<DbSettings>();
 
 // Add services to the container.
-builder.Services.AddHealth(builder.Configuration);
-builder.Services.AddControllers();
-builder.Services.AddProblemDetails();
-builder.Services.AddSwagger();
-builder.Services.AddInternalServices();
-builder.Services.AddDbServices(builder.Configuration);
-builder.Services.AddRedis(redisSettings);
-
-builder.Services.CustomizeAuthorization();
-builder.Services.CustomizeAuthentication();
+builder.Services
+    .AddHealth(builder.Configuration)
+    .AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+    });
+builder.Services
+    .AddProblemDetails()
+    .AddSwagger()
+    .AddInternalServices()
+    .AddDbServices(builder.Configuration)
+    .AddRedis(redisSettings)
+    .CustomizeAuthorization()
+    .CustomizeAuthentication();
 
 var app = builder.Build();
 

@@ -52,7 +52,7 @@ INSERT INTO "ProtoWarriors" ("Id" ,"Number" ,"FactionId" ,"Force" ,"AssetId","Is
 ;
 INSERT INTO "ProtoBuildings" ("Id" ,"Number" ,"InLife" ,"AssetId","BuildingType") VALUES
 ('Tower',1,4,'Tower',1),
-('Wall',2,2,'WallHorizontal',2),
+('Wall',2,2,'Wall',2),
 ('Trap',3,2,'Trap',3),
 ('TreeWall',4,2,'TreeWall',4),
 ('Tree',5,2,'Tree',4)
