@@ -49,6 +49,13 @@ INSERT INTO "ProtoWarriors" ("Id" ,"Number" ,"FactionId" ,"Force" ,"AssetId","Is
 ('Rider',28,'Horde',/*force*/4,'Rider',false/*Hero*/,false/*Ranged*/,true/*Melee*/,true/*BlockFree*/,false/*Immune*/,2/*Life*/,0/*Mana*/,3/*Moves*/,1/*Acts*/,0/*Shots*/,5/*Cost*/)      ,
 ('Ogre',29,'Horde',/*force*/5,'Ogre',false/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,4/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,6/*Cost*/)       ,
 ('Cyclop',30,'Horde',/*force*/2,'Cyclop',true/*Hero*/,false/*Ranged*/,true/*Melee*/,false/*BlockFree*/,false/*Immune*/,1/*Life*/,0/*Mana*/,1/*Moves*/,1/*Acts*/,0/*Shots*/,0/*Cost*/)
+
+
+;
+INSERT INTO "ProtoAbilities" ("Id" ,"InitialPoints", "Ability" ,"AssetId") VALUES
+('Joust', 3, 'abJoust', 'Joust'),
+('AntimagicAura', 0, 'abMagAura', 'AntimagicAura')
+
 ;
 INSERT INTO "ProtoBuildings" ("Id" ,"Number" ,"InLife" ,"AssetId","BuildingType") VALUES
 ('Tower',1,4,'Tower',1),
