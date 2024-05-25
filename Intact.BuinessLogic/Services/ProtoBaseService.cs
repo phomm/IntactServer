@@ -75,7 +75,7 @@ namespace Intact.BusinessLogic.Services
                 Factions = FactionMapper.Map(factions, protoWarriors, localizationGroups),
                 ProtoBuildings = ProtoBuildingMapper.Map(protoBuildings, localizationGroups),
                 ProtoWarriors = ProtoWarriorMapper.Map(protoWarriors, localizationGroups),
-                ProtoAbilities = ProtoAbilityMapper.Map(protoAbilities, localizationGroups),
+                Abilities = ProtoAbilityMapper.Map(protoAbilities, localizationGroups),
             };
 
             await _redisCache.AddAsync(cacheSet, key, protoBase);
