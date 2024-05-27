@@ -52,7 +52,7 @@ INSERT INTO "ProtoWarriors" ("Id" ,"Number" ,"FactionId" ,"Force" ,"AssetId","Is
 
 
 ;
-INSERT INTO "ProtoAbilities" ("Id" ,"Number" ,"InitialPoints" ,"Ability" ,"AssetId") VALUES
+INSERT INTO "Abilities" ("Id" ,"Number" ,"InitialPoints" ,"Ability" ,"AssetId") VALUES
 ('Joust', 1, 3, 'abJoust', 'Joust'),
 ('AntimagicAura', 2, 0, 'abMagAura', 'AntimagicAura')
 

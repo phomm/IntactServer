@@ -6,14 +6,14 @@ using Riok.Mapperly.Abstractions;
 namespace Intact.BusinessLogic.Mappers;
 
 [Mapper]
-public partial class ProtoAbilityMapper
+public partial class AbilityMapper
 {
-    public partial ProtoAbility Map(ProtoAbilityDao dao);
+    public partial AbilityDto Map(AbilityDao dao);
 
-    public static IReadOnlyList<ProtoAbility> Map(IReadOnlyList<ProtoAbilityDao> daos,
+    public static IReadOnlyList<AbilityDto> Map(IReadOnlyList<AbilityDao> daos,
         IReadOnlyList<IGrouping<string, LocalizationDao>> localizations)
     {
-        var mapper = new ProtoAbilityMapper();
+        var mapper = new AbilityMapper();
         return daos.Select(d =>
         {
             var model = mapper.Map(d);

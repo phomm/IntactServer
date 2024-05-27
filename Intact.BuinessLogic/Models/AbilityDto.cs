@@ -1,6 +1,7 @@
 namespace Intact.BusinessLogic.Models;
 
-public class ProtoAbility
+// Dto suffix added because class cannot be named same as property
+public class AbilityDto
 {
     public int Number { get; set; }
     public string Id { get; init; }

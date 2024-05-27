@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Intact.BusinessLogic.Data.Models;
 
-public record ProtoAbilityDao : LocalizableDao
+public record AbilityDao : LocalizableDao
 {
     [Key]
     [StringLength(16)]
