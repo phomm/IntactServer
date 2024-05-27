@@ -22,9 +22,10 @@ public class RedisCacheMock : IRedisCache
         return Task.FromResult(_memoryCache.Get<T>(key));
     }
 
-    public async Task RemoveAsync(string cacheSet, string key)
+    public Task RemoveAsync(string cacheSet, string key)
     {
         _memoryCache.Remove(key);
+        return Task.FromResult(true);
     }
 
     public Task<bool> ExistsAsync(string cacheSet, string key)
@@ -32,7 +33,7 @@ public class RedisCacheMock : IRedisCache
         return Task.FromResult(_memoryCache.TryGetValue(key, out _));
     }
 
-    public  Task<bool> AddStringAsync<T>(string cacheSet, string key, T value, TimeSpan expiration)
+    public Task<bool> AddStringAsync<T>(string cacheSet, string key, T value, TimeSpan expiration)
     {
         _memoryCache.Set(key, value);
         return Task.FromResult(true);
@@ -43,9 +44,10 @@ public class RedisCacheMock : IRedisCache
         return Task.FromResult(_memoryCache.Get<T>(key));
     }
 
-    public async Task RemoveStringAsync(string cacheSet, string key)
+    public Task RemoveStringAsync(string cacheSet, string key)
     {
         _memoryCache.Remove(key);
+        return Task.FromResult(true);
     }
 
     public Task<bool> StringExistsAsync(string cacheSet, string key)

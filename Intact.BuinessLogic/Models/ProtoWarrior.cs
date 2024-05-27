@@ -3,12 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace Intact.BusinessLogic.Models;
 
-public class ProtoWarrior
+public record ProtoWarrior: Localizable
 {
     public int Number { get; set; }
     public string Id { get; set; }
-    public IReadOnlyDictionary<string, string> Name { get; set; }
-    public IReadOnlyDictionary<string, string> Description { get; set; }
     public string FactionId { get; set; }
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public Force Force { get; set; } 
