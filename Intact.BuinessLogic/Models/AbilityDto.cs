@@ -1,7 +1,7 @@
 namespace Intact.BusinessLogic.Models;
 
 // Dto suffix added because class cannot be named same as property
-public class AbilityDto
+public record AbilityDto
 {
     public int Number { get; set; }
     public string Id { get; init; }
