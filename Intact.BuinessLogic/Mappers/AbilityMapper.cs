@@ -20,6 +20,6 @@ public partial class AbilityMapper
             model.Name = localizations.Map(d.TermName, model.Id);
             model.Description = localizations.Map(d.TermDescription, model.Id);
             return model;
-        }).OrderBy(x => x.Number).ToList();
+        }).ToList();
     }
 }
