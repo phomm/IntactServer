@@ -25,4 +25,6 @@ public record ProtoWarriorDao : LocalizableDao
     public byte InActs { get; init; }
     public byte InShots { get; init; }
     public byte Cost { get; init; }
+    [StringLength(32)]
+    public string Abilities { get; init; }
 }
