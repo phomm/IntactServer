@@ -20,7 +20,7 @@ public partial class ProtoWarriorMapper
             model.Name = localizations.Map(d.TermName, model.Id);
             model.Description = localizations.Map(d.TermDescription, model.Id);
             model.Abilities = string.IsNullOrWhiteSpace(d.Abilities)
-                ? new List<string>()
+                ? null
                 : d.Abilities.Split(',').ToList();
             return model;
         }).OrderBy(x => x.Number).ToList();
