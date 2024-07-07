@@ -1,4 +1,4 @@
-﻿using Intact.BusinessLogic.Data.Models;
+using Intact.BusinessLogic.Data.Models;
 using Intact.BusinessLogic.Helpers;
 using Intact.BusinessLogic.Models;
 using Riok.Mapperly.Abstractions;
@@ -6,23 +6,20 @@ using Riok.Mapperly.Abstractions;
 namespace Intact.BusinessLogic.Mappers;
 
 [Mapper]
-public partial class ProtoWarriorMapper
+public partial class AbilityMapper
 {
-    public partial ProtoWarrior Map(ProtoWarriorDao dao);
+    public partial AbilityDto Map(AbilityDao dao);
 
-    public static IReadOnlyList<ProtoWarrior> Map(IReadOnlyList<ProtoWarriorDao> daos,
+    public static IReadOnlyList<AbilityDto> Map(IReadOnlyList<AbilityDao> daos,
         IReadOnlyList<IGrouping<string, LocalizationDao>> localizations)
     {
-        var mapper = new ProtoWarriorMapper();
+        var mapper = new AbilityMapper();
         return daos.Select(d =>
         {
             var model = mapper.Map(d);
             model.Name = localizations.Map(d.TermName, model.Id);
             model.Description = localizations.Map(d.TermDescription, model.Id);
-            model.Abilities = string.IsNullOrWhiteSpace(d.Abilities)
-                ? null
-                : d.Abilities.Split(',').ToList();
             return model;
-        }).OrderBy(x => x.Number).ToList();
+        }).ToList();
     }
 }

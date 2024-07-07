@@ -18,10 +18,11 @@ public static class InternalServicesExtensions
 
     public static IServiceCollection AddDbServices(this IServiceCollection services, ConfigurationManager configuration)
     {
-        const bool usePostgres = true;
         const string assemblyName = $"{nameof(Intact)}.{nameof(API)}";
 
         var dbSettings = configuration.GetSection(nameof(DbSettings)).Get<DbSettings>()!;
+
+        var usePostgres = !dbSettings.UseSqlServer;
         var connectionString = usePostgres ? dbSettings.PgConnectionString : dbSettings.ConnectionString;
 
         services.AddDbContextFactory<AppDbContext>(GetOptions);

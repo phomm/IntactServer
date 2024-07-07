@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     public DbSet<FactionDao> Factions { get; init; }
     public DbSet<ProtoBuildingDao> ProtoBuildings { get; init; }
     public DbSet<ProtoWarriorDao> ProtoWarriors { get; init; }
+    public DbSet<AbilityDao> Abilities { get; init; }
     public DbSet<MapDao> Maps { get; init; }
     public DbSet<MapBuildingDao> MapBuildings { get; init; }
     public DbSet<PlayerOptionsDao> PlayerOptions { get; init; }
@@ -22,6 +23,7 @@ public class AppDbContext : DbContext
         AddComputedLocalizableColumns<FactionDao>();
         AddComputedLocalizableColumns<ProtoBuildingDao>();
         AddComputedLocalizableColumns<ProtoWarriorDao>();
+        AddComputedLocalizableColumns<AbilityDao>();
         AddComputedLocalizableColumns<MapDao>();
             
         builder.Entity<LocalizationDao>().HasKey(x => new { x.TermId, x.LanguageCode});
@@ -36,6 +38,7 @@ public class AppDbContext : DbContext
         builder.Entity<ProtoWarriorDao>().Property(p => p.IsRanged).HasDefaultValue(0);
         builder.Entity<ProtoWarriorDao>().Property(p => p.IsBlockFree).HasDefaultValue(0);
         builder.Entity<ProtoWarriorDao>().Property(p => p.IsImmune).HasDefaultValue(0);
+        builder.Entity<AbilityDao>().Property(p => p.InitialPoints).HasDefaultValue(0);
         builder.Entity<MapDao>().HasKey(x => new { x.Id, x.Version });
         builder.Entity<PlayerOptionsDao>().HasKey(x => new { x.MapId, x.Number });
         builder.Entity<MapBuildingDao>().HasKey(x => new { x.MapId, x.Number });

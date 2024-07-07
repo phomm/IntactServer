@@ -22,4 +22,5 @@ public record ProtoWarrior: Localizable
     public byte InActs { get; set; }
     public byte InShots { get; set; }
     public byte Cost { get; set; }
+    public List<string>? Abilities { get; set; }
 }
