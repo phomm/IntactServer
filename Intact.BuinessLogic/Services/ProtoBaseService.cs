@@ -74,7 +74,7 @@ namespace Intact.BusinessLogic.Services
             {
                 Factions = FactionMapper.Map(factions, protoWarriors, localizationGroups),
                 ProtoBuildings = ProtoBuildingMapper.Map(protoBuildings, localizationGroups),
-                ProtoWarriors = ProtoWarriorMapper.Map(protoWarriors, localizationGroups),
+                ProtoWarriors = ProtoWarriorMapper.Map(protoWarriors, localizationGroups, abilities),
                 Abilities = AbilityMapper.Map(abilities, localizationGroups),
             };
 

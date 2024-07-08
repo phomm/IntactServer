@@ -11,8 +11,9 @@ public partial class ProtoWarriorMapper
     public partial ProtoWarrior Map(ProtoWarriorDao dao);
 
     public static IReadOnlyList<ProtoWarrior> Map(IReadOnlyList<ProtoWarriorDao> daos,
-        IReadOnlyList<IGrouping<string, LocalizationDao>> localizations)
+        IReadOnlyList<IGrouping<string, LocalizationDao>> localizations, List<AbilityDao> abilities)
     {
+        var abilityNamesSet = abilities.Select(x => x.Id).ToHashSet();
         var mapper = new ProtoWarriorMapper();
         return daos.Select(d =>
         {
@@ -21,7 +22,7 @@ public partial class ProtoWarriorMapper
             model.Description = localizations.Map(d.TermDescription, model.Id);
             model.Abilities = string.IsNullOrWhiteSpace(d.Abilities)
                 ? null
-                : d.Abilities.Split(',').ToList();
+                : d.Abilities.Split(',').Where(x => abilityNamesSet.Contains(x)).ToList();
             return model;
         }).OrderBy(x => x.Number).ToList();
     }
