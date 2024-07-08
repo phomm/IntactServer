@@ -22,10 +22,7 @@ public partial class ProtoWarriorMapper
             model.Description = localizations.Map(d.TermDescription, model.Id);
             model.Abilities = string.IsNullOrWhiteSpace(d.Abilities)
                 ? null
-                : d.Abilities.Split(',').ToList();
-            var notFoundName = model.Abilities?.FirstOrDefault(x => !abilityNamesSet.Contains(x));
-            if (notFoundName is not null)
-                throw new IndexOutOfRangeException($"The ability '{notFoundName}' is not found");
+                : d.Abilities.Split(',').Where(x => abilityNamesSet.Contains(x)).ToList();
             return model;
         }).OrderBy(x => x.Number).ToList();
     }
