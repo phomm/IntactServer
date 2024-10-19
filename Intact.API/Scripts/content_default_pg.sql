@@ -346,7 +346,11 @@ INSERT INTO "Localizations" ("TermId", "LanguageCode", "Value") VALUES
 ('AntimagicAuraAbilityName', 'English', N'Antimagic Aura'), 
 ('AntimagicAuraAbilityDescription', 'English', N'Negates all magic spells for ally units aroud Unicorn'), 
 ('AntimagicAuraAbilityName', 'Russian', N'Аура антимагии'), 
-('AntimagicAuraAbilityDescription', 'Russian', N'Отклоняет магические воздействия направленные на дружественных существ эльфов возле себя')
+('AntimagicAuraAbilityDescription', 'Russian', N'Отклоняет магические воздействия направленные на дружественных существ эльфов возле себя'),
+
+
+('KickSpellName', 'Russian', N'Лоу-кик'), 
+('KickSpellDescription', 'Russian', N'Подлый удар по колену')
 ;
 INSERT INTO "Maps" ("Id", "Version", "Width", "Height", "Factions", "SceneBackground") VALUES
 ('IntactBasic', 1, 15, 15, 'Humans, Elves, Necros, Mages, Horde', 'grass_light'), 
@@ -448,4 +452,7 @@ INSERT INTO "MapBuildings" ("MapId", "Number", "Proto", "X", "Y") VALUES
 ('TwilightForest', 24, 'Tree', 7, 7), 
 ('TwilightForest', 25, 'Tree', 11, 9), 
 ('TwilightForest', 26, 'Tree', 16, 11)
+;
+INSERT INTO "Spells"("Id", "Mechanics", "Target", "Use", "Kind", "Cost", "Range", "AssetId") VALUES 
+    ('Kick', 'kick', 0, 0, 0, 5, 10, 'kickSpell')
 ;
