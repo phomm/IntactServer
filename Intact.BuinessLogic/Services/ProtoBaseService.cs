@@ -39,6 +39,7 @@ namespace Intact.BusinessLogic.Services
             List<ProtoBuildingDao> protoBuildings = null!;
             List<ProtoWarriorDao> protoWarriors = null!;
             List<AbilityDao> abilities = null!;
+            List<SpellDao> spells = null!;
 
             await Task.WhenAll(
                 Task.Run(async () =>
@@ -65,7 +66,12 @@ namespace Intact.BusinessLogic.Services
                     {
                         await using var context = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
                         abilities = await context.Abilities.AsNoTracking().ToListAsync(cancellationToken);
-                    }, cancellationToken)
+                    }, cancellationToken),
+                Task.Run(async () =>
+                {
+                    await using var context = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+                    spells = await context.Spells.AsNoTracking().ToListAsync(cancellationToken);
+                }, cancellationToken)
             );
 
             var localizationGroups = localizations.GroupBy(x => x.TermId).ToList();
@@ -76,6 +82,7 @@ namespace Intact.BusinessLogic.Services
                 ProtoBuildings = ProtoBuildingMapper.Map(protoBuildings, localizationGroups),
                 ProtoWarriors = ProtoWarriorMapper.Map(protoWarriors, localizationGroups, abilities),
                 Abilities = AbilityMapper.Map(abilities, localizationGroups),
+                Spells = SpellMapper.Map(spells, localizationGroups),
             };
 
             await _redisCache.AddAsync(cacheSet, key, protoBase);
