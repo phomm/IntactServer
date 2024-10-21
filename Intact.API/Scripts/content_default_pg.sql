@@ -15,7 +15,7 @@ INSERT INTO "Factions" ("Id", "Number") VALUES
 ('Mages', 4), 
 ('Horde', 5)
 ;
-INSERT INTO "ProtoWarriors" ("Id", "Number", "FactionId", "Force", "AssetId", "IsHero", "IsRanged", "IsMelee", "IsBlockFree", "IsBlockable", "IsImmune", "InLife", "InMana", "InMoves", "InActs", "InShots", "Cost", "Abilities", "Spells", "Trits") VALUES 
+INSERT INTO "ProtoWarriors" ("Id", "Number", "FactionId", "Force", "AssetId", "IsHero", "IsRanged", "IsMelee", "IsBlockFree", "IsBlockable", "IsImmune", "InLife", "InMana", "InMoves", "InActs", "InShots", "Cost", "Abilities", "Spells", "Traits") VALUES 
 ('Pikeman', 1, 'Humans', 1/*force*/, 'PikemanAnim', False/*Hero*/, False/*Ranged*/, True/*Melee*/, False/*BlockFree*/, False/*Blockable*/, False/*Immune*/, 1/*Life*/, 0/*Mana*/, 1/*Moves*/, 1/*Acts*/, 0/*Shots*/, 2/*Cost*/, '', '', ''),
 ('Archer', 2, 'Humans', 2/*force*/, 'Archer', False/*Hero*/, True/*Ranged*/, False/*Melee*/, False/*BlockFree*/, False/*Blockable*/, False/*Immune*/, 1/*Life*/, 0/*Mana*/, 1/*Moves*/, 1/*Acts*/, 2/*Shots*/, 3/*Cost*/, '', '', 'Ranged'),
 ('Eagle', 3, 'Humans', 3/*force*/, 'Eagle', False/*Hero*/, False/*Ranged*/, True/*Melee*/, False/*BlockFree*/, False/*Blockable*/, False/*Immune*/, 1/*Life*/, 0/*Mana*/, 4/*Moves*/, 1/*Acts*/, 0/*Shots*/, 4/*Cost*/, '', '', ''),
@@ -599,7 +599,8 @@ INSERT INTO "Localizations" ("TermId", "LanguageCode", "Value") VALUES
 ('BlockFreeTraitName', 'Ukrainian', N'Block Free'),
 ('BlockFreeTraitDescription', 'Ukrainian', N'Could quit the melee fight'),
 ('AlignedFireTraitName', 'Ukrainian', N'Aligned Fire'),
-('AlignedFireTraitDescription', 'Ukrainian', N'When fully prepared, could shoot 2 rounds in a row'),
+('AlignedFireTraitDescription', 'Ukrainian', N'When fully prepared, could shoot 2 rounds in a row')
+;
 
 
 INSERT INTO "Maps" ("Id", "Version", "Width", "Height", "Factions", "SceneBackground") VALUES
@@ -720,6 +721,5 @@ INSERT INTO "Spells"("Id", "Mechanics", "Target", "Use", "Kind", "Cost", "Range"
 ('GenieHaste', 'Haste', 2, 3, 1, 3, 2, 'Haste'),
 ('GenieAntimagic', 'DeMagic', 1, 3, 1, 3, 2, 'Antimagic'),
 ('GenieRay', 'Ray', 2, 3, 1, 1, 2, 'Ray'),
-('GenieEarthquake', 'Equake', 3, 1, 2, 6, 1, 'Earthquake'),
-
+('GenieEarthquake', 'Equake', 3, 1, 2, 6, 1, 'Earthquake')
 ;
