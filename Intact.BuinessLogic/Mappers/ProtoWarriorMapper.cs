@@ -1,5 +1,4 @@
 ﻿using Intact.BusinessLogic.Data.Models;
-using Intact.BusinessLogic.Helpers;
 using Intact.BusinessLogic.Models;
 using Riok.Mapperly.Abstractions;
 
@@ -18,8 +17,7 @@ public partial class ProtoWarriorMapper
         return daos.Select(d =>
         {
             var model = mapper.Map(d);
-            model.Name = localizations.Map(d.TermName, model.Id);
-            model.Description = localizations.Map(d.TermDescription, model.Id);
+            model.SetupLocalization(d, localizations);
             model.Abilities = string.IsNullOrWhiteSpace(d.Abilities)
                 ? null
                 : d.Abilities.Split(',').Where(x => abilityNamesSet.Contains(x)).ToList();

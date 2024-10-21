@@ -6,7 +6,6 @@ namespace Intact.BusinessLogic.Models;
 public record ProtoBuilding: Localizable
 {
     public int Number { get; set; }
-    public string Id { get; set; }
     public string AssetId { get; set; }
     public byte InLife { get; set; }
     [JsonConverter(typeof(JsonStringEnumConverter))]

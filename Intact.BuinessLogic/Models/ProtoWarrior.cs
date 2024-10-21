@@ -6,7 +6,6 @@ namespace Intact.BusinessLogic.Models;
 public record ProtoWarrior: Localizable
 {
     public int Number { get; set; }
-    public string Id { get; set; }
     public string FactionId { get; set; }
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public Force Force { get; set; } 

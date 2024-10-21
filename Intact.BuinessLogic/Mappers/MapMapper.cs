@@ -18,8 +18,7 @@ public partial class MapMapper
         {
             var resultMap = new Map();
             var model = mapper.Map(d);
-            model.Name = localizations.Map(d.TermName, model.Id);
-            model.Description = localizations.Map(d.TermDescription, model.Id);
+            model.SetupLocalization(d, localizations);
             model.Scene = new Scene {BackGround = d.SceneBackground};
 
             resultMap.MapOptions = model;

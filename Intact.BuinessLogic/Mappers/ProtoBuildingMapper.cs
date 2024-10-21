@@ -17,8 +17,7 @@ public partial class ProtoBuildingMapper
         return daos.Select(d =>
         {
             var model = mapper.Map(d);
-            model.Name = localizations.Map(d.TermName, model.Id);
-            model.Description = localizations.Map(d.TermDescription, model.Id);
+            model.SetupLocalization(d, localizations);
             return model;
         }).OrderBy(x => x.Number).ToList();
     }
