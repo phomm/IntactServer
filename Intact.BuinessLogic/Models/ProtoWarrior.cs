@@ -15,6 +15,7 @@ public record ProtoWarrior: Localizable
     public bool IsRanged { get; set; }
     public bool IsMelee { get; set; }
     public bool IsBlockFree { get; set; }
+    public bool IsBlockable { get; set; }
     public bool IsImmune { get; set; }
     public byte InLife { get; set; }
     public byte InMana { get; set; }
