@@ -3,7 +3,6 @@
 public record Faction: Localizable
 {
     public int Number { get; set; }
-    public string Id { get; set; }
     public IReadOnlyList<string> Units { get; set; }
     public int TotalCount { get; set; }
     public int UnitCount { get; set; }
