@@ -68,10 +68,10 @@ namespace Intact.BusinessLogic.Services
                         abilities = await context.Abilities.AsNoTracking().ToListAsync(cancellationToken);
                     }, cancellationToken),
                 Task.Run(async () =>
-                {
-                    await using var context = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
-                    spells = await context.Spells.AsNoTracking().ToListAsync(cancellationToken);
-                }, cancellationToken)
+                    {
+                        await using var context = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+                        spells = await context.Spells.AsNoTracking().ToListAsync(cancellationToken);
+                    }, cancellationToken)
             );
 
             var localizationGroups = localizations.GroupBy(x => x.TermId).ToList();
@@ -80,7 +80,7 @@ namespace Intact.BusinessLogic.Services
             {
                 Factions = FactionMapper.Map(factions, protoWarriors, localizationGroups),
                 ProtoBuildings = ProtoBuildingMapper.Map(protoBuildings, localizationGroups),
-                ProtoWarriors = ProtoWarriorMapper.Map(protoWarriors, localizationGroups, abilities),
+                ProtoWarriors = ProtoWarriorMapper.Map(protoWarriors, localizationGroups, abilities, spells),
                 Abilities = AbilityMapper.Map(abilities, localizationGroups),
                 Spells = SpellMapper.Map(spells, localizationGroups),
             };
