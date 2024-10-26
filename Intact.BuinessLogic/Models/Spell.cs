@@ -1,11 +1,11 @@
-﻿using Intact.BusinessLogic.Data.Enums;
+﻿using System.Text.Json.Serialization;
+using Intact.BusinessLogic.Data.Enums;
 
 namespace Intact.BusinessLogic.Models;
 
 public record Spell: Localizable
 {
-    public string Id { get; init; }
-    
+    [JsonPropertyName("spell")]
     public string Mechanics  { get; set; }
 
     public SpellTargetType Target { get; set; }
