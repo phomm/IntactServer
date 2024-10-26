@@ -1,21 +1,17 @@
-﻿using System.Text.Json.Serialization;
-using Intact.BusinessLogic.Converters;
-using Intact.BusinessLogic.Data.Enums;
+﻿using Intact.BusinessLogic.Data.Enums;
 
 namespace Intact.BusinessLogic.Models;
 
 public record Spell: Localizable
 {
-    [JsonPropertyName("spell")]
-    public string Mechanics  { get; set; }
+    public string Id { get; init; }
     
-    [JsonConverter(typeof(JsonPrefixEnumConverter<SpellTargetType>))]
+    public string Mechanics  { get; set; }
+
     public SpellTargetType Target { get; set; }
 
-    [JsonConverter(typeof(JsonPrefixEnumConverter<SpellUseType>))]
     public SpellUseType Use { get; set; }
 
-    [JsonConverter(typeof(JsonPrefixEnumConverter<SpellKind>))]
     public SpellKind Kind { get; set; }
 
     public int Cost { get; set; }
