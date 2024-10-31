@@ -5,10 +5,6 @@ namespace Intact.BusinessLogic.Data.Models;
 
 public record SpellDao : LocalizableDao
 {
-    [Key]
-    [StringLength(16)]
-    public string Id { get; init; }
-
     [StringLength(16)]
     public string Mechanics  { get; set; }
 

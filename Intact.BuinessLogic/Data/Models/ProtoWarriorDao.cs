@@ -5,9 +5,6 @@ namespace Intact.BusinessLogic.Data.Models;
 
 public record ProtoWarriorDao : LocalizableDao
 {
-    [Key]
-    [StringLength(16)]
-    public string Id { get; init; }
     public int Number { get; init; }
     [StringLength(16)]
     public string FactionId { get; init; }
