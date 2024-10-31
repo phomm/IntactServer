@@ -599,15 +599,15 @@ INSERT INTO "Localizations" ("TermId", "LanguageCode", "Value") VALUES
 ('BlockFreeTraitName', 'Ukrainian', N'Block Free'),
 ('BlockFreeTraitDescription', 'Ukrainian', N'Може відступити з ближнього бою'),
 ('AlignedFireTraitName', 'Ukrainian', N'Пристрілка'),
-('AlignedFireTraitDescription', 'Ukrainian', N'При повній готовності може стріляти поспіль 2 раунди'),
-
+('AlignedFireTraitDescription', 'Ukrainian', N'При повній готовності може стріляти поспіль 2 раунди')
+;
 
 
 INSERT INTO "Maps" ("Id", "Version", "Width", "Height", "Factions", "SceneBackground") VALUES
-('IntactBasic', 1, 15, 15, 'Humans, Elves, Necros, Mages, Horde', 'grass_light'), 
-('SiegeBasic', 1, 15, 10, 'Humans, Elves, Necros, Mages, Horde', 'cmbksnmt'), 
-('EdgeTowers', 1, 10, 10, 'Humans, Elves, Necros, Mages, Horde', 'cmbksnmt'), 
-('TwilightForest', 1, 20, 20, 'Humans, Elves, Necros, Mages, Horde', 'grass_dark')
+('IntactBasic', 1, 15, 15, 'Humans,Elves,Necros,Mages,Horde', 'grass_light'), 
+('SiegeBasic', 1, 15, 10, 'Humans,Elves,Necros,Mages,Horde', 'cmbksnmt'), 
+('EdgeTowers', 1, 10, 10, 'Humans,Elves,Necros,Mages,Horde', 'cmbksnmt'), 
+('TwilightForest', 1, 20, 20, 'Humans,Elves,Necros,Mages,Horde', 'grass_dark')
 ;
 INSERT INTO "PlayerOptions" ("MapId", "Number", "Money", "Color", "Left", "Right", "Top", "Bottom") VALUES
 ('IntactBasic', 1, 40, 255, 1, 3, 1, 7), 
