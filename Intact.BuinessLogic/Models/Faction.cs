@@ -2,9 +2,6 @@
 
 public record Faction: Localizable
 {
-    public int Number { get; set; }
+    public int Number { get; init; }
     public IReadOnlyList<string> Units { get; set; }
-    public int TotalCount { get; set; }
-    public int UnitCount { get; set; }
-    public int HeroCount { get; set; }
 }
