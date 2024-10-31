@@ -1,6 +1,6 @@
 ﻿namespace Intact.BusinessLogic.Data.Enums;
 
-public enum SpellTargetType
+public enum SpellTarget
 {
     None = 0, 
     OneEnm = 1, 

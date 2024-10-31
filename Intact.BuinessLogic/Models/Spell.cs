@@ -8,9 +8,9 @@ public record Spell: Localizable
     [JsonPropertyName("spell")]
     public string Mechanics  { get; set; }
 
-    public SpellTargetType Target { get; set; }
+    public SpellTarget Target { get; set; }
 
-    public SpellUseType Use { get; set; }
+    public SpellUse Use { get; set; }
 
     public SpellKind Kind { get; set; }
 

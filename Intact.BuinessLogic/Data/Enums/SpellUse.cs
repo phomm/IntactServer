@@ -1,6 +1,6 @@
 ﻿namespace Intact.BusinessLogic.Data.Enums;
 
-public enum SpellUseType
+public enum SpellUse
 {
     None = 0,
     Free = 1,
