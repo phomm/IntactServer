@@ -2,8 +2,8 @@
 
 public record Zone
 {
-    public int Left { get; set; }
-    public int Right { get; set; }
-    public int Top { get; set; }
-    public int Bottom { get; set; }
+    public int Left { get; init; }
+    public int Right { get; init; }
+    public int Top { get; init; }
+    public int Bottom { get; init; }
 }

@@ -6,17 +6,17 @@ namespace Intact.BusinessLogic.Models;
 public record Spell: Localizable
 {
     [JsonPropertyName("spell")]
-    public string Mechanics  { get; set; }
+    public string Mechanics  { get; init; }
 
-    public SpellTarget Target { get; set; }
+    public SpellTarget Target { get; init; }
 
-    public SpellUse Use { get; set; }
+    public SpellUse Use { get; init; }
 
-    public SpellKind Kind { get; set; }
+    public SpellKind Kind { get; init; }
 
-    public int Cost { get; set; }
+    public int Cost { get; init; }
 
-    public int Range { get; set; }
+    public int Range { get; init; }
     
     public string AssetId { get; init; }
 }

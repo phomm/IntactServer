@@ -5,8 +5,8 @@ namespace Intact.BusinessLogic.Models;
 public record MapBuilding
 {
     [JsonIgnore]
-    public string MapId { get; set; }
-    public string Proto { get; set; }
-    public int X { get; set; }
-    public int Y { get; set; }
+    public string MapId { get; init; }
+    public string Proto { get; init; }
+    public int X { get; init; }
+    public int Y { get; init; }
 }

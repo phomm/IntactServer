@@ -2,5 +2,5 @@
 
 public record Scene
 {
-    public string BackGround { get; set; }
+    public string BackGround { get; init; }
 }

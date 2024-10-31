@@ -5,23 +5,22 @@ namespace Intact.BusinessLogic.Models;
 
 public record ProtoWarrior: Localizable
 {
-    public int Number { get; set; }
-    public string FactionId { get; set; }
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public Force Force { get; set; } 
-    public string AssetId { get; set; }
-    public bool IsHero { get; set; }
-    public bool IsRanged { get; set; }
-    public bool IsMelee { get; set; }
-    public bool IsBlockFree { get; set; }
-    public bool IsBlockable { get; set; }
-    public bool IsImmune { get; set; }
-    public byte InLife { get; set; }
-    public byte InMana { get; set; }
-    public byte InMoves { get; set; }
-    public byte InActs { get; set; }
-    public byte InShots { get; set; }
-    public byte Cost { get; set; }
+    public int Number { get; init; }
+    public string FactionId { get; init; }
+    public Force Force { get; init; } 
+    public string AssetId { get; init; }
+    public bool IsHero { get; init; }
+    public bool IsRanged { get; init; }
+    public bool IsMelee { get; init; }
+    public bool IsBlockFree { get; init; }
+    public bool IsBlockable { get; init; }
+    public bool IsImmune { get; init; }
+    public byte InLife { get; init; }
+    public byte InMana { get; init; }
+    public byte InMoves { get; init; }
+    public byte InActs { get; init; }
+    public byte InShots { get; init; }
+    public byte Cost { get; init; }
     public List<string>? Abilities { get; set; }
     public List<string>? Spells { get; set; }
 }
