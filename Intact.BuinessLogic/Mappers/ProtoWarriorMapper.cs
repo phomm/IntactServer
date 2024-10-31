@@ -1,4 +1,5 @@
 ﻿using Intact.BusinessLogic.Data.Models;
+using Intact.BusinessLogic.Helpers;
 using Intact.BusinessLogic.Models;
 using Riok.Mapperly.Abstractions;
 
