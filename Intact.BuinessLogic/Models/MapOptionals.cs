@@ -2,6 +2,6 @@
 
 public record MapOptionals
 {
-    public bool DiffFactions { get; set; }
-    public bool NoMoneyTrade { get; set; }
+    public bool DiffFactions { get; init; }
+    public bool NoMoneyTrade { get; init; }
 }

@@ -6,19 +6,19 @@ using Riok.Mapperly.Abstractions;
 namespace Intact.BusinessLogic.Mappers;
 
 [Mapper]
-public partial class ProtoBuildingMapper
+public partial class SpellMapper
 {
-    public partial ProtoBuilding Map(ProtoBuildingDao dao);
+    public partial Spell Map(SpellDao dao);
 
-    public static IReadOnlyList<ProtoBuilding> Map(IReadOnlyList<ProtoBuildingDao> daos,
+    public static IReadOnlyList<Spell> Map(IReadOnlyList<SpellDao> daos,
         IReadOnlyList<IGrouping<string, LocalizationDao>> localizations)
     {
-        var mapper = new ProtoBuildingMapper();
+        var mapper = new SpellMapper();
         return daos.Select(d =>
         {
             var model = mapper.Map(d);
             model.SetupLocalization(d, localizations);
             return model;
-        }).OrderBy(x => x.Number).ToList();
+        }).ToList();
     }
 }
