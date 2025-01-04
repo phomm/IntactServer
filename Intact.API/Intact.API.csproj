@@ -35,4 +35,8 @@
     <ProjectReference Include="..\Intact.BuinessLogic\Intact.BusinessLogic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Scripts\*.sql" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

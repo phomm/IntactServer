@@ -27,6 +27,7 @@ public static class InternalServicesExtensions
 
         services.AddDbContextFactory<AppDbContext>(GetOptions);
         services.AddDbContext<AppIdentityDbContext>(GetOptions);
+        services.AddDbContext<DataSetupDbContext>(GetOptions);
         
         return services;
 

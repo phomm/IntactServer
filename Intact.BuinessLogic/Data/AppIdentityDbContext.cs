@@ -4,7 +4,4 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Intact.BusinessLogic.Data;
 
-public class AppIdentityDbContext: IdentityDbContext<User>
-{
-    public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : base(options) {}
-}
+public class AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : IdentityDbContext<User>(options) { }

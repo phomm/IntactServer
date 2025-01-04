@@ -3,11 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Intact.BusinessLogic.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     private bool IsSqlServer => Database.IsSqlServer();
-
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     public DbSet<LocalizationDao> Localizations { get; init; }
     public DbSet<FactionDao> Factions { get; init; }
