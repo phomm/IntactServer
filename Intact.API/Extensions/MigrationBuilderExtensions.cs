@@ -57,7 +57,7 @@ namespace Intact.API.Extensions
                     throw new FileNotFoundException($"\"{fileName}\" was not found in any directory.", fileFullPath);
             }
 
-            return migrationBuilder.Sql(fileFullPath);
+            return migrationBuilder.Sql(File.ReadAllText(fileFullPath));
         }
     }
 }
