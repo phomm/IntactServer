@@ -11,10 +11,12 @@ public partial class ProtoWarriorMapper
     public partial ProtoWarrior Map(ProtoWarriorDao dao);
 
     public static IReadOnlyList<ProtoWarrior> Map(IReadOnlyList<ProtoWarriorDao> daos,
-        IReadOnlyList<IGrouping<string, LocalizationDao>> localizations, List<AbilityDao> abilities, List<SpellDao> spells)
+        IReadOnlyList<IGrouping<string, LocalizationDao>> localizations, 
+        List<AbilityDao> abilities, List<SpellDao> spells, List<TraitDao> traits)
     {
         var abilityNamesSet = abilities.Select(x => x.Id).ToHashSet();
         var spellNamesSet = spells.Select(x => x.Id).ToHashSet();
+        var traitNamesSet = traits.Select(x => x.Id).ToHashSet();
         var mapper = new ProtoWarriorMapper();
         return daos.Select(d =>
         {
@@ -22,6 +24,7 @@ public partial class ProtoWarriorMapper
             model.SetupLocalization(d, localizations);
             model.Abilities = RefsFromString(d.Abilities, abilityNamesSet);
             model.Spells = RefsFromString(d.Spells, spellNamesSet);
+            model.Traits = RefsFromString(d.Traits, traitNamesSet);
             return model;
         }).OrderBy(x => x.Number).ToList();
     }
