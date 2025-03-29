@@ -1,4 +1,4 @@
-/*
+
 truncate "Factions";
 truncate "ProtoWarriors";
 truncate "ProtoBuildings";
@@ -7,7 +7,9 @@ truncate "Maps";
 truncate "MapBuildings";
 truncate "PlayerOptions";
 truncate "Abilities";
-*/
+truncate "Spells";
+truncate "Traits";
+
 INSERT INTO "Factions" ("Id", "Number") VALUES
 ('Humans', 1), 
 ('Elves', 2), 
@@ -724,4 +726,8 @@ INSERT INTO "Spells"("Id", "Mechanics", "Target", "Use", "Kind", "Cost", "Range"
 ('GenieAntimagic', 'DeMagic', 1, 3, 1, 3, 2, 'Antimagic'),
 ('GenieRay', 'Ray', 2, 3, 1, 1, 2, 'Ray'),
 ('GenieEarthquake', 'Equake', 3, 1, 2, 6, 1, 'Earthquake')
+;
+INSERT INTO "Traits"("Id", "AssetId") VALUES
+('Shine', 'Shine'),
+('Heal', 'Heal')
 ;
