@@ -729,5 +729,6 @@ INSERT INTO "Spells"("Id", "Mechanics", "Target", "Use", "Kind", "Cost", "Range"
 ;
 INSERT INTO "Traits"("Id", "AssetId") VALUES
 ('Shine', 'Shine'),
+('Tank', 'Tank'),
 ('Heal', 'Heal')
 ;
