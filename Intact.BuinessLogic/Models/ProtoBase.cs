@@ -7,6 +7,7 @@ public record ProtoBase
     public IReadOnlyCollection<ProtoWarrior> ProtoWarriors { get; set; }
     public IReadOnlyCollection<AbilityDto> Abilities { get; set; }
     public IReadOnlyCollection<Spell> Spells { get; set; }
+    public IReadOnlyCollection<Trait> Traits { get; set; }
 
     // TODO temporary, to be removed after testing
     public bool FromCache { get; set; }

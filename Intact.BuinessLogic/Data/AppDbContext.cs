@@ -16,6 +16,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<MapBuildingDao> MapBuildings { get; init; }
     public DbSet<PlayerOptionsDao> PlayerOptions { get; init; }
     public DbSet<SpellDao> Spells { get; init; }
+    public DbSet<TraitDao> Traits { get; init; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -25,6 +26,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         AddComputedLocalizableColumns<AbilityDao>();
         AddComputedLocalizableColumns<MapDao>();
         AddComputedLocalizableColumns<SpellDao>();
+        AddComputedLocalizableColumns<TraitDao>();
             
         builder.Entity<LocalizationDao>().HasKey(x => new { x.TermId, x.LanguageCode});
         builder.Entity<ProtoWarriorDao>().Property(p => p.InLife).HasDefaultValue(1);
