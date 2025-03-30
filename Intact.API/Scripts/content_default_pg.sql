@@ -68,7 +68,7 @@ INSERT INTO "Abilities" ("Id", "InitialPoints", "Ability", "AssetId") VALUES
 ('GargoyleBody', 0, 'DeRise', 'GargoyleBody'),
 ('Inspirable', 0, 'Inspire', 'Inspirable'),
 ('Jump', 2, 'Jump', 'Jump'),
-('Regeneration', 4, 'Regeneration', 'Regen'),
+('Regeneration', 4, 'Regeneration', 'Regeneration'),
 ('LimitedAmmo', 2, 'LimitedAmmo', 'LimitedAmmo'),
 ('Grab', 0, 'Grab', 'Grab'),
 ('SecondChance', 0, 'SecondChance', 'SecondChance')
@@ -406,7 +406,7 @@ INSERT INTO "Localizations" ("TermId", "LanguageCode", "Value") VALUES
 ('RegenerationAbilityName', 'Russian', N'Регенерация'),
 ('RegenerationAbilityDescription', 'Russian', N'Регенерация восполняет 1 ОЗ по прошествии определённого количества раундов'),
 ('LimitedAmmoAbilityName', 'Russian', N'Лимит боеприпасов'),
-('LimitedAmmoAbilityDescription', 'Russian', N'Ограниченные боеприпасы позволяют сделать только несколько выстрелов после чего стрельба невоможна'),
+('LimitedAmmoAbilityDescription', 'Russian', N'Ограниченные боеприпасы позволяют сделать только несколько выстрелов, после чего стрельба невозможна'),
 ('GrabAbilityName', 'Russian', N'Захват'),
 ('GrabAbilityDescription', 'Russian', N'Схватив мелкого медленного противника, может сразу ударить им как оружием с меньшим уроном, нанося повреждения обоим'),
 ('SecondChanceAbilityName', 'Russian', N'Второй шанс'),
@@ -642,8 +642,6 @@ INSERT INTO "MapBuildings" ("MapId", "Number", "Proto", "X", "Y") VALUES
 ('EdgeTowers', 17, 'Wall', 8, 5), 
 ('EdgeTowers', 18, 'Wall', 8, 6), 
 ('EdgeTowers', 19, 'Wall', 8, 7), 
-('EdgeTowers', 20, 'Tree', 5, 1), 
-('EdgeTowers', 21, 'Tree', 6, 10), 
 ('IntactBasic', 0, 'Tower', 6, 8), 
 ('IntactBasic', 1, 'Wall', 4, 4), 
 ('IntactBasic', 2, 'Wall', 5, 4), 
@@ -677,36 +675,7 @@ INSERT INTO "MapBuildings" ("MapId", "Number", "Proto", "X", "Y") VALUES
 ('SiegeBasic', 16, 'Trap', 11, 10), 
 ('SiegeBasic', 17, 'Tower', 12, 10), 
 ('SiegeBasic', 18, 'Trap', 11, 4), 
-('SiegeBasic', 19, 'Trap', 11, 7), 
-('TwilightForest', 0, 'Tree', 12, 4), 
-('TwilightForest', 1, 'Tree', 17, 5), 
-('TwilightForest', 2, 'Tree', 6, 4), 
-('TwilightForest', 3, 'Tree', 12, 5), 
-('TwilightForest', 4, 'Tree', 8, 19), 
-('TwilightForest', 5, 'Tree', 7, 15), 
-('TwilightForest', 6, 'Tree', 16, 3), 
-('TwilightForest', 7, 'Tree', 14, 6), 
-('TwilightForest', 8, 'Tree', 11, 20), 
-('TwilightForest', 9, 'Tree', 11, 4), 
-('TwilightForest', 10, 'Tree', 11, 7),
-('TwilightForest', 11, 'Tree', 12, 14),
-('TwilightForest', 12, 'Tree', 4, 12),
-('TwilightForest', 13, 'Tree', 5, 18),
-('TwilightForest', 14, 'Tree', 16, 19),
-('TwilightForest', 15, 'Tree', 10, 12),
-('TwilightForest', 16, 'Tree', 10, 2),
-('TwilightForest', 17, 'Tree', 12, 16),
-('TwilightForest', 18, 'Tree', 14, 18),
-('TwilightForest', 19, 'Tree', 4, 20),
-('TwilightForest', 20, 'Tree', 1, 14),
-('TwilightForest', 21, 'Tree', 18, 14),
-('TwilightForest', 22, 'Tree', 20, 5),
-('TwilightForest', 23, 'Tree', 8, 1),
-('TwilightForest', 24, 'Tree', 16, 1),
-('TwilightForest', 25, 'Tree', 1, 10),
-('TwilightForest', 26, 'Tree', 7, 7),
-('TwilightForest', 27, 'Tree', 11, 9),
-('TwilightForest', 28, 'Tree', 16, 11)
+('SiegeBasic', 19, 'Trap', 11, 7)
 ;
 INSERT INTO "Spells"("Id", "Mechanics", "Target", "Use", "Kind", "Cost", "Range", "AssetId") VALUES 
 ('Shine', 'Stun', 3, 1, 1, 2, 2, 'Shine'),
@@ -728,7 +697,11 @@ INSERT INTO "Spells"("Id", "Mechanics", "Target", "Use", "Kind", "Cost", "Range"
 ('GenieEarthquake', 'Equake', 3, 1, 2, 6, 1, 'Earthquake')
 ;
 INSERT INTO "Traits"("Id", "AssetId") VALUES
-('Shine', 'Shine'),
 ('Tank', 'Tank'),
-('Heal', 'Heal')
+('Ace', 'Ace'),
+('DoubleAttack', 'DoubleAttack'),
+('MagicImmune', 'MagicImmune'),
+('Ranged', 'Ranged'),
+('BlockFree', 'BlockFree'),
+('AlignedFire', 'AlignedFire')
 ;
