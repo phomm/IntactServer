@@ -29,7 +29,7 @@ INSERT INTO "ProtoWarriors" ("Id", "Number", "FactionId", "Force", "AssetId", "I
 ('Dryad', 9, 'Elves', 3/*force*/, 'Dryad', False/*Hero*/, False/*Ranged*/, True/*Melee*/, False/*BlockFree*/, False/*Blockable*/, False/*Immune*/, 1/*Life*/, 0/*Mana*/, 4/*Moves*/, 1/*Acts*/, 0/*Shots*/, 4/*Cost*/, 'ManaFlow', '', ''),
 ('Unicorn', 10, 'Elves', 4/*force*/, 'Unicorn', False/*Hero*/, False/*Ranged*/, True/*Melee*/, True/*BlockFree*/, False/*Blockable*/, False/*Immune*/, 2/*Life*/, 0/*Mana*/, 3/*Moves*/, 1/*Acts*/, 0/*Shots*/, 5/*Cost*/, 'AntimagicAura', '', 'BlockFree'),
 ('Ent', 11, 'Elves', 5/*force*/, 'Ent', False/*Hero*/, False/*Ranged*/, True/*Melee*/, False/*BlockFree*/, False/*Blockable*/, False/*Immune*/, 4/*Life*/, 2/*Mana*/, 1/*Moves*/, 1/*Acts*/, 0/*Shots*/, 6/*Cost*/, '', 'EntRoots', 'Tank'),
-('Druid', 12, 'Elves', 2/*force*/, 'Druid', True/*Hero*/, True/*Ranged*/, True/*Melee*/, False/*BlockFree*/, False/*Blockable*/, False/*Immune*/, 1/*Life*/, 3/*Mana*/, 1/*Moves*/, 1/*Acts*/, 3/*Shots*/, 0/*Cost*/, 'Agility,Desorientation,Acrobatics', 'DruidRoots,TreeWall,ChantedArrow', 'Ace,AlignedFire'),
+('Druid', 12, 'Elves', 2/*force*/, 'Druid', True/*Hero*/, True/*Ranged*/, True/*Melee*/, False/*BlockFree*/, False/*Blockable*/, False/*Immune*/, 2/*Life*/, 3/*Mana*/, 1/*Moves*/, 1/*Acts*/, 3/*Shots*/, 0/*Cost*/, 'Agility,Desorientation,Acrobatics', 'DruidRoots,TreeWall,ChantedArrow', 'Ace,AlignedFire'),
 ('Ghoul', 13, 'Necros', 1/*force*/, 'Ghoul', False/*Hero*/, False/*Ranged*/, True/*Melee*/, False/*BlockFree*/, False/*Blockable*/, False/*Immune*/, 1/*Life*/, 0/*Mana*/, 1/*Moves*/, 1/*Acts*/, 0/*Shots*/, 2/*Cost*/, 'DeadBody', '', ''),
 ('Lich', 14, 'Necros', 2/*force*/, 'Lich', False/*Hero*/, True/*Ranged*/, False/*Melee*/, False/*BlockFree*/, False/*Blockable*/, True/*Immune*/, 1/*Life*/, 2/*Mana*/, 1/*Moves*/, 1/*Acts*/, 2/*Shots*/, 3/*Cost*/, '', 'Weakness', 'MagicImmune,Ranged'),
 ('Ghost', 15, 'Necros', 3/*force*/, 'Ghost', False/*Hero*/, False/*Ranged*/, True/*Melee*/, False/*BlockFree*/, False/*Blockable*/, False/*Immune*/, 1/*Life*/, 0/*Mana*/, 4/*Moves*/, 1/*Acts*/, 0/*Shots*/, 4/*Cost*/, 'GhostBody', '', ''),
@@ -298,35 +298,35 @@ INSERT INTO "Localizations" ("TermId", "LanguageCode", "Value") VALUES
 ('CyclopWarriorDescription', 'Ukrainian', N'Циклоп — могутній герой Орди, відомий своїм величезним розміром і силою. Його міць дозволяє руйнувати будівлі та знищувати ворожі укріплення, роблячи його страшною загрозою на полі бою.'),
 
 ('WallBuildingName', 'English', N'Wall'),
-('WallBuildingDescription', 'English', N'Wall'),
+('WallBuildingDescription', 'English', N'Immovable wall, that blocks path for units and projectiles'),
 ('TowerBuildingName', 'English', N'Tower'),
-('TowerBuildingDescription', 'English', N'Tower'),
+('TowerBuildingDescription', 'English', N'Tower, into which light troops could climb up, increases the range of shooters by 1'),
 ('TreeWallBuildingName', 'English', N'Tree Wall'),
 ('TreeWallBuildingDescription', 'English', N'Tree Wall'),
 ('TrapBuildingName', 'English', N'Trap'),
-('TrapBuildingDescription', 'English', N'Trap'),
+('TrapBuildingDescription', 'English', N'Trap, that takes all movement of troops when they stepped into it, but it is passable for projectiles'),
 ('TreeBuildingName', 'English', N'Tree'),
 ('TreeBuildingDescription', 'English', N'Tree'),
 
 ('WallBuildingName', 'Russian', N'Стена'),
-('WallBuildingDescription', 'Russian', N'Стена'),
+('WallBuildingDescription', 'Russian', N'Неподвижная стена, которая блокирует путь для юнитов и снарядов'),
 ('TowerBuildingName', 'Russian', N'Башня'),
-('TowerBuildingDescription', 'Russian', N'Башня'),
+('TowerBuildingDescription', 'Russian', N'Башня, в которую могут подняться лёгкие войска, для стрелков увеличивает дальность выстрела на 1'),
 ('TreeWallBuildingName', 'Russian', N'Стена Леса'),
 ('TreeWallBuildingDescription', 'Russian', N'Стена Леса'),
 ('TrapBuildingName', 'Russian', N'Ловушка'),
-('TrapBuildingDescription', 'Russian', N'Ловушка'),
+('TrapBuildingDescription', 'Russian', N'Ловушка, которая забирает все очки движения у войск, когда они ступили на нее, но проницаема для снарядов'),
 ('TreeBuildingName', 'Russian', N'Дерево'),
 ('TreeBuildingDescription', 'Russian', N'Дерево'),
 
 ('WallBuildingName', 'Ukrainian', N'Стіна'),
-('WallBuildingDescription', 'Ukrainian', N'Стіна'),
+('WallBuildingDescription', 'Ukrainian', N'Непохитна стіна, яка блокує шлях для юнітів та снарядів'),
 ('TowerBuildingName', 'Ukrainian', N'Башта'),
-('TowerBuildingDescription', 'Ukrainian', N'Вежа'),
+('TowerBuildingDescription', 'Ukrainian', N'Башта, через яку можуть проходити піхота/легкі війська, збільшує дальність пострілу'),
 ('TreeWallBuildingName', 'Ukrainian', N'Стіна Лісу'),
 ('TreeWallBuildingDescription', 'Ukrainian', N'Стіна Лісу'),
 ('TrapBuildingName', 'Ukrainian', N'Пастка'),
-('TrapBuildingDescription', 'Ukrainian', N'Trap'),
+('TrapBuildingDescription', 'Ukrainian', N'Пастка, яка забирає всі очки руху у військ, коли вони ступили на неї, але проніцаема для снарядів'),
 ('TreeBuildingName', 'Ukrainian', N'Дерево'),
 ('TreeBuildingDescription', 'Ukrainian', N'Дерево'),
 
@@ -606,10 +606,9 @@ INSERT INTO "Localizations" ("TermId", "LanguageCode", "Value") VALUES
 
 
 INSERT INTO "Maps" ("Id", "Version", "Width", "Height", "Factions", "SceneBackground") VALUES
-('IntactBasic', 1, 15, 15, 'Humans,Elves,Necros,Mages,Horde', 'grass_light'), 
-('SiegeBasic', 1, 15, 10, 'Humans,Elves,Necros,Mages,Horde', 'cmbksnmt'), 
-('EdgeTowers', 1, 10, 10, 'Humans,Elves,Necros,Mages,Horde', 'cmbksnmt'), 
-('TwilightForest', 1, 20, 20, 'Humans,Elves,Necros,Mages,Horde', 'grass_dark')
+('IntactBasic', 1, 15, 15, 'Humans,Elves,Necros,Mages', 'grass_light'), 
+('SiegeBasic', 1, 15, 10, 'Humans,Elves,Necros,Mages', 'cmbksnmt'), 
+('EdgeTowers', 1, 10, 10, 'Humans,Elves,Necros,Mages', 'cmbksnmt')
 ;
 INSERT INTO "PlayerOptions" ("MapId", "Number", "Money", "Color", "Left", "Right", "Top", "Bottom") VALUES
 ('IntactBasic', 1, 40, 255, 1, 3, 1, 7), 
@@ -617,9 +616,7 @@ INSERT INTO "PlayerOptions" ("MapId", "Number", "Money", "Color", "Left", "Right
 ('SiegeBasic', 1, 45, 255, 1, 3, 1, 10), 
 ('SiegeBasic', 2, 30, 16711935, 14, 15, 1, 10), 
 ('EdgeTowers', 1, 40, 255, 1, 2, 1, 10), 
-('EdgeTowers', 2, 40, 16711935, 9, 10, 1, 10), 
-('TwilightForest', 1, 40, 255, 1, 4, 1, 6), 
-('TwilightForest', 2, 40, 16711935, 17, 20, 15, 20)
+('EdgeTowers', 2, 40, 16711935, 9, 10, 1, 10)
 ;
 INSERT INTO "MapBuildings" ("MapId", "Number", "Proto", "X", "Y") VALUES
 ('EdgeTowers', 0, 'Tower', 1, 1), 
