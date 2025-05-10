@@ -36,7 +36,7 @@ public class ProfilesController : ControllerBase
         return profile is null ? Conflict() : Ok(profile);
     }
 
-    [HttpDelete("{name}", Name = "DeleteProfiles")]
+    [HttpDelete("{name}", Name = "DeleteProfile")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteProfileAsync(string name, CancellationToken cancellationToken)
