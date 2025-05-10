@@ -12,6 +12,7 @@ public static class InternalServicesExtensions
         services.AddTransient<IProtoBaseService, ProtoBaseService>();
         services.AddTransient<IMapsService, MapsService>();
         services.AddTransient<ICacheService, CacheService>();
+        services.AddTransient<IProfilesService, ProfilesService>();
         
         return services;
     }
