@@ -23,7 +23,7 @@ public class ProfilesService(AppDbContext appDbContext) : IProfilesService
 
     public async Task<IEnumerable<Profile>> GetAsync(Guid userId, CancellationToken cancellationToken)
     {
-        return ProfileMapper.Map(await _appDbContext.ProfilesDaos
+        return ProfileMapper.Map(await _appDbContext.Profiles
             .Where(x => x.UserId == userId && x.State == ProfileState.Active)
             .ToListAsync(cancellationToken: cancellationToken));
     }
@@ -42,7 +42,7 @@ public class ProfilesService(AppDbContext appDbContext) : IProfilesService
                 Status = "",
             };
             
-            await _appDbContext.ProfilesDaos.AddAsync(profile, cancellationToken);
+            await _appDbContext.Profiles.AddAsync(profile, cancellationToken);
             await _appDbContext.SaveChangesAsync(cancellationToken);
             return new ProfileMapper().Map(profile);
         }
@@ -51,7 +51,7 @@ public class ProfilesService(AppDbContext appDbContext) : IProfilesService
 
     public async Task DeleteAsync(Guid userId, string name, CancellationToken cancellationToken)
     {
-        var profileDao = await _appDbContext.ProfilesDaos.FindAsync(new object?[] { userId, name }, cancellationToken: cancellationToken);
+        var profileDao = await _appDbContext.Profiles.FindAsync(new object?[] { userId, name }, cancellationToken: cancellationToken);
         if (profileDao is null)
             throw new KeyNotFoundException();
 
