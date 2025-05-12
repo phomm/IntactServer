@@ -25,6 +25,7 @@ public class ProfilesService(AppDbContext appDbContext) : IProfilesService
     {
         return ProfileMapper.Map(await _appDbContext.Profiles
             .Where(x => x.UserId == userId && x.State == ProfileState.Active)
+            .OrderByDescending(x => x.LastPlayed)
             .ToListAsync(cancellationToken: cancellationToken));
     }
 
@@ -39,6 +40,7 @@ public class ProfilesService(AppDbContext appDbContext) : IProfilesService
                 CreateTime = DateTime.Now,
                 Rating = 0,
                 State = ProfileState.Active,
+                LastPlayed = DateTime.Now,
                 Status = "",
             };
             

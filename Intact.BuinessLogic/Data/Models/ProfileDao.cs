@@ -14,6 +14,8 @@ public class ProfileDao
 
     public DateTime CreateTime { get; init; }
     
+    public DateTime LastPlayed { get; set; }
+    
     public ProfileState State { get; set; }
 
     public int Rating { get; set; }
