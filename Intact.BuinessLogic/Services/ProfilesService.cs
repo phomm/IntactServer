@@ -18,7 +18,7 @@ public interface IProfilesService
 
 public class ProfilesService(AppDbContext appDbContext) : IProfilesService
 {
-    private const int PROFILES_MAX_COUNT_PER_USER = 5;
+    private const int ProfilesMaxCountPerUser = 5;
     private readonly AppDbContext _appDbContext = appDbContext;
 
     public async Task<IEnumerable<Profile>> GetAsync(Guid userId, CancellationToken cancellationToken)
@@ -31,16 +31,16 @@ public class ProfilesService(AppDbContext appDbContext) : IProfilesService
 
     public async Task<Profile?> CreateAsync(Guid userId, string name, CancellationToken cancellationToken)
     {
-        if ((await GetAsync(userId, cancellationToken)).Count() < PROFILES_MAX_COUNT_PER_USER)
+        if ((await GetAsync(userId, cancellationToken)).Count() < ProfilesMaxCountPerUser)
         {
             var profile = new ProfileDao()
             {
                 Name = name,
                 UserId = userId,
-                CreateTime = DateTime.Now,
+                CreateTime = DateTime.UtcNow,
                 Rating = 0,
                 State = ProfileState.Active,
-                LastPlayed = DateTime.Now,
+                LastPlayed = DateTime.UtcNow,
                 Status = "",
             };
             
