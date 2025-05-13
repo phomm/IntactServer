@@ -1,4 +1,5 @@
 using Intact.API.Bootstrap;
+using Intact.API.Health;
 using Intact.BusinessLogic.Data.Config;
 using Intact.BusinessLogic.Data.Redis;
 using Intact.BusinessLogic.Models;
@@ -36,7 +37,7 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.MapHealthChecks("/_health", new HealthCheckOptions
+app.MapHealthChecks(HealthCheckConsts.EndpointPath, new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });

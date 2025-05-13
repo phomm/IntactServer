@@ -72,6 +72,7 @@ public static class InfrastructureExtensions
                     Array.Empty<string>()
                 }
             });
+            options.DocumentFilter<HealthCheckEndpointFilter>();
         });
 
         return serviceCollection;
@@ -96,9 +97,12 @@ public static class InfrastructureExtensions
             .AddHealthChecks()
             .AddCheck<ApiHealthCheck>("Api")
             .AddNpgSql(configuration[$"{nameof(DbSettings)}:{nameof(DbSettings.PgConnectionString)}"]!,
-                failureStatus: HealthStatus.Degraded)
-            .AddRedis(configuration[$"{nameof(RedisSettings)}:{nameof(RedisSettings.ConnectionString)}"]!,
                 failureStatus: HealthStatus.Degraded);
+        if (!string.IsNullOrEmpty(configuration.GetSection(nameof(RedisSettings)).Get<RedisSettings>()!.ConnectionString))
+            serviceCollection
+                .AddHealthChecks()
+                .AddRedis(configuration[$"{nameof(RedisSettings)}:{nameof(RedisSettings.ConnectionString)}"]!,
+                    failureStatus: HealthStatus.Degraded);
 
         return serviceCollection;
     }
