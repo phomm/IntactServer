@@ -52,4 +52,21 @@ public class ProfilesController : ControllerBase
             return NotFound();
         }
     }
+
+    [HttpPost("{name}/pick", Name = "PickProfile")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> PickProfileAsync(string name, CancellationToken cancellationToken)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        try
+        {
+            await _profilesService.PickAsync(Guid.Parse(userId), name, cancellationToken);
+            return Ok();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
 }

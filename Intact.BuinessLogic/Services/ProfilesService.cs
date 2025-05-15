@@ -1,6 +1,7 @@
 using Intact.BusinessLogic.Data;
 using Intact.BusinessLogic.Data.Enums;
 using Intact.BusinessLogic.Data.Models;
+using Intact.BusinessLogic.Data.RedisCache;
 using Intact.BusinessLogic.Mappers;
 using Intact.BusinessLogic.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +15,18 @@ public interface IProfilesService
     Task<Profile?> CreateAsync(Guid userId, string name, CancellationToken cancellationToken);
     
     Task DeleteAsync(Guid userId, string name, CancellationToken cancellationToken);
+    
+    Task PickAsync(Guid userId, string name, CancellationToken cancellationToken);
+
+    Task<Profile?> GetCurrentAsync(string userId);
 }
 
-public class ProfilesService(AppDbContext appDbContext) : IProfilesService
+public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) : IProfilesService
 {
     private const int ProfilesMaxCountPerUser = 5;
     private readonly AppDbContext _appDbContext = appDbContext;
+    private readonly IRedisCache _redisCache = redisCache;
+    const string cacheSet = nameof(Profile);
 
     public async Task<IEnumerable<Profile>> GetAsync(Guid userId, CancellationToken cancellationToken)
     {
@@ -33,7 +40,7 @@ public class ProfilesService(AppDbContext appDbContext) : IProfilesService
     {
         if ((await GetAsync(userId, cancellationToken)).Count() < ProfilesMaxCountPerUser)
         {
-            var profile = new ProfileDao()
+            var profileDao = new ProfileDao()
             {
                 Name = name,
                 UserId = userId,
@@ -44,9 +51,10 @@ public class ProfilesService(AppDbContext appDbContext) : IProfilesService
                 Status = "",
             };
             
-            await _appDbContext.Profiles.AddAsync(profile, cancellationToken);
+            await _redisCache.AddAsync(cacheSet, userId.ToString(), profileDao);
+            await _appDbContext.Profiles.AddAsync(profileDao, cancellationToken);
             await _appDbContext.SaveChangesAsync(cancellationToken);
-            return new ProfileMapper().Map(profile);
+            return new ProfileMapper().Map(profileDao);
         }
         return null;
     }
@@ -59,5 +67,21 @@ public class ProfilesService(AppDbContext appDbContext) : IProfilesService
 
         profileDao.State = ProfileState.Deleted;
         await _appDbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task PickAsync(Guid userId, string name, CancellationToken cancellationToken)
+    {
+        var profileDao = await _appDbContext.Profiles.FindAsync(new object?[] { userId, name }, cancellationToken: cancellationToken);
+        if (profileDao is null)
+            throw new KeyNotFoundException();
+        
+        profileDao.LastPlayed = DateTime.UtcNow;
+        await _redisCache.AddAsync(cacheSet, userId.ToString(), profileDao);
+        await _appDbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task<Profile?> GetCurrentAsync(string userId)
+    {
+        return _redisCache.GetAsync<Profile>(cacheSet, userId);
     }
 }
