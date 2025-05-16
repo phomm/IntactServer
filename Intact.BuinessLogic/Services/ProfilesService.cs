@@ -19,6 +19,8 @@ public interface IProfilesService
     Task PickAsync(Guid userId, string name, CancellationToken cancellationToken);
 
     Task<Profile?> GetCurrentAsync(string userId);
+
+    Task<Profile?> GetCurrentAsync(Guid userId);
 }
 
 public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) : IProfilesService
@@ -84,4 +86,6 @@ public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) 
     {
         return _redisCache.GetAsync<Profile>(cacheSet, userId);
     }
+
+    public Task<Profile?> GetCurrentAsync(Guid userId) => GetCurrentAsync(userId.ToString());
 }
