@@ -78,8 +78,8 @@ public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) 
             throw new KeyNotFoundException();
         
         profileDao.LastPlayed = DateTime.UtcNow;
-        await _redisCache.AddAsync(cacheSet, userId.ToString(), profileDao);
         await _appDbContext.SaveChangesAsync(cancellationToken);
+        await _redisCache.AddAsync(cacheSet, userId.ToString(), profileDao);
     }
 
     public Task<Profile?> GetCurrentAsync(string userId)
