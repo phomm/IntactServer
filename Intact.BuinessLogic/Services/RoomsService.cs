@@ -83,7 +83,7 @@ public class RoomsService(AppDbContext appDbContext, IProfilesService profilesSe
 
     public Task ExitAsync(Guid userId, int id, CancellationToken cancellationToken) =>
         appDbContext.RoomMembers
-            .Where(x => x.UserId == userId && x.UserId == userId)
+            .Where(x => x.UserId == userId && x.RoomId == id)
             .ExecuteDeleteAsync(cancellationToken);
 
     private Task<int> GetPlayersCount(int id, CancellationToken cancellationToken) => appDbContext.RoomMembers
