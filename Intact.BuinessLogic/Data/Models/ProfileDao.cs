@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Intact.BusinessLogic.Data.Models;
 
-[PrimaryKey(nameof(UserId), nameof(Name))]
 public class ProfileDao
 {
+    [Key]
+    public int Id { get; set; }
+    
     public Guid UserId { get; init; }
     
     [StringLength(32)]

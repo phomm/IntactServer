@@ -18,6 +18,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<SpellDao> Spells { get; init; }
     public DbSet<TraitDao> Traits { get; init; }
     public DbSet<ProfileDao> Profiles { get; init; }
+    public DbSet<RoomDao> Rooms { get; init; }
+    
+    public DbSet<RoomMemberDao> RoomMembers { get; init; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

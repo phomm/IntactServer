@@ -17,6 +17,7 @@ builder.AddConfigOptions<DbSettings>();
 // Add services to the container.
 builder.Services
     .AddHealth(builder.Configuration)
+    .AddHttpContextAccessor()
     .AddControllers()
     .AddJsonOptions(options =>
     {
@@ -56,7 +57,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapGroup("api").MapIdentityApi<User>();
