@@ -14,9 +14,9 @@ public interface IProfilesService
     
     Task<Profile?> CreateAsync(Guid userId, string name, CancellationToken cancellationToken);
     
-    Task DeleteAsync(Guid userId, string name, CancellationToken cancellationToken);
+    Task DeleteAsync(Guid userId, int id, CancellationToken cancellationToken);
     
-    Task PickAsync(Guid userId, string name, CancellationToken cancellationToken);
+    Task PickAsync(Guid userId, int id, CancellationToken cancellationToken);
 
     Task<Profile?> GetCurrentAsync(string userId);
 
@@ -61,9 +61,9 @@ public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) 
         return null;
     }
 
-    public async Task DeleteAsync(Guid userId, string name, CancellationToken cancellationToken)
+    public async Task DeleteAsync(Guid userId, int id, CancellationToken cancellationToken)
     {
-        var profileDao = await _appDbContext.Profiles.FindAsync(new object?[] { userId, name }, cancellationToken: cancellationToken);
+        var profileDao = await _appDbContext.Profiles.FindAsync([id], cancellationToken);
         if (profileDao is null)
             throw new KeyNotFoundException();
 
@@ -71,9 +71,9 @@ public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) 
         await _appDbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task PickAsync(Guid userId, string name, CancellationToken cancellationToken)
+    public async Task PickAsync(Guid userId, int id, CancellationToken cancellationToken)
     {
-        var profileDao = await _appDbContext.Profiles.FindAsync(new object?[] { userId, name }, cancellationToken: cancellationToken);
+        var profileDao = await _appDbContext.Profiles.FindAsync([id], cancellationToken);
         if (profileDao is null)
             throw new KeyNotFoundException();
         
