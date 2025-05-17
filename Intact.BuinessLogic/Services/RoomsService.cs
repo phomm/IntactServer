@@ -20,7 +20,7 @@ public interface IRoomsService
     Task ExitAsync(Guid userId, int id, CancellationToken cancellationToken);
 }
 
-public class RoomsService(AppDbContext appDbContext, IProfilesService profilesService): IRoomsService
+public class RoomsService(AppDbContext appDbContext, IProfilesService profilesService, IProfileAccessor profileAccessor): IRoomsService
 {
     private const int MaxPlayers = 8;
     
@@ -31,18 +31,19 @@ public class RoomsService(AppDbContext appDbContext, IProfilesService profilesSe
 
     public async Task<int?> CreateAsync(Guid userId, string title, CancellationToken cancellationToken)
     {
+        var profileId = await profileAccessor.GetProfileIdAsync();
         var roomDao = new RoomDao()
         {
             Title = title,
             CreateDate = DateTime.UtcNow,
-            Creator = userId,
+            Creator = profileId,
             State = RoomState.Opened,
         };
             
         await appDbContext.Rooms.AddAsync(roomDao, cancellationToken);
         await appDbContext.SaveChangesAsync(cancellationToken);
         
-        await AddMemberAsync(userId, roomDao.Id, cancellationToken);
+        await AddMemberAsync(profileId, roomDao.Id, cancellationToken);
         await appDbContext.SaveChangesAsync(cancellationToken);
         return roomDao.Id;
     }
@@ -58,10 +59,11 @@ public class RoomsService(AppDbContext appDbContext, IProfilesService profilesSe
 
     public async Task<bool> JoinAsync(Guid userId, int id, CancellationToken cancellationToken)
     {
+        var profileId = await profileAccessor.GetProfileIdAsync();
         if (await GetAvailabilityAsync(id, cancellationToken) &&
-            !await appDbContext.RoomMembers.Where(x => x.UserId == userId).AnyAsync(cancellationToken))
+            !await appDbContext.RoomMembers.Where(x => x.ProfileId == profileId).AnyAsync(cancellationToken))
         {
-            await AddMemberAsync(userId, id, cancellationToken);
+            await AddMemberAsync(profileId, id, cancellationToken);
             await appDbContext.SaveChangesAsync(cancellationToken);
             return true;
         }
@@ -69,22 +71,23 @@ public class RoomsService(AppDbContext appDbContext, IProfilesService profilesSe
         return false;
     }
 
-    private async Task AddMemberAsync(Guid userId, int id, CancellationToken cancellationToken)
+    private async Task AddMemberAsync(int profileId, int id, CancellationToken cancellationToken)
     {
         var roomMemberDao = new RoomMemberDao()
         {
             RoomId = id,
-            UserId = userId,
-            ProfileName = (await profilesService.GetCurrentAsync(userId))?.Name
-                          ?? throw new KeyNotFoundException(userId.ToString())
+            ProfileId = profileId,
         };
         await appDbContext.RoomMembers.AddAsync(roomMemberDao, cancellationToken);
     }
 
-    public Task ExitAsync(Guid userId, int id, CancellationToken cancellationToken) =>
-        appDbContext.RoomMembers
-            .Where(x => x.UserId == userId && x.RoomId == id)
+    public async Task ExitAsync(Guid userId, int id, CancellationToken cancellationToken)
+    {
+        var profileId = await profileAccessor.GetProfileIdAsync();
+        await appDbContext.RoomMembers
+            .Where(x => x.ProfileId == profileId)
             .ExecuteDeleteAsync(cancellationToken);
+    }
 
     private Task<int> GetPlayersCount(int id, CancellationToken cancellationToken) => appDbContext.RoomMembers
             .Select(x => x.RoomId == id).CountAsync(cancellationToken: cancellationToken);

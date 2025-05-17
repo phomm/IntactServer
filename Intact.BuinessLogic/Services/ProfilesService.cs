@@ -17,10 +17,6 @@ public interface IProfilesService
     Task DeleteAsync(Guid userId, int id, CancellationToken cancellationToken);
     
     Task PickAsync(Guid userId, int id, CancellationToken cancellationToken);
-
-    Task<Profile?> GetCurrentAsync(string userId);
-
-    Task<Profile?> GetCurrentAsync(Guid userId);
 }
 
 public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) : IProfilesService
@@ -81,11 +77,4 @@ public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) 
         await _appDbContext.SaveChangesAsync(cancellationToken);
         await _redisCache.AddAsync(cacheSet, userId.ToString(), profileDao);
     }
-
-    public Task<Profile?> GetCurrentAsync(string userId)
-    {
-        return _redisCache.GetAsync<Profile>(cacheSet, userId);
-    }
-
-    public Task<Profile?> GetCurrentAsync(Guid userId) => GetCurrentAsync(userId.ToString());
 }

@@ -9,10 +9,13 @@ public static class InternalServicesExtensions
 {
     public static IServiceCollection AddInternalServices(this IServiceCollection services)
     {
+        services.AddTransient<IUserAccessor, UserAccessor>();
+        services.AddTransient<IProfileAccessor, ProfileAccessor>();
         services.AddTransient<IProtoBaseService, ProtoBaseService>();
         services.AddTransient<IMapsService, MapsService>();
         services.AddTransient<ICacheService, CacheService>();
         services.AddTransient<IProfilesService, ProfilesService>();
+        services.AddTransient<IRoomsService, RoomsService>();
         
         return services;
     }

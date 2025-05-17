@@ -11,7 +11,7 @@ public class RoomDao
     [StringLength(32)]
     public string Title { get; init; }
     
-    public Guid Creator { get; set; }
+    public int Creator { get; set; }
     
     public DateTime CreateDate { get; set; }
 
