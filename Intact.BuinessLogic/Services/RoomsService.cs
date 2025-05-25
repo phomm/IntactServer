@@ -20,19 +20,25 @@ public interface IRoomsService
     Task ExitAsync(Guid userId, int id, CancellationToken cancellationToken);
 }
 
-public class RoomsService(AppDbContext appDbContext, IProfilesService profilesService, IProfileAccessor profileAccessor): IRoomsService
+public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAccessor): IRoomsService
 {
-    private const int MaxPlayers = 8;
+    private const int MaxPlayers = 2;
     
     public async Task<IEnumerable<Room>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return RoomMapper.Map(await appDbContext.Rooms.ToListAsync(cancellationToken));
+        return RoomMapper.Map(await appDbContext.Rooms
+            .Where(room => room.State == RoomState.Opened)
+            .GroupJoin(appDbContext.RoomMembers, room => room.Id, roomMember => roomMember.RoomId, 
+                (room, roomMembers) => new { room, roomMembers})
+            .Where(x => x.roomMembers.Count() < MaxPlayers)
+            .Select(x => x.room)
+            .ToListAsync(cancellationToken));
     }
 
     public async Task<int?> CreateAsync(Guid userId, string title, CancellationToken cancellationToken)
     {
         var profileId = await profileAccessor.GetProfileIdAsync();
-        var roomDao = new RoomDao()
+        var roomDao = new RoomDao
         {
             Title = title,
             CreateDate = DateTime.UtcNow,
@@ -50,7 +56,7 @@ public class RoomsService(AppDbContext appDbContext, IProfilesService profilesSe
 
     public async Task<bool> GetAvailabilityAsync(int id, CancellationToken cancellationToken)
     {
-        var room = await appDbContext.Rooms.FindAsync(id);
+        var room = await appDbContext.Rooms.FindAsync(id, cancellationToken);
         if (room is null)
             throw new KeyNotFoundException();
 
@@ -73,7 +79,7 @@ public class RoomsService(AppDbContext appDbContext, IProfilesService profilesSe
 
     private async Task AddMemberAsync(int profileId, int id, CancellationToken cancellationToken)
     {
-        var roomMemberDao = new RoomMemberDao()
+        var roomMemberDao = new RoomMemberDao
         {
             RoomId = id,
             ProfileId = profileId,
