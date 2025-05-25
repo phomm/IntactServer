@@ -27,7 +27,7 @@ public class RoomsController : ControllerBase
         return Ok(await _roomsService.GetAllAsync(cancellationToken));
     }
     
-    [HttpGet("", Name = "CreateRoom")]
+    [HttpPost("", Name = "CreateRoom")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateRoomAsync([FromQuery] string title, CancellationToken cancellationToken)

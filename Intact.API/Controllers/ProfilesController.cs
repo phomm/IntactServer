@@ -9,6 +9,7 @@ namespace Intact.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class ProfilesController : ControllerBase
 {
     private readonly IProfilesService _profilesService;

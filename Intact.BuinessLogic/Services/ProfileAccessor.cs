@@ -16,14 +16,13 @@ public interface IProfileAccessor: IUserAccessor
 
 public class ProfileAccessor(IHttpContextAccessor httpContextAccessor, AppDbContext context, IRedisCache redisCache) : UserAccessor(httpContextAccessor), IProfileAccessor
 {
-    const string cacheSet = nameof(Profile);
+    private const string CacheSet = nameof(Profile);
     
     public async Task<Profile> GetProfileAsync()
     {
-        return await redisCache.GetAsync<Profile>(cacheSet, GetUserIdStr())
-               ?? new ProfileMapper().Map(
-                   await context.Profiles.OrderByDescending(x => x.LastPlayed).FirstOrDefaultAsync() ??
-                   throw new AuthenticationException());
+        return await redisCache.GetAsync<Profile>(CacheSet, GetUserIdStr())
+            ?? new ProfileMapper().Map(await context.Profiles.OrderByDescending(x => x.LastPlayed).FirstOrDefaultAsync() 
+                ?? throw new AuthenticationException());
     }
 
     public async Task<int> GetProfileIdAsync() => (await GetProfileAsync()).Id;
