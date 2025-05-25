@@ -56,7 +56,7 @@ public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAcc
 
     public async Task<bool> GetAvailabilityAsync(int id, CancellationToken cancellationToken)
     {
-        var room = await appDbContext.Rooms.FindAsync(id, cancellationToken);
+        var room = await appDbContext.Rooms.FindAsync([id], cancellationToken);
         if (room is null)
             throw new KeyNotFoundException();
 

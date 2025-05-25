@@ -26,10 +26,14 @@ public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) 
 
     public async Task<IEnumerable<Profile>> GetAsync(Guid userId, CancellationToken cancellationToken)
     {
-        return ProfileMapper.Map(await appDbContext.Profiles
+        return ProfileMapper.Map(await GetById(userId).ToListAsync(cancellationToken: cancellationToken));
+    }
+
+    private IQueryable<ProfileDao> GetById(Guid userId)
+    {
+        return appDbContext.Profiles
             .Where(x => x.UserId == userId && x.State == ProfileState.Active)
-            .OrderByDescending(x => x.LastPlayed)
-            .ToListAsync(cancellationToken: cancellationToken));
+            .OrderByDescending(x => x.LastPlayed);
     }
 
     public async Task<Profile?> CreateAsync(Guid userId, string name, CancellationToken cancellationToken)
@@ -58,7 +62,7 @@ public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) 
 
     public async Task DeleteAsync(Guid userId, int id, CancellationToken cancellationToken)
     {
-        var profileDao = await appDbContext.Profiles.FindAsync([id], cancellationToken);
+        var profileDao = GetById(userId).FirstOrDefault(x => x.Id == id);
         if (profileDao is null)
             throw new KeyNotFoundException();
 
