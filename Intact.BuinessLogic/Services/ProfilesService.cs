@@ -21,14 +21,12 @@ public interface IProfilesService
 
 public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) : IProfilesService
 {
-    private const int ProfilesMaxCountPerUser = 5;
-    private readonly AppDbContext _appDbContext = appDbContext;
-    private readonly IRedisCache _redisCache = redisCache;
-    const string cacheSet = nameof(Profile);
+    private const int ProfilesMaxCountPerUser = 4;
+    private const string CacheSet = nameof(Profile);
 
     public async Task<IEnumerable<Profile>> GetAsync(Guid userId, CancellationToken cancellationToken)
     {
-        return ProfileMapper.Map(await _appDbContext.Profiles
+        return ProfileMapper.Map(await appDbContext.Profiles
             .Where(x => x.UserId == userId && x.State == ProfileState.Active)
             .OrderByDescending(x => x.LastPlayed)
             .ToListAsync(cancellationToken: cancellationToken));
@@ -49,32 +47,40 @@ public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) 
                 Status = "",
             };
             
-            await _redisCache.AddAsync(cacheSet, userId.ToString(), profileDao);
-            await _appDbContext.Profiles.AddAsync(profileDao, cancellationToken);
-            await _appDbContext.SaveChangesAsync(cancellationToken);
-            return new ProfileMapper().Map(profileDao);
+            await appDbContext.Profiles.AddAsync(profileDao, cancellationToken);
+            await appDbContext.SaveChangesAsync(cancellationToken);
+            var profile = new ProfileMapper().Map(profileDao);
+            await redisCache.AddAsync(CacheSet, userId.ToString(), profile);
+            return profile;
         }
         return null;
     }
 
     public async Task DeleteAsync(Guid userId, int id, CancellationToken cancellationToken)
     {
-        var profileDao = await _appDbContext.Profiles.FindAsync([id], cancellationToken);
+        var profileDao = await appDbContext.Profiles.FindAsync([id], cancellationToken);
         if (profileDao is null)
             throw new KeyNotFoundException();
 
         profileDao.State = ProfileState.Deleted;
-        await _appDbContext.SaveChangesAsync(cancellationToken);
+        await appDbContext.SaveChangesAsync(cancellationToken);
+        if (redisCache.GetAsync<Profile>(CacheSet, userId.ToString())?.Id == profileDao.Id)
+        {
+            await redisCache.RemoveAsync(CacheSet, userId.ToString());
+            var profile = (await GetAsync(userId, cancellationToken)).FirstOrDefault();
+            if (profile != null)
+                await redisCache.AddAsync(CacheSet, userId.ToString(), profile);
+        }
     }
 
     public async Task PickAsync(Guid userId, int id, CancellationToken cancellationToken)
     {
-        var profileDao = await _appDbContext.Profiles.FindAsync([id], cancellationToken);
+        var profileDao = await appDbContext.Profiles.FindAsync([id], cancellationToken);
         if (profileDao is null)
             throw new KeyNotFoundException();
         
         profileDao.LastPlayed = DateTime.UtcNow;
-        await _appDbContext.SaveChangesAsync(cancellationToken);
-        await _redisCache.AddAsync(cacheSet, userId.ToString(), profileDao);
+        await appDbContext.SaveChangesAsync(cancellationToken);
+        await redisCache.AddAsync(CacheSet, userId.ToString(), profileDao);
     }
 }
