@@ -11,13 +11,13 @@ public interface IRoomsService
 {
     Task<IEnumerable<Room>> GetAllAsync(CancellationToken cancellationToken);
     
-    Task<int?> CreateAsync(Guid userId, string title, CancellationToken cancellationToken);
+    Task<int?> CreateAsync(string title, CancellationToken cancellationToken);
     
     Task<bool> GetAvailabilityAsync(int id, CancellationToken cancellationToken);
     
-    Task<bool> JoinAsync(Guid userId, int id, CancellationToken cancellationToken);
+    Task<bool> JoinAsync(int id, CancellationToken cancellationToken);
     
-    Task ExitAsync(Guid userId, int id, CancellationToken cancellationToken);
+    Task ExitAsync(int id, CancellationToken cancellationToken);
 }
 
 public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAccessor): IRoomsService
@@ -35,7 +35,7 @@ public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAcc
             .ToListAsync(cancellationToken));
     }
 
-    public async Task<int?> CreateAsync(Guid userId, string title, CancellationToken cancellationToken)
+    public async Task<int?> CreateAsync(string title, CancellationToken cancellationToken)
     {
         var profileId = await profileAccessor.GetProfileIdAsync();
         var roomDao = new RoomDao
@@ -63,7 +63,7 @@ public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAcc
         return room.State == RoomState.Opened && await GetPlayersCount(id, cancellationToken) < MaxPlayers;
     }
 
-    public async Task<bool> JoinAsync(Guid userId, int id, CancellationToken cancellationToken)
+    public async Task<bool> JoinAsync(int id, CancellationToken cancellationToken)
     {
         var profileId = await profileAccessor.GetProfileIdAsync();
         if (await GetAvailabilityAsync(id, cancellationToken) &&
@@ -87,7 +87,7 @@ public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAcc
         await appDbContext.RoomMembers.AddAsync(roomMemberDao, cancellationToken);
     }
 
-    public async Task ExitAsync(Guid userId, int id, CancellationToken cancellationToken)
+    public async Task ExitAsync(int id, CancellationToken cancellationToken)
     {
         var profileId = await profileAccessor.GetProfileIdAsync();
         await appDbContext.RoomMembers

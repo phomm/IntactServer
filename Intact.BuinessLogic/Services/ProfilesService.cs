@@ -68,7 +68,7 @@ public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) 
 
         profileDao.State = ProfileState.Deleted;
         await appDbContext.SaveChangesAsync(cancellationToken);
-        if (redisCache.GetAsync<Profile>(CacheSet, userId.ToString())?.Id == profileDao.Id)
+        if ((await redisCache.GetAsync<Profile>(CacheSet, userId.ToString()))?.Id == profileDao.Id)
         {
             await redisCache.RemoveAsync(CacheSet, userId.ToString());
             var profile = (await GetAsync(userId, cancellationToken)).FirstOrDefault();
@@ -79,7 +79,7 @@ public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) 
 
     public async Task PickAsync(Guid userId, int id, CancellationToken cancellationToken)
     {
-        var profileDao = await appDbContext.Profiles.FindAsync([id], cancellationToken);
+        var profileDao = GetById(userId).FirstOrDefault(x => x.Id == id);
         if (profileDao is null)
             throw new KeyNotFoundException();
         

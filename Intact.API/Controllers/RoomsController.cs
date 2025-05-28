@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Intact.BusinessLogic.Models;
 using Intact.BusinessLogic.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -9,22 +8,13 @@ namespace Intact.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class RoomsController : ControllerBase
+public class RoomsController(IRoomsService roomsService) : ControllerBase
 {
-    private readonly IProfilesService _profilesService;
-    private readonly IRoomsService _roomsService;
-
-    public RoomsController(IProfilesService profilesService, IRoomsService roomsService)
-    {
-        _profilesService = profilesService;
-        _roomsService = roomsService;
-    }
-    
     [HttpGet("", Name = "GetRoom")]
     [ProducesResponseType(typeof(IEnumerable<Room>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetRoomsAsync(CancellationToken cancellationToken)
     {
-        return Ok(await _roomsService.GetAllAsync(cancellationToken));
+        return Ok(await roomsService.GetAllAsync(cancellationToken));
     }
     
     [HttpPost("", Name = "CreateRoom")]
@@ -32,8 +22,7 @@ public class RoomsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateRoomAsync([FromQuery] string title, CancellationToken cancellationToken)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var id = await _roomsService.CreateAsync(Guid.Parse(userId), title, cancellationToken);
+        var id = await roomsService.CreateAsync(title, cancellationToken);
         return id is null ? Conflict() : Ok();
     }
     
@@ -44,7 +33,7 @@ public class RoomsController : ControllerBase
     {
         try
         {
-            return Ok(await _roomsService.GetAvailabilityAsync(id, cancellationToken));
+            return Ok(await roomsService.GetAvailabilityAsync(id, cancellationToken));
         }
         catch (KeyNotFoundException)
         {
@@ -57,10 +46,9 @@ public class RoomsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> JoinAsync([FromRoute] int id, CancellationToken cancellationToken)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         try
         {
-            return Ok(await _roomsService.JoinAsync(Guid.Parse(userId), id, cancellationToken));
+            return Ok(await roomsService.JoinAsync(id, cancellationToken));
         }
         catch (KeyNotFoundException)
         {
@@ -73,10 +61,9 @@ public class RoomsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ExitAsync([FromRoute] int id, CancellationToken cancellationToken)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         try
         {
-            await _roomsService.ExitAsync(Guid.Parse(userId), id, cancellationToken);
+            await roomsService.ExitAsync(id, cancellationToken);
             return Ok();
         }
         catch (KeyNotFoundException)

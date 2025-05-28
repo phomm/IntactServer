@@ -10,21 +10,14 @@ namespace Intact.API.Controllers;
 [Route("api/[controller]")]
 [Authorize]
 [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-public class ProfilesController : ControllerBase
+public class ProfilesController(IProfilesService profilesService) : ControllerBase
 {
-    private readonly IProfilesService _profilesService;
-
-    public ProfilesController(IProfilesService profilesService)
-    {
-        _profilesService = profilesService;
-    }
-
     [HttpGet("", Name = "GetProfiles")]
     [ProducesResponseType(typeof(IEnumerable<Profile>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProfilesAsync(CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        return Ok(await _profilesService.GetAsync(Guid.Parse(userId), cancellationToken));
+        return Ok(await profilesService.GetAsync(Guid.Parse(userId), cancellationToken));
     }
 
     [HttpPost("", Name = "CreateProfile")]
@@ -33,7 +26,7 @@ public class ProfilesController : ControllerBase
     public async Task<IActionResult> CreateProfileAsync([FromQuery] string name, CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var profile = await _profilesService.CreateAsync(Guid.Parse(userId), name, cancellationToken);
+        var profile = await profilesService.CreateAsync(Guid.Parse(userId), name, cancellationToken);
         return profile is null ? Conflict() : Ok(profile);
     }
 
@@ -45,7 +38,7 @@ public class ProfilesController : ControllerBase
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         try
         {
-            await _profilesService.DeleteAsync(Guid.Parse(userId), id, cancellationToken);
+            await profilesService.DeleteAsync(Guid.Parse(userId), id, cancellationToken);
             return Ok();
         }
         catch (KeyNotFoundException)
@@ -62,7 +55,7 @@ public class ProfilesController : ControllerBase
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         try
         {
-            await _profilesService.PickAsync(Guid.Parse(userId), id, cancellationToken);
+            await profilesService.PickAsync(Guid.Parse(userId), id, cancellationToken);
             return Ok();
         }
         catch (KeyNotFoundException)
