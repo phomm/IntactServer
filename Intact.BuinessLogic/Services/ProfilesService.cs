@@ -38,26 +38,25 @@ public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) 
 
     public async Task<Profile?> CreateAsync(Guid userId, string name, CancellationToken cancellationToken)
     {
-        if ((await GetAsync(userId, cancellationToken)).Count() < ProfilesMaxCountPerUser)
+        if (GetById(userId).Count() >= ProfilesMaxCountPerUser) 
+            return null;
+        
+        var profileDao = new ProfileDao
         {
-            var profileDao = new ProfileDao()
-            {
-                Name = name,
-                UserId = userId,
-                CreateTime = DateTime.UtcNow,
-                Rating = 0,
-                State = ProfileState.Active,
-                LastPlayed = DateTime.UtcNow,
-                Status = "",
-            };
+            Name = name,
+            UserId = userId,
+            CreateTime = DateTime.UtcNow,
+            Rating = 0,
+            State = ProfileState.Active,
+            LastPlayed = DateTime.UtcNow,
+            Status = "",
+        };
             
-            await appDbContext.Profiles.AddAsync(profileDao, cancellationToken);
-            await appDbContext.SaveChangesAsync(cancellationToken);
-            var profile = new ProfileMapper().Map(profileDao);
-            await redisCache.AddAsync(CacheSet, userId.ToString(), profile);
-            return profile;
-        }
-        return null;
+        await appDbContext.Profiles.AddAsync(profileDao, cancellationToken);
+        await appDbContext.SaveChangesAsync(cancellationToken);
+        var profile = new ProfileMapper().Map(profileDao);
+        await redisCache.AddAsync(CacheSet, userId.ToString(), profile);
+        return profile;
     }
 
     public async Task DeleteAsync(Guid userId, int id, CancellationToken cancellationToken)

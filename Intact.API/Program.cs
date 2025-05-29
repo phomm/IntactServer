@@ -1,5 +1,6 @@
 using Intact.API.Bootstrap;
 using Intact.API.Health;
+using Intact.API.Extensions;
 using Intact.BusinessLogic.Data.Config;
 using Intact.BusinessLogic.Data.Redis;
 using Intact.BusinessLogic.Models;
@@ -59,7 +60,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 
-app.MapGroup("api").MapIdentityApi<User>();
+app.MapGroup("api")
+    .MapIdentityApi<User>();
+app.MapGroup("api") 
+    .MapIdentityApiAdditionalEndpoints<User>();
 
 app.MapControllers();
 
