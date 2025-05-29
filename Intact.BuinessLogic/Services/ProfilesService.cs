@@ -84,6 +84,6 @@ public class ProfilesService(AppDbContext appDbContext, IRedisCache redisCache) 
         
         profileDao.LastPlayed = DateTime.UtcNow;
         await appDbContext.SaveChangesAsync(cancellationToken);
-        await redisCache.AddAsync(CacheSet, userId.ToString(), profileDao);
+        await redisCache.AddAsync(CacheSet, userId.ToString(), new ProfileMapper().Map(profileDao));
     }
 }
