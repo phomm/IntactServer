@@ -9,42 +9,53 @@ namespace Intact.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class ProfilesController : ControllerBase
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+public class ProfilesController(IProfilesService profilesService) : ControllerBase
 {
-    private readonly IProfilesService _profilesService;
-
-    public ProfilesController(IProfilesService profilesService)
-    {
-        _profilesService = profilesService;
-    }
-
     [HttpGet("", Name = "GetProfiles")]
     [ProducesResponseType(typeof(IEnumerable<Profile>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProfilesAsync(CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        return Ok(await _profilesService.GetAsync(Guid.Parse(userId), cancellationToken));
+        return Ok(await profilesService.GetAsync(Guid.Parse(userId), cancellationToken));
     }
 
-    [HttpPost("{name}", Name = "CreateProfile")]
+    [HttpPost("", Name = "CreateProfile")]
     [ProducesResponseType(typeof(Profile), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> CreateProfileAsync(string name, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateProfileAsync([FromQuery] string name, CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var profile = await _profilesService.CreateAsync(Guid.Parse(userId), name, cancellationToken);
+        var profile = await profilesService.CreateAsync(Guid.Parse(userId), name, cancellationToken);
         return profile is null ? Conflict() : Ok(profile);
     }
 
-    [HttpDelete("{name}", Name = "DeleteProfile")]
+    [HttpDelete("{id:int}", Name = "DeleteProfile")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteProfileAsync(string name, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteProfileAsync([FromRoute] int id, CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         try
         {
-            await _profilesService.DeleteAsync(Guid.Parse(userId), name, cancellationToken);
+            await profilesService.DeleteAsync(Guid.Parse(userId), id, cancellationToken);
+            return Ok();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
+    [HttpPost("{id:int}/pick", Name = "PickProfile")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> PickProfileAsync([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        try
+        {
+            await profilesService.PickAsync(Guid.Parse(userId), id, cancellationToken);
             return Ok();
         }
         catch (KeyNotFoundException)
