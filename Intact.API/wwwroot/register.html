@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Intact Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .register-header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .register-header p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .register-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .resend-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .resend-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .resend-btn:hover {
+            color: #5a67d8;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <h1>Create Account</h1>
+            <p>Join Intact Application today</p>
+        </div>
+        
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required minlength="6">
+            </div>
+            
+            <button type="submit" class="register-btn" id="registerBtn">Create Account</button>
+        </form>
+        
+        <div id="message" class="message" style="display: none;"></div>
+        
+        <div id="resendContainer" class="resend-container" style="display: none;">
+            <button type="button" class="resend-btn" id="resendBtn">Resend confirmation email</button>
+        </div>
+        
+        <div class="login-link">
+            Already have an account? <a href="/">Sign In</a>
+        </div>
+    </div>
+
+    <script>
+        const registerForm = document.getElementById('registerForm');
+        const registerBtn = document.getElementById('registerBtn');
+        const messageDiv = document.getElementById('message');
+        const resendContainer = document.getElementById('resendContainer');
+        const resendBtn = document.getElementById('resendBtn');
+        
+        let registeredEmail = '';
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            registerBtn.disabled = true;
+            registerBtn.textContent = 'Creating Account...';
+            
+            try {
+                const response = await fetch('/api/auth/register-with-confirmation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    registeredEmail = email;
+                    showMessage(result.message, 'success');
+                    registerForm.style.display = 'none';
+                    resendContainer.style.display = 'block';
+                } else {
+                    showMessage(result.errors ? result.errors.join(', ') : 'Registration failed', 'error');
+                }
+            } catch (error) {
+                showMessage('Network error. Please try again.', 'error');
+            } finally {
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Create Account';
+            }
+        });
+
+        resendBtn.addEventListener('click', async () => {
+            if (!registeredEmail) return;
+            
+            resendBtn.disabled = true;
+            resendBtn.textContent = 'Sending...';
+            
+            try {
+                const response = await fetch('/api/resendEmailConfirmation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: registeredEmail })
+                });
+                
+                const result = await response.json();
+                showMessage(result.message, response.ok ? 'success' : 'error');
+            } catch (error) {
+                showMessage('Failed to resend email. Please try again.', 'error');
+            } finally {
+                resendBtn.disabled = false;
+                resendBtn.textContent = 'Resend confirmation email';
+            }
+        });
+
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            
+            // Auto-hide error messages after 5 seconds
+            if (type === 'error') {
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
