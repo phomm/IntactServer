@@ -42,6 +42,23 @@ public static class IdentityApiAdditionalEndpointsExtensions
             return Results.Content(errorPageFinal, "text/html");
         });
 
+        // Auth configuration endpoint
+        endpoints.MapGet("/api/auth/config", () =>
+        {
+            return Results.Ok(new
+            {
+                requireEmailConfirmation = true,
+                message = "Email confirmation is enabled for new registrations"
+            });
+        });
+
+        // Logout endpoint
+        endpoints.MapPost("/api/auth/logout", async (SignInManager<TUser> signInManager) =>
+        {
+            await signInManager.SignOutAsync();
+            return Results.Ok(new { message = "Logged out successfully" });
+        });
+
         return endpoints;
     }
 }
