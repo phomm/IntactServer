@@ -17,30 +17,7 @@ public class EmailService : IEmailService
     public async Task SendEmailConfirmationAsync(string email, string userName, string confirmationLink)
     {
         var subject = "Confirm your email - Intact Application";
-        var htmlMessage = $@"
-            <html>
-            <body style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'>
-                <div style='max-width: 600px; margin: 0 auto; padding: 20px;'>
-                    <h2 style='color: #2c3e50; text-align: center;'>Welcome to Intact!</h2>
-                    <p>Hello {userName},</p>
-                    <p>Thank you for registering with Intact Application. To complete your registration, please confirm your email address by clicking the link below:</p>
-                    <div style='text-align: center; margin: 30px 0;'>
-                        <a href='{confirmationLink}' 
-                           style='background-color: #3498db; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;'>
-                            Confirm Email Address
-                        </a>
-                    </div>
-                    <p>If you cannot click the button above, copy and paste the following link into your browser:</p>
-                    <p style='word-break: break-all; color: #7f8c8d;'>{confirmationLink}</p>
-                    <p>If you did not create this account, please ignore this email.</p>
-                    <hr style='border: none; border-top: 1px solid #ecf0f1; margin: 30px 0;'>
-                    <p style='color: #7f8c8d; font-size: 12px; text-align: center;'>
-                        This is an automated message from Intact Application. Please do not reply to this email.
-                    </p>
-                </div>
-            </body>
-            </html>";
-
+        var htmlMessage = EmailTemplates.GetEmailConfirmationTemplate(userName, confirmationLink);
         await SendEmailAsync(email, subject, htmlMessage);
     }
 
