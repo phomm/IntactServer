@@ -161,6 +161,16 @@ public class AuthController : ControllerBase
             isEmailConfirmed = isConfirmed
         });
     }
+
+    [HttpGet("config")]
+    public IActionResult GetConfig()
+    {
+        return Ok(new
+        {
+            requireEmailConfirmation = true,
+            message = "Email confirmation is enabled for new registrations"
+        });
+    }
 }
 
 public class RegisterRequest
