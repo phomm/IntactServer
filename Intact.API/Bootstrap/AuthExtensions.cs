@@ -28,7 +28,27 @@ public static class AuthExtensions
         serviceCollection
             .AddAuthentication();
         serviceCollection
-            .AddIdentityApiEndpoints<User>()
+            .AddIdentityApiEndpoints<User>(options =>
+            {
+                // Password requirements
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 6;
+
+                // Email confirmation requirements
+                options.SignIn.RequireConfirmedEmail = true;
+                options.User.RequireUniqueEmail = true;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // Token settings
+                options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+            })
             .AddEntityFrameworkStores<AppIdentityDbContext>();
 
         return serviceCollection;
