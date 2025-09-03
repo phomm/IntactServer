@@ -17,6 +17,7 @@ public static class InternalServicesExtensions
         services.AddTransient<IProfilesService, ProfilesService>();
         services.AddTransient<IRoomsService, RoomsService>();
         services.AddTransient<IEmailService, EmailService>();
+        services.AddTransient<IEmailTemplateService, EmailTemplateService>();
         
         return services;
     }
