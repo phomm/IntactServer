@@ -53,7 +53,7 @@ public static class IdentityApiAdditionalEndpointsExtensions
         });
 
         // Logout endpoint
-        endpoints.MapPost("/api/auth/logout", async (SignInManager<TUser> signInManager) =>
+        endpoints.MapPost("/logout", async (SignInManager<TUser> signInManager) =>
         {
             await signInManager.SignOutAsync();
             return Results.Ok(new { message = "Logged out successfully" });
