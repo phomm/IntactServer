@@ -1,7 +1,3 @@
-using Intact.BusinessLogic.Models;
-using Intact.BusinessLogic.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Intact.API.Controllers;
@@ -10,31 +6,7 @@ namespace Intact.API.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly UserManager<User> _userManager;
-
-    public AuthController(UserManager<User> userManager)
-    {
-        _userManager = userManager;
-    }
-
-    [HttpPost("check-email-status")]
-    [Authorize]
-    public async Task<IActionResult> CheckEmailStatus()
-    {
-        var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return Unauthorized();
-        }
-
-        var isConfirmed = await _userManager.IsEmailConfirmedAsync(user);
-        return Ok(new
-        {
-            email = user.Email,
-            isEmailConfirmed = isConfirmed
-        });
-    }
-
+    // Keep only essential custom endpoints that don't duplicate Identity functionality
     [HttpGet("config")]
     public IActionResult GetConfig()
     {
