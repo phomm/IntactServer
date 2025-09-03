@@ -8,23 +8,25 @@ namespace Intact.BusinessLogic.Services;
 public class EmailService : IEmailService
 {
     private readonly EmailSettings _emailSettings;
+    private readonly IEmailTemplateService _emailTemplateService;
 
-    public EmailService(IOptions<EmailSettings> emailSettings)
+    public EmailService(IOptions<EmailSettings> emailSettings, IEmailTemplateService emailTemplateService)
     {
         _emailSettings = emailSettings.Value;
+        _emailTemplateService = emailTemplateService;
     }
 
     public async Task SendEmailConfirmationAsync(string email, string userName, string confirmationLink)
     {
         var subject = "Confirm your email - Intact Application";
-        var htmlMessage = EmailTemplates.GetEmailConfirmationTemplate(userName, confirmationLink);
+        var htmlMessage = _emailTemplateService.GetEmailConfirmationTemplate(userName, confirmationLink);
         await SendEmailAsync(email, subject, htmlMessage);
     }
 
     public async Task SendPasswordResetAsync(string email, string userName, string resetLink)
     {
         var subject = "Reset your password - Intact Application";
-        var htmlMessage = EmailTemplates.GetPasswordResetTemplate(userName, resetLink);
+        var htmlMessage = _emailTemplateService.GetPasswordResetTemplate(userName, resetLink);
         await SendEmailAsync(email, subject, htmlMessage);
     }
 
