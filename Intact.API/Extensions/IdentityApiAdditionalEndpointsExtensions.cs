@@ -57,7 +57,8 @@ public static class IdentityApiAdditionalEndpointsExtensions
         {
             await signInManager.SignOutAsync();
             return Results.Ok(new { message = "Logged out successfully" });
-        });
+        })
+        .RequireAuthorization();
 
         return endpoints;
     }
