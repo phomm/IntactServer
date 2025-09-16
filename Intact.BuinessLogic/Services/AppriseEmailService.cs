@@ -16,13 +16,16 @@ public class AppriseEmailService : IAppriseEmailService
 {
     private readonly EmailSettings _emailSettings;
     private readonly ILogger<AppriseEmailService> _logger;
-    private readonly AppriseClient _appriseClient;
+    private readonly IAppriseStatelessClient _appriseClient;
 
-    public AppriseEmailService(IOptions<EmailSettings> emailSettings, ILogger<AppriseEmailService> logger)
+    public AppriseEmailService(
+        IOptions<EmailSettings> emailSettings, 
+        ILogger<AppriseEmailService> logger,
+        IAppriseStatelessClient appriseClient)
     {
         _emailSettings = emailSettings.Value;
         _logger = logger;
-        _appriseClient = new AppriseClient();
+        _appriseClient = appriseClient;
     }
 
     public async Task SendEmailAsync(string to, string subject, string htmlMessage)
