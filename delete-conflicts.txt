@@ -1,0 +1,5 @@
+Files to delete to resolve conflicts:
+- Intact.API/Controllers/AuthController.cs (doesn't exist in appjet)
+- Intact.BuinessLogic/Services/IEmailService.cs (doesn't exist in appjet)
+
+These files cause conflicts because they exist in apprise branch but not in appjet branch.
