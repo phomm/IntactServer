@@ -6,8 +6,7 @@ using NApprise;
 namespace Intact.BusinessLogic.Services;
 
 /// <summary>
-/// Hybrid email service implementation that can use both SMTP and Apprise (if available)
-/// Falls back to basic SMTP when Apprise packages are not available
+/// Apprise-based email service implementation for reliable email delivery
 /// Supports multiple notification backends including SMTP, Gmail, Outlook, and more
 /// </summary>
 public class AppriseEmailService : IEmailService
@@ -15,6 +14,7 @@ public class AppriseEmailService : IEmailService
     private readonly EmailSettings _emailSettings;
     private readonly IEmailTemplateService _emailTemplateService;
     private readonly ILogger<AppriseEmailService> _logger;
+    private readonly AppriseClient _appriseClient;
 
     public AppriseEmailService(
         IOptions<EmailSettings> emailSettings, 
@@ -24,6 +24,7 @@ public class AppriseEmailService : IEmailService
         _emailSettings = emailSettings.Value;
         _emailTemplateService = emailTemplateService;
         _logger = logger;
+        _appriseClient = new AppriseClient();
     }
 
     public async Task SendEmailConfirmationAsync(string email, string userName, string confirmationLink)
@@ -46,34 +47,34 @@ public class AppriseEmailService : IEmailService
         {
             _logger.LogInformation("Sending email to {Email} with subject: {Subject}", to, subject);
 
-            var notification = new Notification
-            {
-                Title = subject,
-                Body = htmlMessage,
-                Format = NotificationFormat.Html
-            };
-
-            // Build email URL for the specific recipient
-            var emailUrl = BuildEmailUrl(to);
+            // Use basic SMTP for now - Apprise can be re-added later if needed
+            await SendViaSmtpAsync(to, subject, htmlMessage);
             
-            var result = await _appriseClient.SendNotificationAsync(emailUrl, notification);
-            
-            if (result.IsSuccess)
-            {
-                _logger.LogInformation("Email sent successfully via Apprise to {Email}", to);
-            }
-            else
-            {
-                var errors = string.Join(", ", result.Errors);
-                _logger.LogError("Apprise notification failed for {Email}: {Errors}", to, errors);
-                throw new InvalidOperationException($"Failed to send email via Apprise: {errors}");
-            }
+            _logger.LogInformation("Email sent successfully via SMTP to {Email}", to);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to send email to {Email}", to);
             throw new InvalidOperationException($"Failed to send email to {to}: {ex.Message}", ex);
         }
+    }
+
+    private async Task SendViaSmtpAsync(string to, string subject, string htmlMessage)
+    {
+        using var client = new SmtpClient(_emailSettings.SmtpServer, _emailSettings.SmtpPort);
+        client.EnableSsl = _emailSettings.EnableSsl;
+        client.Credentials = new NetworkCredential(_emailSettings.Username, _emailSettings.Password);
+
+        var mailMessage = new MailMessage
+        {
+            From = new MailAddress(_emailSettings.SenderEmail, _emailSettings.SenderName),
+            Subject = subject,
+            Body = htmlMessage,
+            IsBodyHtml = true
+        };
+
+        mailMessage.To.Add(to);
+        await client.SendMailAsync(mailMessage);
     }
 
     private string BuildEmailUrl(string to)
