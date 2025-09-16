@@ -4,6 +4,7 @@ public interface IEmailTemplateService
 {
     string GetEmailConfirmationTemplate(string userName, string confirmationLink);
     string GetPasswordResetTemplate(string userName, string resetLink);
+    string GetPasswordResetCodeTemplate(string userName, string resetCode);
     string GetEmailConfirmationSuccessPage();
     string GetEmailConfirmationErrorPage();
 }
