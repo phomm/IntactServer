@@ -19,8 +19,10 @@ public static class InternalServicesExtensions
         services.AddTransient<IProfilesService, ProfilesService>();
         services.AddTransient<IRoomsService, RoomsService>();
         services.AddTransient<IEmailService, EmailService>();
+        services.AddTransient<IAppriseEmailService, AppriseEmailService>();
         services.AddTransient<IEmailTemplateService, EmailTemplateService>();
         services.AddTransient<IEmailSender, EmailSender>();
+        services.AddTransient<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender<Intact.BusinessLogic.Models.User>, EmailSender>();
 
         return services;
     }
