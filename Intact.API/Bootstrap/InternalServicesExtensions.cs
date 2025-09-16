@@ -16,8 +16,9 @@ public static class InternalServicesExtensions
         services.AddTransient<ICacheService, CacheService>();
         services.AddTransient<IProfilesService, ProfilesService>();
         services.AddTransient<IRoomsService, RoomsService>();
-        // Email service registration - uses Apprise for reliable email delivery
-        services.AddTransient<IEmailService, AppriseEmailService>();
+        // Email service registration
+        services.AddTransient<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, EmailSender>();
+        services.AddTransient<IEmailService, EmailService>();
         services.AddTransient<IEmailTemplateService, EmailTemplateService>();
         
         return services;
