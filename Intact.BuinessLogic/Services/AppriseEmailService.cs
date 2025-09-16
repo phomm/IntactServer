@@ -1,7 +1,8 @@
 using Intact.BusinessLogic.Data.Config;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
-using NApprise;
+using System.Net;
+using System.Net.Mail;
 
 namespace Intact.BusinessLogic.Services;
 
