@@ -1,8 +1,7 @@
 using Intact.BusinessLogic.Data;
 using Intact.BusinessLogic.Data.Config;
 using Intact.BusinessLogic.Services;
-using Intact.BusinessLogic.Models;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Intact.API.Bootstrap;
@@ -18,9 +17,10 @@ public static class InternalServicesExtensions
         services.AddTransient<ICacheService, CacheService>();
         services.AddTransient<IProfilesService, ProfilesService>();
         services.AddTransient<IRoomsService, RoomsService>();
+        services.AddTransient<IAppriseEmailService, AppriseEmailService>();
         services.AddTransient<IEmailService, EmailService>();
         services.AddTransient<IEmailTemplateService, EmailTemplateService>();
-        services.AddTransient<IEmailSender, EmailSender>();
+        services.AddTransient<IEmailSender<User>, EmailSender>();
         
         return services;
     }
