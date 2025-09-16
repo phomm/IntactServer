@@ -4,7 +4,6 @@ public interface IEmailTemplateService
 {
     string GetEmailConfirmationTemplate(string userName, string confirmationLink);
     string GetPasswordResetTemplate(string userName, string resetLink);
-    string GetPasswordResetCodeTemplate(string userName, string resetCode);
     string GetEmailConfirmationSuccessPage();
     string GetEmailConfirmationErrorPage();
 }
@@ -56,6 +55,32 @@ public class EmailTemplateService : IEmailTemplateService
                     <p>If you cannot click the button above, copy and paste the following link into your browser:</p>
                     <p style='word-break: break-all; color: #7f8c8d;'>{resetLink}</p>
                     <p>If you did not request this password reset, please ignore this email. Your password will not be changed.</p>
+                    <hr style='border: none; border-top: 1px solid #ecf0f1; margin: 30px 0;'>
+                    <p style='color: #7f8c8d; font-size: 12px; text-align: center;'>
+                        This is an automated message from Intact Application. Please do not reply to this email.
+                    </p>
+                </div>
+            </body>
+            </html>";
+    }
+
+    public string GetPasswordResetCodeTemplate(string userName, string resetCode)
+    {
+        return $@"
+            <html>
+            <body style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'>
+                <div style='max-width: 600px; margin: 0 auto; padding: 20px;'>
+                    <h2 style='color: #e74c3c; text-align: center;'>Password Reset Code</h2>
+                    <p>Hello {userName},</p>
+                    <p>We received a request to reset your password for your Intact Application account. Use the following code to reset your password:</p>
+                    <div style='text-align: center; margin: 30px 0;'>
+                        <div style='background-color: #f8f9fa; border: 2px dashed #e74c3c; padding: 20px; border-radius: 5px; display: inline-block;'>
+                            <span style='font-size: 24px; font-weight: bold; color: #e74c3c; letter-spacing: 3px;'>{resetCode}</span>
+                        </div>
+                    </div>
+                    <p>Enter this code in the password reset form to continue.</p>
+                    <p>If you did not request this password reset, please ignore this email. Your password will not be changed.</p>
+                    <p><strong>Note:</strong> This code will expire in 15 minutes for security reasons.</p>
                     <hr style='border: none; border-top: 1px solid #ecf0f1; margin: 30px 0;'>
                     <p style='color: #7f8c8d; font-size: 12px; text-align: center;'>
                         This is an automated message from Intact Application. Please do not reply to this email.
