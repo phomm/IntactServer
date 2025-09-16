@@ -1,5 +1,5 @@
+using Intact.BusinessLogic.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Intact.BusinessLogic.Services;
 
 namespace Intact.API.Controllers;
@@ -39,7 +39,7 @@ public class EmailTestController : ControllerBase
 
         try
         {
-            await _emailService.SendEmailConfirmationAsync(
+            await _emailService.SendEmailAsync(
                 request.To, 
                 request.Subject ?? "🧪 Test Email from Intact API", 
                 request.Body ?? "<h2>Test Email</h2><p>This is a test email from the Intact application using Apprise email service.</p>"
@@ -78,8 +78,8 @@ public class EmailTestController : ControllerBase
 
         try
         {
-            await _emailService.SendEmailConfirmationAsync(
-                request.Email,
+            await _emailService.SendConfirmationLinkAsync(
+                GetTestUser(request.Email),
                 request.UserName,
                 request.ConfirmationLink ?? "https://localhost:7000/confirmEmail?userId=test&code=testcode"
             );
@@ -115,8 +115,8 @@ public class EmailTestController : ControllerBase
 
         try
         {
-            await _emailService.SendPasswordResetAsync(
-                request.Email,
+            await _emailService.SendPasswordResetLinkAsync(
+                GetTestUser(request.Email),
                 request.UserName,
                 request.ResetLink ?? "https://localhost:7000/reset-password?token=testtoken"
             );
@@ -153,7 +153,7 @@ public class EmailTestController : ControllerBase
         try
         {
             await _emailService.SendPasswordResetCodeAsync(
-                request.Email,
+                GetTestUser(request.Email),
                 request.UserName,
                 request.ResetCode ?? "ABC123"
             );
@@ -209,6 +209,16 @@ public class EmailTestController : ControllerBase
                 testPasswordResetCode = "/api/emailtest/test-password-reset-code"
             }
         });
+    }
+
+    private User GetTestUser(string email)
+    {
+        return new User
+        {
+            Id = "test",
+            Email = email,
+            UserName = "test"
+        };
     }
 }
 

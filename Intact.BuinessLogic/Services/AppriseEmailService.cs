@@ -57,29 +57,30 @@ public class AppriseEmailService : IAppriseEmailService
 
     private async Task SendViaAppriseAsync(string to, string subject, string htmlMessage)
     {
-        var notification = new NotificationRequest
+        var appriseUrl = BuildAppriseEmailUrl(to);
+        var urls = new List<string> { appriseUrl };
+        if (_emailSettings.AppriseUrls?.Length > 0)
+        {
+            urls.AddRange(_emailSettings.AppriseUrls);
+        }
+
+        var notification = new StatelessNotificationRequest
         {
             Title = subject,
             Body = htmlMessage,
-            NotifyType = NotifyType.Info,
-            BodyFormat = NotifyFormat.Html
+            Type = NotificationType.Info,
+            Format = NotificationFormat.Html,
+            Urls = urls
         };
 
-        // Try custom Apprise URLs first if configured
-        if (_emailSettings.AppriseUrls?.Length > 0)
+        try
         {
-            foreach (var url in _emailSettings.AppriseUrls)
-            {
-                await _appriseClient.NotifyAsync(notification, url);
-            }
-            _logger.LogInformation("Email sent successfully via Apprise custom URLs to {To}", to);
+            await _appriseClient.SendNotificationAsync(notification);
+            _logger.LogDebug("Sending email via Apprise to {To} using URLs: {Urls}", to, string.Join(", ", urls));
         }
-        else
+        catch (Exception ex)
         {
-            // Build default mailto URL for Apprise
-            var appriseUrl = BuildAppriseEmailUrl(to);
-            await _appriseClient.NotifyAsync(notification, appriseUrl);
-            _logger.LogInformation("Email sent successfully via Apprise mailto to {To}", to);
+            _logger.LogError(ex, "Failed to log Apprise email sending attempt to {To}", to);
         }
     }
 

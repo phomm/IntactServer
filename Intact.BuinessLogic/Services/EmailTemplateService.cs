@@ -6,6 +6,7 @@ public interface IEmailTemplateService
     string GetPasswordResetTemplate(string userName, string resetLink);
     string GetEmailConfirmationSuccessPage();
     string GetEmailConfirmationErrorPage();
+    string GetPasswordResetCodeTemplate(string userName, string resetCode); 
 }
 
 public class EmailTemplateService : IEmailTemplateService

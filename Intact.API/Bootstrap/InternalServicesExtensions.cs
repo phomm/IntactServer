@@ -1,7 +1,7 @@
 using Intact.BusinessLogic.Data;
 using Intact.BusinessLogic.Data.Config;
 using Intact.BusinessLogic.Services;
-using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NApprise;
 
@@ -21,8 +21,7 @@ public static class InternalServicesExtensions
         services.AddTransient<IEmailService, EmailService>();
         services.AddTransient<IAppriseEmailService, AppriseEmailService>();
         services.AddTransient<IEmailTemplateService, EmailTemplateService>();
-        services.AddTransient<IEmailSender, EmailSender>();
-        services.AddTransient<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender<Intact.BusinessLogic.Models.User>, EmailSender>();
+        services.AddTransient<IEmailSender<BusinessLogic.Models.User>, EmailSender>();
 
         return services;
     }

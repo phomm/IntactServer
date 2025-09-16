@@ -1,9 +1,9 @@
 using Intact.BusinessLogic.Models;
-using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace Intact.BusinessLogic.Services;
 
-public class EmailSender : IEmailSender, IEmailSender<User>
+public class EmailSender : IEmailSender<User>
 {
     private readonly IEmailService _emailService;
 
