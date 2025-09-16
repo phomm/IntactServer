@@ -5,82 +5,72 @@ using NApprise;
 
 namespace Intact.BusinessLogic.Services;
 
-/// <summary>
-/// Apprise-based email service implementation for reliable email delivery
-/// Supports multiple notification backends including SMTP, Gmail, Outlook, and more
-/// </summary>
-public class AppriseEmailService : IEmailService
+public interface IAppriseEmailService
+{
+    Task SendEmailAsync(string to, string subject, string htmlMessage);
+}
+
+public class AppriseEmailService : IAppriseEmailService
 {
     private readonly EmailSettings _emailSettings;
-    private readonly IEmailTemplateService _emailTemplateService;
     private readonly ILogger<AppriseEmailService> _logger;
-    private readonly IAppriseStatelessClient _appriseClient;
+    private readonly AppriseClient _appriseClient;
 
-    public AppriseEmailService(
-        IOptions<EmailSettings> emailSettings,
-        IEmailTemplateService emailTemplateService,
-        ILogger<AppriseEmailService> logger,
-        IAppriseStatelessClient appriseClient)
+    public AppriseEmailService(IOptions<EmailSettings> emailSettings, ILogger<AppriseEmailService> logger)
     {
         _emailSettings = emailSettings.Value;
-        _emailTemplateService = emailTemplateService;
         _logger = logger;
-        _appriseClient = appriseClient;
-    }
-
-    public async Task SendEmailConfirmationAsync(string email, string userName, string confirmationLink)
-    {
-        var subject = "✅ Confirm your email - Intact Application";
-        var htmlMessage = _emailTemplateService.GetEmailConfirmationTemplate(userName, confirmationLink);
-        await SendEmailAsync(email, subject, htmlMessage);
-    }
-
-    public async Task SendPasswordResetAsync(string email, string userName, string resetLink)
-    {
-        var subject = "🔒 Reset your password - Intact Application";
-        var htmlMessage = _emailTemplateService.GetPasswordResetTemplate(userName, resetLink);
-        await SendEmailAsync(email, subject, htmlMessage);
+        _appriseClient = new AppriseClient();
     }
 
     public async Task SendEmailAsync(string to, string subject, string htmlMessage)
     {
         try
         {
-            _logger.LogInformation("Sending email to {Email} with subject: {Subject}", to, subject);
+            // Build Apprise email URL (mailto:// protocol)
+            var appriseUrl = BuildAppriseEmailUrl(to);
+            
+            var notification = new NotificationRequest
+            {
+                Title = subject,
+                Body = htmlMessage,
+                NotifyType = NotifyType.Info,
+                BodyFormat = NotifyFormat.Html
+            };
 
-            // Use basic SMTP for now - Apprise can be re-added later if needed
-            await SendAsync(to, subject, htmlMessage);
-
-            _logger.LogInformation("Email sent successfully via SMTP to {Email}", to);
+            await _appriseClient.NotifyAsync(appriseUrl, notification);
+            
+            _logger.LogInformation("Email sent successfully via Apprise to {To} with subject '{Subject}'", to, subject);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to send email to {Email}", to);
+            _logger.LogError(ex, "Failed to send email via Apprise to {To} with subject '{Subject}'", to, subject);
             throw new InvalidOperationException($"Failed to send email to {to}: {ex.Message}", ex);
         }
     }
 
-    private async Task SendAsync(string to, string subject, string htmlMessage)
+    private string BuildAppriseEmailUrl(string to)
     {
-        // Construct the payload for Apprise
-        var payload = new StatelessNotificationRequest
+        // Build mailto URL for Apprise
+        // Format: mailto://user:password@smtp.server:port/?from=sender@domain.com&to=recipient@domain.com&name=SenderName
+        
+        var url = $"mailto://{Uri.EscapeDataString(_emailSettings.Username)}:{Uri.EscapeDataString(_emailSettings.Password)}@{_emailSettings.SmtpServer}:{_emailSettings.SmtpPort}";
+        
+        var parameters = new List<string>
         {
-            Urls = [to],
-            Title = subject,
-            Body = htmlMessage,
-            Type = NotificationType.Info,
-            Format = NotificationFormat.Html
+            $"from={Uri.EscapeDataString(_emailSettings.SenderEmail)}",
+            $"to={Uri.EscapeDataString(to)}",
+            $"name={Uri.EscapeDataString(_emailSettings.SenderName)}"
         };
 
-        // Send the notification via Apprise
-        try
+        if (_emailSettings.EnableSsl)
         {
-            await _appriseClient.SendNotificationAsync(payload);
+            parameters.Add("secure=yes");
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error sending notification via Apprise");
-            throw;
-        }
+
+        url += "/?" + string.Join("&", parameters);
+        
+        _logger.LogDebug("Built Apprise email URL for {To}", to);
+        return url;
     }
 }
