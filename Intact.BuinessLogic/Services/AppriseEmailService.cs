@@ -77,8 +77,56 @@ public class AppriseEmailService : IEmailService
         await client.SendMailAsync(mailMessage);
     }
 
-    // Apprise functionality removed for compatibility with appjet branch
-    // Can be re-added later by installing NApprise package
+    private string BuildEmailUrl(string to)
+    {
+        try
+        {
+            // If a specific Apprise URL is configured, use it
+            if (!string.IsNullOrEmpty(_emailSettings.AppriseUrl))
+            {
+                var baseUrl = _emailSettings.AppriseUrl;
+                
+                // Add recipient to the URL
+                if (baseUrl.Contains("?"))
+                    return $"{baseUrl}&to={Uri.EscapeDataString(to)}";
+                else
+                    return $"{baseUrl}?to={Uri.EscapeDataString(to)}";
+            }
+
+            // Build URL from SMTP settings
+            return BuildEmailUrlFromSmtpSettings(to);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to build email URL for {Email}", to);
+            throw;
+        }
+    }
+
+    private string BuildEmailUrlFromSmtpSettings(string to)
+    {
+        var username = Uri.EscapeDataString(_emailSettings.Username ?? "");
+        var password = Uri.EscapeDataString(_emailSettings.Password ?? "");
+        var smtpServer = _emailSettings.SmtpServer ?? "smtp.gmail.com";
+        var smtpPort = _emailSettings.SmtpPort > 0 ? _emailSettings.SmtpPort : 587;
+        var senderEmail = Uri.EscapeDataString(_emailSettings.SenderEmail ?? _emailSettings.Username ?? "");
+        var senderName = Uri.EscapeDataString(_emailSettings.SenderName ?? "Intact Application");
+
+        // Build mailto URL for Apprise
+        // Format: mailto://username:password@smtp.server:port?to=recipient&from=sender&name=sendername
+        var url = $"mailto://{username}:{password}@{smtpServer}:{smtpPort}";
+        url += $"?to={Uri.EscapeDataString(to)}";
+        url += $"&from={senderEmail}";
+        
+        if (!string.IsNullOrEmpty(senderName))
+            url += $"&name={senderName}";
+
+        // Add SSL if enabled
+        if (_emailSettings.EnableSsl)
+            url += "&secure=yes";
+
+        return url;
+    }
 
     /// <summary>
     /// Test the email configuration by sending a test message
@@ -88,7 +136,7 @@ public class AppriseEmailService : IEmailService
         try
         {
             var testSubject = "🧪 Test Email - Intact Application";
-            var testBody = "<h2>Email Configuration Test</h2><p>This is a test email to verify your email configuration is working correctly.</p><p>If you received this email, your Apprise email setup is functioning properly!</p>";
+            var testBody = "<h2>Email Configuration Test</h2><p>This is a test email to verify your email configuration is working correctly.</p><p>If you received this email, your email setup is functioning properly!</p>";
             
             await SendEmailAsync(testEmail, testSubject, testBody);
             return true;
