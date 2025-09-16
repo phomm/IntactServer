@@ -1,1 +1,1 @@
-// This interface has been removed - using EmailSender pattern from appjet branch
+ 
