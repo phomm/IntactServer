@@ -1,44 +1,59 @@
-using Intact.BusinessLogic.Data.Config;
-using Microsoft.Extensions.Options;
-using System.Net;
-using System.Net.Mail;
-using Microsoft.AspNetCore.Identity.UI.Services;
+using Intact.BusinessLogic.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace Intact.BusinessLogic.Services;
 
-public class EmailSender : IEmailSender
+public class EmailSender : IEmailSender<User>
 {
-    private readonly EmailSettings _emailSettings;
+    private readonly IEmailService _emailService;
+    private readonly ILogger<EmailSender> _logger;
 
-    public EmailSender(IOptions<EmailSettings> emailSettings)
+    public EmailSender(IEmailService emailService, ILogger<EmailSender> logger)
     {
-        _emailSettings = emailSettings.Value;
+        _emailService = emailService;
+        _logger = logger;
     }
-    
-    public async Task SendEmailAsync(string to, string subject, string htmlMessage)
+
+    public async Task SendConfirmationLinkAsync(User user, string email, string confirmationLink)
     {
         try
         {
-            using var client = new SmtpClient(_emailSettings.SmtpServer, _emailSettings.SmtpPort);
-            client.EnableSsl = _emailSettings.EnableSsl;
-            client.Credentials = new NetworkCredential(_emailSettings.Username, _emailSettings.Password);
-
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress(_emailSettings.SenderEmail, _emailSettings.SenderName),
-                Subject = subject,
-                Body = htmlMessage,
-                IsBodyHtml = true
-            };
-
-            mailMessage.To.Add(to);
-
-            await client.SendMailAsync(mailMessage);
+            await _emailService.SendEmailConfirmationAsync(email, user.UserName ?? email, confirmationLink);
+            _logger.LogInformation("Email confirmation sent to {Email} for user {UserId}", email, user.Id);
         }
         catch (Exception ex)
         {
-            // Log the exception (you might want to use ILogger here)
-            throw new InvalidOperationException($"Failed to send email to {to}: {ex.Message}", ex);
+            _logger.LogError(ex, "Failed to send confirmation email to {Email} for user {UserId}", email, user.Id);
+            throw;
+        }
+    }
+
+    public async Task SendPasswordResetLinkAsync(User user, string email, string resetLink)
+    {
+        try
+        {
+            await _emailService.SendPasswordResetAsync(email, user.UserName ?? email, resetLink);
+            _logger.LogInformation("Password reset email sent to {Email} for user {UserId}", email, user.Id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send password reset email to {Email} for user {UserId}", email, user.Id);
+            throw;
+        }
+    }
+
+    public async Task SendPasswordResetCodeAsync(User user, string email, string resetCode)
+    {
+        try
+        {
+            await _emailService.SendPasswordResetCodeAsync(email, user.UserName ?? email, resetCode);
+            _logger.LogInformation("Password reset code sent to {Email} for user {UserId}", email, user.Id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send password reset code to {Email} for user {UserId}", email, user.Id);
+            throw;
         }
     }
 }
