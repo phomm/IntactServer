@@ -1,7 +1,8 @@
 using Intact.BusinessLogic.Data;
 using Intact.BusinessLogic.Data.Config;
 using Intact.BusinessLogic.Services;
-using Microsoft.AspNetCore.Identity.UI.Services;
+using Intact.BusinessLogic.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Intact.API.Bootstrap;
