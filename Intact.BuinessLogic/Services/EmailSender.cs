@@ -1,44 +1,35 @@
-using Intact.BusinessLogic.Data.Config;
-using Microsoft.Extensions.Options;
-using System.Net;
-using System.Net.Mail;
+using Intact.BusinessLogic.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Intact.BusinessLogic.Services;
 
-public class EmailSender : IEmailSender
+public class EmailSender : IEmailSender, IEmailSender<User>
 {
-    private readonly EmailSettings _emailSettings;
+    private readonly IEmailService _emailService;
 
-    public EmailSender(IOptions<EmailSettings> emailSettings)
+    public EmailSender(IEmailService emailService)
     {
-        _emailSettings = emailSettings.Value;
+        _emailService = emailService;
     }
     
     public async Task SendEmailAsync(string to, string subject, string htmlMessage)
     {
-        try
-        {
-            using var client = new SmtpClient(_emailSettings.SmtpServer, _emailSettings.SmtpPort);
-            client.EnableSsl = _emailSettings.EnableSsl;
-            client.Credentials = new NetworkCredential(_emailSettings.Username, _emailSettings.Password);
+        await _emailService.SendEmailAsync(to, subject, htmlMessage);
+    }
 
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress(_emailSettings.SenderEmail, _emailSettings.SenderName),
-                Subject = subject,
-                Body = htmlMessage,
-                IsBodyHtml = true
-            };
+    public async Task SendConfirmationLinkAsync(User user, string email, string confirmationLink)
+    {
+        await _emailService.SendConfirmationLinkAsync(user, email, confirmationLink);
+    }
 
-            mailMessage.To.Add(to);
+    public async Task SendPasswordResetLinkAsync(User user, string email, string resetLink)
+    {
+        await _emailService.SendPasswordResetLinkAsync(user, email, resetLink);
+    }
 
-            await client.SendMailAsync(mailMessage);
-        }
-        catch (Exception ex)
-        {
-            // Log the exception (you might want to use ILogger here)
-            throw new InvalidOperationException($"Failed to send email to {to}: {ex.Message}", ex);
-        }
+    public async Task SendPasswordResetCodeAsync(User user, string email, string resetCode)
+    {
+        await _emailService.SendPasswordResetCodeAsync(user, email, resetCode);
     }
 }
