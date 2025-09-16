@@ -1,13 +1,13 @@
 using Intact.BusinessLogic.Data.Config;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
-using System.Net;
-using System.Net.Mail;
+using NApprise;
 
 namespace Intact.BusinessLogic.Services;
 
 /// <summary>
-/// Apprise-based email service implementation for reliable email delivery
+/// Hybrid email service implementation that can use both SMTP and Apprise (if available)
+/// Falls back to basic SMTP when Apprise packages are not available
 /// Supports multiple notification backends including SMTP, Gmail, Outlook, and more
 /// </summary>
 public class AppriseEmailService : IEmailService
@@ -15,7 +15,6 @@ public class AppriseEmailService : IEmailService
     private readonly EmailSettings _emailSettings;
     private readonly IEmailTemplateService _emailTemplateService;
     private readonly ILogger<AppriseEmailService> _logger;
-    private readonly AppriseClient _appriseClient;
 
     public AppriseEmailService(
         IOptions<EmailSettings> emailSettings, 
@@ -25,7 +24,6 @@ public class AppriseEmailService : IEmailService
         _emailSettings = emailSettings.Value;
         _emailTemplateService = emailTemplateService;
         _logger = logger;
-        _appriseClient = new AppriseClient();
     }
 
     public async Task SendEmailConfirmationAsync(string email, string userName, string confirmationLink)
