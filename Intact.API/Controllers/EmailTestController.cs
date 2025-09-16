@@ -140,6 +140,43 @@ public class EmailTestController : ControllerBase
     }
 
     /// <summary>
+    /// Test password reset code template (Development only)
+    /// </summary>
+    [HttpPost("test-password-reset-code")]
+    public async Task<IActionResult> TestPasswordResetCode([FromBody] PasswordResetCodeTestRequest request)
+    {
+        if (!_environment.IsDevelopment())
+        {
+            return NotFound();
+        }
+
+        try
+        {
+            await _emailService.SendPasswordResetCodeAsync(
+                request.Email,
+                request.UserName,
+                request.ResetCode ?? "ABC123"
+            );
+
+            return Ok(new { 
+                success = true, 
+                message = $"Password reset code sent to {request.Email}",
+                timestamp = DateTime.UtcNow
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send password reset code to {Email}", request.Email);
+            
+            return BadRequest(new { 
+                success = false, 
+                message = $"Failed to send password reset code: {ex.Message}",
+                timestamp = DateTime.UtcNow
+            });
+        }
+    }
+
+    /// <summary>
     /// Get email service configuration info (Development only)
     /// </summary>
     [HttpGet("config")]
@@ -153,20 +190,23 @@ public class EmailTestController : ControllerBase
         return Ok(new
         {
             service = "Apprise Email Service",
-            description = "Using NApprise package for reliable email delivery",
+            description = "Using NApprise package for reliable email delivery with .NET Identity integration",
             features = new[]
             {
                 "Multi-backend support (SMTP, Gmail, Outlook, etc.)",
                 "Automatic fallback to SMTP if Apprise fails",
                 "HTML email templates",
-                "Email confirmation integration",
-                "Password reset functionality"
+                "Email confirmation integration", 
+                "Password reset functionality",
+                "Password reset code support",
+                "IEmailSender<User> implementation for .NET Identity"
             },
             endpoints = new
             {
                 testEmail = "/api/emailtest/send-test",
                 testConfirmation = "/api/emailtest/test-confirmation",
-                testPasswordReset = "/api/emailtest/test-password-reset"
+                testPasswordReset = "/api/emailtest/test-password-reset",
+                testPasswordResetCode = "/api/emailtest/test-password-reset-code"
             }
         });
     }
@@ -197,4 +237,13 @@ public record PasswordResetTestRequest(
     string Email,
     string UserName,
     string? ResetLink = null
+);
+
+/// <summary>
+/// Request model for testing password reset code
+/// </summary>
+public record PasswordResetCodeTestRequest(
+    string Email,
+    string UserName,
+    string? ResetCode = null
 );
