@@ -1,1 +1,1 @@
-// AuthController has been removed - all endpoints moved to Identity extensions
+ 
