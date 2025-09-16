@@ -31,6 +31,7 @@
     </PackageReference>
     <PackageReference Include="Riok.Mapperly" Version="3.2.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.7.4" />
+    <PackageReference Include="NApprise" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
