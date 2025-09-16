@@ -70,7 +70,7 @@ public class AppriseEmailService : IAppriseEmailService
         {
             foreach (var url in _emailSettings.AppriseUrls)
             {
-                await _appriseClient.NotifyAsync(url, notification);
+                await _appriseClient.NotifyAsync(notification, url);
             }
             _logger.LogInformation("Email sent successfully via Apprise custom URLs to {To}", to);
         }
@@ -78,7 +78,7 @@ public class AppriseEmailService : IAppriseEmailService
         {
             // Build default mailto URL for Apprise
             var appriseUrl = BuildAppriseEmailUrl(to);
-            await _appriseClient.NotifyAsync(appriseUrl, notification);
+            await _appriseClient.NotifyAsync(notification, appriseUrl);
             _logger.LogInformation("Email sent successfully via Apprise mailto to {To}", to);
         }
     }
