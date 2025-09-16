@@ -2,6 +2,8 @@ using Intact.BusinessLogic.Data.Config;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using NApprise;
+using System.Net;
+using System.Net.Mail;
 
 namespace Intact.BusinessLogic.Services;
 
@@ -25,26 +27,83 @@ public class AppriseEmailService : IAppriseEmailService
 
     public async Task SendEmailAsync(string to, string subject, string htmlMessage)
     {
+        if (_emailSettings.UseApprise)
+        {
+            try
+            {
+                await SendViaAppriseAsync(to, subject, htmlMessage);
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to send email via Apprise to {To}, attempting fallback", to);
+                
+                if (!_emailSettings.FallbackToSmtp)
+                {
+                    throw;
+                }
+            }
+        }
+
+        // Fallback to SMTP or direct SMTP if Apprise is disabled
+        if (_emailSettings.FallbackToSmtp || !_emailSettings.UseApprise)
+        {
+            await SendViaSmtpAsync(to, subject, htmlMessage);
+        }
+    }
+
+    private async Task SendViaAppriseAsync(string to, string subject, string htmlMessage)
+    {
+        var notification = new NotificationRequest
+        {
+            Title = subject,
+            Body = htmlMessage,
+            NotifyType = NotifyType.Info,
+            BodyFormat = NotifyFormat.Html
+        };
+
+        // Try custom Apprise URLs first if configured
+        if (_emailSettings.AppriseUrls?.Length > 0)
+        {
+            foreach (var url in _emailSettings.AppriseUrls)
+            {
+                await _appriseClient.NotifyAsync(url, notification);
+            }
+            _logger.LogInformation("Email sent successfully via Apprise custom URLs to {To}", to);
+        }
+        else
+        {
+            // Build default mailto URL for Apprise
+            var appriseUrl = BuildAppriseEmailUrl(to);
+            await _appriseClient.NotifyAsync(appriseUrl, notification);
+            _logger.LogInformation("Email sent successfully via Apprise mailto to {To}", to);
+        }
+    }
+
+    private async Task SendViaSmtpAsync(string to, string subject, string htmlMessage)
+    {
         try
         {
-            // Build Apprise email URL (mailto:// protocol)
-            var appriseUrl = BuildAppriseEmailUrl(to);
-            
-            var notification = new NotificationRequest
+            using var client = new SmtpClient(_emailSettings.SmtpServer, _emailSettings.SmtpPort);
+            client.EnableSsl = _emailSettings.EnableSsl;
+            client.Credentials = new NetworkCredential(_emailSettings.Username, _emailSettings.Password);
+
+            var mailMessage = new MailMessage
             {
-                Title = subject,
+                From = new MailAddress(_emailSettings.SenderEmail, _emailSettings.SenderName),
+                Subject = subject,
                 Body = htmlMessage,
-                NotifyType = NotifyType.Info,
-                BodyFormat = NotifyFormat.Html
+                IsBodyHtml = true
             };
 
-            await _appriseClient.NotifyAsync(appriseUrl, notification);
+            mailMessage.To.Add(to);
+            await client.SendMailAsync(mailMessage);
             
-            _logger.LogInformation("Email sent successfully via Apprise to {To} with subject '{Subject}'", to, subject);
+            _logger.LogInformation("Email sent successfully via SMTP fallback to {To}", to);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to send email via Apprise to {To} with subject '{Subject}'", to, subject);
+            _logger.LogError(ex, "Failed to send email via SMTP to {To}", to);
             throw new InvalidOperationException($"Failed to send email to {to}: {ex.Message}", ex);
         }
     }
