@@ -14,7 +14,7 @@ public static class IdentityApiAdditionalEndpointsExtensions
         ArgumentNullException.ThrowIfNull(endpoints);
 
         // Enhanced email confirmation endpoint with HTML response
-        endpoints.MapGet("/confirmEmail", async (string userId, string code, UserManager<TUser> userManager, IEmailTemplateService emailTemplateService) =>
+        endpoints.MapGet("/confirmEmail2", async (string userId, string code, UserManager<TUser> userManager, IEmailTemplateService emailTemplateService) =>
         {
             if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(code))
             {
