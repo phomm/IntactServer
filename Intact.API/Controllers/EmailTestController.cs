@@ -39,7 +39,7 @@ public class EmailTestController : ControllerBase
 
         try
         {
-            await _emailService.SendEmailAsync(
+            await _emailService.SendEmailConfirmationAsync(
                 request.To, 
                 request.Subject ?? "🧪 Test Email from Intact API", 
                 request.Body ?? "<h2>Test Email</h2><p>This is a test email from the Intact application using Apprise email service.</p>"

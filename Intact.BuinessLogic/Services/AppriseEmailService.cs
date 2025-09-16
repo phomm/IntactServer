@@ -14,17 +14,18 @@ public class AppriseEmailService : IEmailService
     private readonly EmailSettings _emailSettings;
     private readonly IEmailTemplateService _emailTemplateService;
     private readonly ILogger<AppriseEmailService> _logger;
-    private readonly AppriseClient _appriseClient;
+    private readonly IAppriseStatelessClient _appriseClient;
 
     public AppriseEmailService(
-        IOptions<EmailSettings> emailSettings, 
-        IEmailTemplateService emailTemplateService, 
-        ILogger<AppriseEmailService> logger)
+        IOptions<EmailSettings> emailSettings,
+        IEmailTemplateService emailTemplateService,
+        ILogger<AppriseEmailService> logger,
+        IAppriseStatelessClient appriseClient)
     {
         _emailSettings = emailSettings.Value;
         _emailTemplateService = emailTemplateService;
         _logger = logger;
-        _appriseClient = new AppriseClient();
+        _appriseClient = appriseClient;
     }
 
     public async Task SendEmailConfirmationAsync(string email, string userName, string confirmationLink)
@@ -48,8 +49,8 @@ public class AppriseEmailService : IEmailService
             _logger.LogInformation("Sending email to {Email} with subject: {Subject}", to, subject);
 
             // Use basic SMTP for now - Apprise can be re-added later if needed
-            await SendViaSmtpAsync(to, subject, htmlMessage);
-            
+            await SendAsync(to, subject, htmlMessage);
+
             _logger.LogInformation("Email sent successfully via SMTP to {Email}", to);
         }
         catch (Exception ex)
@@ -59,92 +60,27 @@ public class AppriseEmailService : IEmailService
         }
     }
 
-    private async Task SendViaSmtpAsync(string to, string subject, string htmlMessage)
+    private async Task SendAsync(string to, string subject, string htmlMessage)
     {
-        using var client = new SmtpClient(_emailSettings.SmtpServer, _emailSettings.SmtpPort);
-        client.EnableSsl = _emailSettings.EnableSsl;
-        client.Credentials = new NetworkCredential(_emailSettings.Username, _emailSettings.Password);
-
-        var mailMessage = new MailMessage
+        // Construct the payload for Apprise
+        var payload = new StatelessNotificationRequest
         {
-            From = new MailAddress(_emailSettings.SenderEmail, _emailSettings.SenderName),
-            Subject = subject,
+            Urls = [to],
+            Title = subject,
             Body = htmlMessage,
-            IsBodyHtml = true
+            Type = NotificationType.Info,
+            Format = NotificationFormat.Html
         };
 
-        mailMessage.To.Add(to);
-        await client.SendMailAsync(mailMessage);
-    }
-
-    private string BuildEmailUrl(string to)
-    {
+        // Send the notification via Apprise
         try
         {
-            // If a specific Apprise URL is configured, use it
-            if (!string.IsNullOrEmpty(_emailSettings.AppriseUrl))
-            {
-                var baseUrl = _emailSettings.AppriseUrl;
-                
-                // Add recipient to the URL
-                if (baseUrl.Contains("?"))
-                    return $"{baseUrl}&to={Uri.EscapeDataString(to)}";
-                else
-                    return $"{baseUrl}?to={Uri.EscapeDataString(to)}";
-            }
-
-            // Build URL from SMTP settings
-            return BuildEmailUrlFromSmtpSettings(to);
+            await _appriseClient.SendNotificationAsync(payload);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to build email URL for {Email}", to);
+            _logger.LogError(ex, "Error sending notification via Apprise");
             throw;
-        }
-    }
-
-    private string BuildEmailUrlFromSmtpSettings(string to)
-    {
-        var username = Uri.EscapeDataString(_emailSettings.Username ?? "");
-        var password = Uri.EscapeDataString(_emailSettings.Password ?? "");
-        var smtpServer = _emailSettings.SmtpServer ?? "smtp.gmail.com";
-        var smtpPort = _emailSettings.SmtpPort > 0 ? _emailSettings.SmtpPort : 587;
-        var senderEmail = Uri.EscapeDataString(_emailSettings.SenderEmail ?? _emailSettings.Username ?? "");
-        var senderName = Uri.EscapeDataString(_emailSettings.SenderName ?? "Intact Application");
-
-        // Build mailto URL for Apprise
-        // Format: mailto://username:password@smtp.server:port?to=recipient&from=sender&name=sendername
-        var url = $"mailto://{username}:{password}@{smtpServer}:{smtpPort}";
-        url += $"?to={Uri.EscapeDataString(to)}";
-        url += $"&from={senderEmail}";
-        
-        if (!string.IsNullOrEmpty(senderName))
-            url += $"&name={senderName}";
-
-        // Add SSL if enabled
-        if (_emailSettings.EnableSsl)
-            url += "&secure=yes";
-
-        return url;
-    }
-
-    /// <summary>
-    /// Test the email configuration by sending a test message
-    /// </summary>
-    public async Task<bool> TestEmailConfigurationAsync(string testEmail = "test@example.com")
-    {
-        try
-        {
-            var testSubject = "🧪 Test Email - Intact Application";
-            var testBody = "<h2>Email Configuration Test</h2><p>This is a test email to verify your email configuration is working correctly.</p><p>If you received this email, your email setup is functioning properly!</p>";
-            
-            await SendEmailAsync(testEmail, testSubject, testBody);
-            return true;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Email configuration test failed");
-            return false;
         }
     }
 }
