@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.SetupConfiguration();
 builder.Services.AddConfigOptionsAndBind<RedisSettings>(builder.Configuration, nameof(RedisSettings), out var redisSettings);
 builder.AddConfigOptions<DbSettings>();
+builder.AddConfigOptions<EmailSettings>();
 
 // Add services to the container.
 builder.Services
@@ -31,6 +32,7 @@ builder.Services
     .AddInternalServices()
     .AddDbServices(builder.Configuration)
     .AddRedis(redisSettings)
+    .AddApprise()
     .CustomizeAuthorization()
     .CustomizeAuthentication();
 
