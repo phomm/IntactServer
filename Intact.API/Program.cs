@@ -32,6 +32,7 @@ builder.Services
     .AddInternalServices()
     .AddDbServices(builder.Configuration)
     .AddRedis(redisSettings)
+    .AddApprise()
     .CustomizeAuthorization()
     .CustomizeAuthentication();
 

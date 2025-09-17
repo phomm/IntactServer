@@ -1,0 +1,91 @@
+{
+  "_comment": "Apprise Email Configuration Examples",
+  "_documentation": "https://github.com/caronc/apprise/wiki/Notify_email",
+  
+  "EmailSettings_Examples": {
+    
+    "Gmail_Basic": {
+      "UseApprise": true,
+      "AppriseUrl": "mailto://username:password@smtp.gmail.com:587",
+      "SenderEmail": "your-email@gmail.com",
+      "SenderName": "Your Application Name"
+    },
+    
+    "Gmail_With_App_Password": {
+      "UseApprise": true,
+      "AppriseUrl": "mailto://username:app-specific-password@smtp.gmail.com:587",
+      "SenderEmail": "your-email@gmail.com",
+      "SenderName": "Your Application Name"
+    },
+    
+    "Outlook_365": {
+      "UseApprise": true,
+      "AppriseUrl": "mailto://username:password@smtp-mail.outlook.com:587",
+      "SenderEmail": "your-email@outlook.com",
+      "SenderName": "Your Application Name"
+    },
+    
+    "Custom_SMTP": {
+      "UseApprise": true,
+      "AppriseUrl": "mailto://username:password@your-smtp-server.com:587",
+      "SenderEmail": "noreply@yourdomain.com",
+      "SenderName": "Your Application Name"
+    },
+    
+    "SMTP_With_TLS": {
+      "UseApprise": true,
+      "AppriseUrl": "mailto://username:password@smtp.example.com:587?secure=yes",
+      "SenderEmail": "noreply@example.com",
+      "SenderName": "Secure Email Service"
+    },
+    
+    "SMTP_Advanced_Options": {
+      "UseApprise": true,
+      "AppriseUrl": "mailto://user:pass@smtp.example.com:587?secure=yes&verify=no&timeout=30",
+      "SenderEmail": "notifications@example.com",
+      "SenderName": "Advanced SMTP Setup"
+    },
+    
+    "Fallback_To_Standard_SMTP": {
+      "_comment": "Leave AppriseUrl empty to use standard SMTP",
+      "UseApprise": false,
+      "AppriseUrl": "",
+      "SmtpServer": "smtp.gmail.com",
+      "SmtpPort": 587,
+      "SenderEmail": "your-email@gmail.com",
+      "SenderName": "Fallback SMTP",
+      "Username": "your-email@gmail.com",
+      "Password": "your-app-password",
+      "EnableSsl": true
+    }
+  },
+  
+  "Environment_Variables": {
+    "_comment": "You can also use environment variables for sensitive data",
+    "examples": {
+      "EMAIL_APPRISE_URL": "mailto://username:password@smtp.gmail.com:587",
+      "EMAIL_SENDER_EMAIL": "noreply@yourdomain.com",
+      "EMAIL_SENDER_NAME": "Your App Name"
+    }
+  },
+  
+  "Security_Notes": [
+    "Never commit passwords or sensitive credentials to version control",
+    "Use app-specific passwords for Gmail (not your regular password)",
+    "Consider using environment variables for production deployments",
+    "Test your configuration before deploying to production"
+  ],
+  
+  "Apprise_URL_Format": {
+    "basic": "mailto://username:password@smtp-server:port",
+    "with_params": "mailto://user:pass@server:port?param1=value1&param2=value2",
+    "common_params": {
+      "secure": "yes/no (enable SSL/TLS)",
+      "verify": "yes/no (verify SSL certificates)", 
+      "timeout": "connection timeout in seconds",
+      "to": "recipient email (added automatically by service)",
+      "from": "sender email override",
+      "name": "sender name override"
+    }
+  }
+}

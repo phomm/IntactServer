@@ -1,8 +1,9 @@
 using Intact.BusinessLogic.Data;
 using Intact.BusinessLogic.Data.Config;
 using Intact.BusinessLogic.Services;
-using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NApprise;
 
 namespace Intact.API.Bootstrap;
 
@@ -19,9 +20,9 @@ public static class InternalServicesExtensions
         services.AddTransient<IRoomsService, RoomsService>();
         services.AddTransient<IAppriseEmailService, AppriseEmailService>();
         services.AddTransient<IEmailService, EmailService>();
+        services.AddTransient<IAppriseEmailService, AppriseEmailService>();
         services.AddTransient<IEmailTemplateService, EmailTemplateService>();
-        services.AddTransient<IEmailSender<User>, EmailSender>();
-        
+        services.AddTransient<IEmailSender<BusinessLogic.Models.User>, EmailSender>();
         return services;
     }
 
@@ -37,11 +38,31 @@ public static class InternalServicesExtensions
         services.AddDbContextFactory<AppDbContext>(GetOptions);
         services.AddDbContext<AppIdentityDbContext>(GetOptions);
         services.AddDbContext<DataSetupDbContext>(GetOptions);
-        
+
         return services;
 
         void GetOptions(DbContextOptionsBuilder options) => _ = usePostgres
             ? options.UseNpgsql(connectionString, b => b.MigrationsAssembly(assemblyName))
             : options.UseSqlServer(connectionString, b => b.MigrationsAssembly(assemblyName));
+    }
+
+    public static IServiceCollection AddApprise(this IServiceCollection services)
+    {
+        // Register HttpClient
+        services.AddHttpClient();
+
+        // Register AppriseStatelessClient with BaseUrl from config
+        services.AddSingleton<IAppriseStatelessClient>(provider =>
+        {
+            var config = provider.GetRequiredService<IConfiguration>();
+            var baseUrl = config.GetValue<string>("Apprise:BaseUrl");
+
+            var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
+            var httpClient = httpClientFactory.CreateClient();
+
+            return new AppriseStatelessClient(baseUrl, httpClient);
+        });
+
+        return services;
     }
 }
