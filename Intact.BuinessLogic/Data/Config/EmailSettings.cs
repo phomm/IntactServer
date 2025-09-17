@@ -11,7 +11,7 @@ public class EmailSettings
     public string Password { get; set; } = string.Empty;
     public bool EnableSsl { get; set; } = true;
   // Apprise Configuration (preferred)
-    public string AppriseUrl { get; set; } = string.Empty;
+    public string AppriseAddress { get; set; } = string.Empty;
     public bool UseApprise { get; set; } = true;
     public string[] AppriseUrls { get; set; } = Array.Empty<string>();
     public bool FallbackToSmtp { get; set; } = true;

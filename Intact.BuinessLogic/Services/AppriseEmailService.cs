@@ -81,6 +81,7 @@ public class AppriseEmailService : IAppriseEmailService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to log Apprise email sending attempt to {To}", to);
+            throw;
         }
     }
 

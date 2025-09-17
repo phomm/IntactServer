@@ -18,7 +18,6 @@ public static class InternalServicesExtensions
         services.AddTransient<ICacheService, CacheService>();
         services.AddTransient<IProfilesService, ProfilesService>();
         services.AddTransient<IRoomsService, RoomsService>();
-        services.AddTransient<IAppriseEmailService, AppriseEmailService>();
         services.AddTransient<IEmailService, EmailService>();
         services.AddTransient<IAppriseEmailService, AppriseEmailService>();
         services.AddTransient<IEmailTemplateService, EmailTemplateService>();
