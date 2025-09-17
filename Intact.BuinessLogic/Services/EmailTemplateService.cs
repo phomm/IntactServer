@@ -73,15 +73,15 @@ public class EmailTemplateService : IEmailTemplateService
                 <div style='max-width: 600px; margin: 0 auto; padding: 20px;'>
                     <h2 style='color: #e74c3c; text-align: center;'>Password Reset Code</h2>
                     <p>Hello {userName},</p>
-                    <p>We received a request to reset your password for your Intact Application account. Use the following code to reset your password:</p>
+                    <p>You requested a password reset for your Intact Application account. Use the code below to reset your password:</p>
                     <div style='text-align: center; margin: 30px 0;'>
-                        <div style='background-color: #f8f9fa; border: 2px dashed #e74c3c; padding: 20px; border-radius: 5px; display: inline-block;'>
-                            <span style='font-size: 24px; font-weight: bold; color: #e74c3c; letter-spacing: 3px;'>{resetCode}</span>
+                        <div style='background-color: #f8f9fa; border: 2px dashed #e74c3c; padding: 20px; border-radius: 10px; display: inline-block;'>
+                            <span style='font-size: 24px; font-weight: bold; color: #e74c3c; letter-spacing: 5px;'>{resetCode}</span>
                         </div>
                     </div>
-                    <p>Enter this code in the password reset form to continue.</p>
+                    <p>Enter this code in the password reset form to set your new password.</p>
+                    <p><strong>Important:</strong> This code will expire soon for security reasons.</p>
                     <p>If you did not request this password reset, please ignore this email. Your password will not be changed.</p>
-                    <p><strong>Note:</strong> This code will expire in 15 minutes for security reasons.</p>
                     <hr style='border: none; border-top: 1px solid #ecf0f1; margin: 30px 0;'>
                     <p style='color: #7f8c8d; font-size: 12px; text-align: center;'>
                         This is an automated message from Intact Application. Please do not reply to this email.
