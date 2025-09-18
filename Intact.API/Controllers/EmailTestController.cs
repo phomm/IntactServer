@@ -103,11 +103,15 @@ public class EmailTestController : ControllerBase
     }
 
     /// <summary>
-    /// Test password reset template
+    /// Test password reset template (Development only)
     /// </summary>
     [HttpPost("test-password-reset")]
     public async Task<IActionResult> TestPasswordReset([FromBody] PasswordResetTestRequest request)
     {
+        if (!_environment.IsDevelopment())
+        {
+            return NotFound();
+        }
 
         try
         {
@@ -136,15 +140,11 @@ public class EmailTestController : ControllerBase
     }
 
     /// <summary>
-    /// Test password reset code template (Development only)
+    /// Test password reset code template
     /// </summary>
     [HttpPost("test-password-reset-code")]
     public async Task<IActionResult> TestPasswordResetCode([FromBody] PasswordResetCodeTestRequest request)
     {
-        if (!_environment.IsDevelopment())
-        {
-            return NotFound();
-        }
 
         try
         {
