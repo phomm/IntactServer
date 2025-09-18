@@ -1,6 +1,8 @@
 using Intact.BusinessLogic.Models;
 using Microsoft.AspNetCore.Mvc;
 using Intact.BusinessLogic.Services;
+using Intact.BusinessLogic.Data.Config;
+using Microsoft.Extensions.Options;
 
 namespace Intact.API.Controllers;
 
