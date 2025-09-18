@@ -134,7 +134,7 @@ public class AppriseEmailService : IAppriseEmailService
 
         url += "/?" + string.Join("&", parameters);
         
-        _logger.LogDebug("Built Apprise email URL for {To}", to);
+        _logger.LogWarning("Built Apprise email {url} for {To}", url, to);
         return url;
     }
 }

@@ -1,6 +1,8 @@
 using Intact.BusinessLogic.Models;
 using Microsoft.AspNetCore.Mvc;
 using Intact.BusinessLogic.Services;
+using Microsoft.Extensions.Options;
+using Intact.BusinessLogic.Data.Config;
 
 namespace Intact.API.Controllers;
 
@@ -14,28 +16,26 @@ public class EmailTestController : ControllerBase
     private readonly IEmailService _emailService;
     private readonly ILogger<EmailTestController> _logger;
     private readonly IWebHostEnvironment _environment;
+    private readonly EmailSettings _emailSettings;
 
     public EmailTestController(
         IEmailService emailService, 
         ILogger<EmailTestController> logger,
-        IWebHostEnvironment environment)
+        IWebHostEnvironment environment,
+        IOptions<EmailSettings> emailSettings)
     {
         _emailService = emailService;
         _logger = logger;
         _environment = environment;
+        _emailSettings = emailSettings.Value;
     }
 
     /// <summary>
-    /// Test email sending functionality (Development only)
+    /// Test email sending functionality
     /// </summary>
     [HttpPost("send-test")]
     public async Task<IActionResult> SendTestEmail([FromBody] TestEmailRequest request)
     {
-        // Only allow in development environment
-        if (!_environment.IsDevelopment())
-        {
-            return NotFound();
-        }
 
         try
         {
@@ -71,10 +71,6 @@ public class EmailTestController : ControllerBase
     [HttpPost("test-confirmation")]
     public async Task<IActionResult> TestEmailConfirmation([FromBody] ConfirmationTestRequest request)
     {
-        if (!_environment.IsDevelopment())
-        {
-            return NotFound();
-        }
 
         try
         {
@@ -103,16 +99,11 @@ public class EmailTestController : ControllerBase
     }
 
     /// <summary>
-    /// Test password reset template (Development only)
+    /// Test password reset template
     /// </summary>
     [HttpPost("test-password-reset")]
     public async Task<IActionResult> TestPasswordReset([FromBody] PasswordResetTestRequest request)
     {
-        if (!_environment.IsDevelopment())
-        {
-            return NotFound();
-        }
-
         try
         {
             await _emailService.SendPasswordResetLinkAsync(
@@ -140,15 +131,11 @@ public class EmailTestController : ControllerBase
     }
 
     /// <summary>
-    /// Test password reset code template (Development only)
+    /// Test password reset code template
     /// </summary>
     [HttpPost("test-password-reset-code")]
     public async Task<IActionResult> TestPasswordResetCode([FromBody] PasswordResetCodeTestRequest request)
     {
-        if (!_environment.IsDevelopment())
-        {
-            return NotFound();
-        }
 
         try
         {
@@ -177,16 +164,11 @@ public class EmailTestController : ControllerBase
     }
 
     /// <summary>
-    /// Get email service configuration info (Development only)
+    /// Get email service configuration info
     /// </summary>
     [HttpGet("config")]
     public IActionResult GetEmailConfig()
     {
-        if (!_environment.IsDevelopment())
-        {
-            return NotFound();
-        }
-
         return Ok(new
         {
             service = "Apprise Email Service",
@@ -207,6 +189,22 @@ public class EmailTestController : ControllerBase
                 testConfirmation = "/api/emailtest/test-confirmation",
                 testPasswordReset = "/api/emailtest/test-password-reset",
                 testPasswordResetCode = "/api/emailtest/test-password-reset-code"
+            },
+            emailSettings = new
+            {
+                // SMTP Configuration
+                smtpServer = _emailSettings.SmtpServer,
+                smtpPort = _emailSettings.SmtpPort,
+                senderEmail = _emailSettings.SenderEmail,
+                senderName = _emailSettings.SenderName,
+                username = _emailSettings.Username,
+                password = string.IsNullOrEmpty(_emailSettings.Password) ? null : "***configured***",
+                enableSsl = _emailSettings.EnableSsl,
+                // Apprise Configuration
+                appriseAddress = _emailSettings.AppriseAddress,
+                useApprise = _emailSettings.UseApprise,
+                appriseUrls = _emailSettings.AppriseUrls,
+                fallbackToSmtp = _emailSettings.FallbackToSmtp
             }
         });
     }

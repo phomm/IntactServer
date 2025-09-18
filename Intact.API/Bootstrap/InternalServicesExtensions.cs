@@ -54,8 +54,7 @@ public static class InternalServicesExtensions
         services.AddSingleton<IAppriseStatelessClient>(provider =>
         {
             var config = provider.GetRequiredService<IConfiguration>();
-            var baseUrl = config.GetValue<string>("Emailsettings:AppriseAddress");
-
+            var baseUrl = config.GetValue<string>("EmailSettings:AppriseAddress");
             var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
             var httpClient = httpClientFactory.CreateClient();
 
