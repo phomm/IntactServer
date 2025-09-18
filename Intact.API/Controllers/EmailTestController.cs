@@ -26,16 +26,11 @@ public class EmailTestController : ControllerBase
     }
 
     /// <summary>
-    /// Test email sending functionality (Development only)
+    /// Test email sending functionality
     /// </summary>
     [HttpPost("send-test")]
     public async Task<IActionResult> SendTestEmail([FromBody] TestEmailRequest request)
     {
-        // Only allow in development environment
-        if (!_environment.IsDevelopment())
-        {
-            return NotFound();
-        }
 
         try
         {
