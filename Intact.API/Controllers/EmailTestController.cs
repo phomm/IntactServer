@@ -1,8 +1,6 @@
 using Intact.BusinessLogic.Models;
 using Microsoft.AspNetCore.Mvc;
 using Intact.BusinessLogic.Services;
-using Intact.BusinessLogic.Data.Config;
-using Microsoft.Extensions.Options;
 
 namespace Intact.API.Controllers;
 
@@ -16,15 +14,18 @@ public class EmailTestController : ControllerBase
     private readonly IEmailService _emailService;
     private readonly ILogger<EmailTestController> _logger;
     private readonly IWebHostEnvironment _environment;
+    private readonly EmailSettings _emailSettings;
 
     public EmailTestController(
         IEmailService emailService, 
         ILogger<EmailTestController> logger,
-        IWebHostEnvironment environment)
+        IWebHostEnvironment environment,
+        IOptions<EmailSettings> emailSettings)
     {
         _emailService = emailService;
         _logger = logger;
         _environment = environment;
+        _emailSettings = emailSettings.Value;
     }
 
     /// <summary>
