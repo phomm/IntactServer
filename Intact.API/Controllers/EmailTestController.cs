@@ -173,15 +173,11 @@ public class EmailTestController : ControllerBase
     }
 
     /// <summary>
-    /// Get email service configuration info (Development only)
+    /// Get email service configuration info
     /// </summary>
     [HttpGet("config")]
     public IActionResult GetEmailConfig()
     {
-        if (!_environment.IsDevelopment())
-        {
-            return NotFound();
-        }
 
         return Ok(new
         {
