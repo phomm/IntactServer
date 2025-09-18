@@ -26,11 +26,16 @@ public class EmailTestController : ControllerBase
     }
 
     /// <summary>
-    /// Test email sending functionality
+    /// Test email sending functionality (Development only)
     /// </summary>
     [HttpPost("send-test")]
     public async Task<IActionResult> SendTestEmail([FromBody] TestEmailRequest request)
     {
+        // Only allow in development environment
+        if (!_environment.IsDevelopment())
+        {
+            return NotFound();
+        }
 
         try
         {
@@ -61,15 +66,11 @@ public class EmailTestController : ControllerBase
     }
 
     /// <summary>
-    /// Test email confirmation template (Development only)
+    /// Test email confirmation template
     /// </summary>
     [HttpPost("test-confirmation")]
     public async Task<IActionResult> TestEmailConfirmation([FromBody] ConfirmationTestRequest request)
     {
-        if (!_environment.IsDevelopment())
-        {
-            return NotFound();
-        }
 
         try
         {
