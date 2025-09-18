@@ -167,7 +167,6 @@ public class EmailTestController : ControllerBase
     [HttpGet("config")]
     public IActionResult GetEmailConfig()
     {
-
         return Ok(new
         {
             service = "Apprise Email Service",
@@ -188,6 +187,22 @@ public class EmailTestController : ControllerBase
                 testConfirmation = "/api/emailtest/test-confirmation",
                 testPasswordReset = "/api/emailtest/test-password-reset",
                 testPasswordResetCode = "/api/emailtest/test-password-reset-code"
+            },
+            emailSettings = new
+            {
+                // SMTP Configuration
+                smtpServer = _emailSettings.SmtpServer,
+                smtpPort = _emailSettings.SmtpPort,
+                senderEmail = _emailSettings.SenderEmail,
+                senderName = _emailSettings.SenderName,
+                username = _emailSettings.Username,
+                password = string.IsNullOrEmpty(_emailSettings.Password) ? null : "***configured***",
+                enableSsl = _emailSettings.EnableSsl,
+                // Apprise Configuration
+                appriseAddress = _emailSettings.AppriseAddress,
+                useApprise = _emailSettings.UseApprise,
+                appriseUrls = _emailSettings.AppriseUrls,
+                fallbackToSmtp = _emailSettings.FallbackToSmtp
             }
         });
     }
