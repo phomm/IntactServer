@@ -66,11 +66,15 @@ public class EmailTestController : ControllerBase
     }
 
     /// <summary>
-    /// Test email confirmation template
+    /// Test email confirmation template (Development only)
     /// </summary>
     [HttpPost("test-confirmation")]
     public async Task<IActionResult> TestEmailConfirmation([FromBody] ConfirmationTestRequest request)
     {
+        if (!_environment.IsDevelopment())
+        {
+            return NotFound();
+        }
 
         try
         {
@@ -99,15 +103,11 @@ public class EmailTestController : ControllerBase
     }
 
     /// <summary>
-    /// Test password reset template (Development only)
+    /// Test password reset template
     /// </summary>
     [HttpPost("test-password-reset")]
     public async Task<IActionResult> TestPasswordReset([FromBody] PasswordResetTestRequest request)
     {
-        if (!_environment.IsDevelopment())
-        {
-            return NotFound();
-        }
 
         try
         {
