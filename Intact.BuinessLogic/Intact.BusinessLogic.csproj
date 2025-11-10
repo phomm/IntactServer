@@ -30,6 +30,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NApprise" Version="1.0.5" />
+    <PackageReference Include="OneSignalApi" Version="5.0.0-alpha01" />
     <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
     <PackageReference Include="StackExchange.Redis" Version="2.9.17" />
   </ItemGroup>
