@@ -1,0 +1,31 @@
+namespace Intact.BusinessLogic.Data.Enums;
+
+public enum CommandType : byte
+{
+    c_None = 0,
+    c_GetText = 1,
+    c_SetLocPlr = 2,
+    c_SetName = 3,
+    c_SetCurPlr = 4,
+    c_OpenMap = 5,
+    c_CheckVer = 6,
+    c_ChooseFaction = 7,
+    c_AddUnit = 8,
+    c_TakeUnit = 9,
+    c_UnitMove = 10,
+    c_UnitAtk = 11,
+    c_UnitShot = 12,
+    c_UnitAbil = 13,
+    c_UnitSpl = 14,
+    c_BuyFin = 15,
+    c_EndTurn = 16,
+    c_DelMoney = 17,
+    c_SendMoney = 18,
+    c_Act = 19,
+    c_SetCurAct = 20,
+    c_NewGame = 21,
+    c_SetReplay = 22,
+    c_ServerCmd = 23,
+    c_ShotFailed = 24,
+    c_UnitSwap = 25
+}
