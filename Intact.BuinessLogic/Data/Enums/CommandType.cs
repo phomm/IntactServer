@@ -1,6 +1,6 @@
 namespace Intact.BusinessLogic.Data.Enums;
 
-public enum CommandType : byte
+public enum CommandType
 {
     c_None = 0,
     c_GetText = 1,
