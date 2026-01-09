@@ -15,4 +15,6 @@ public interface ICommandsRepository
     Task<RoomDao?> GetRoomAsync(int roomId, CancellationToken cancellationToken);
     
     Task<bool> IsProfileInRoomAsync(int profileId, int roomId, CancellationToken cancellationToken);
+    
+    Task<int?> GetPlayerRoomIdAsync(int profileId, CancellationToken cancellationToken);
 }
