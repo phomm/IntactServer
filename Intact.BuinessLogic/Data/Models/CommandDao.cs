@@ -7,20 +7,33 @@ namespace Intact.BusinessLogic.Data.Models;
 public class CommandDao
 {
     [Key]
-    [Column(Order = 0)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; init; }
+    
+    [Required]
     public int RoomId { get; init; }
     
-    [Key]
-    [Column(Order = 1)]
-    public uint QueueNumber { get; init; }
-    
+    [Required]
     public int ProfileId { get; init; }
     
-    public ushort PlayerIndex { get; init; }
+    [Required]
+    public ushort PlayerIndex { get; set; }
     
-    public CommandType CommandId { get; init; }
+    [Required]
+    public CommandType CommandId { get; set; }
     
-    public string? Value { get; init; }
+    [Required]
+    public uint QueueNumber { get; init; }
     
-    public CommandError Error { get; init; } = CommandError.NoError;
+    public string? Value { get; set; }
+    
+    [Required]
+    public CommandError Error { get; set; } = CommandError.NoError;
+    
+    // Navigation properties
+    [ForeignKey(nameof(RoomId))]
+    public RoomDao? Room { get; set; }
+    
+    [ForeignKey(nameof(ProfileId))]
+    public ProfileDao? Profile { get; set; }
 }
