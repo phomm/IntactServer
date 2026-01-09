@@ -14,12 +14,12 @@ namespace Intact.API.Migrations
                 name: "Commands",
                 columns: table => new
                 {
-                    RoomId = table.Column<int>(type: "int", nullable: false),
+                    RoomId = table.Column<int>(type: "integer", nullable: false),
                     QueueNumber = table.Column<long>(type: "bigint", nullable: false),
-                    ProfileId = table.Column<int>(type: "int", nullable: false),
-                    PlayerIndex = table.Column<int>(type: "int", nullable: false),
-                    CommandId = table.Column<int>(type: "int", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProfileId = table.Column<int>(type: "integer", nullable: false),
+                    PlayerIndex = table.Column<int>(type: "integer", nullable: false),
+                    CommandId = table.Column<int>(type: "integer", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: true),
                     Error = table.Column<short>(type: "smallint", nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
