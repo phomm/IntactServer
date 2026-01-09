@@ -1,12 +1,15 @@
+using System.ComponentModel.DataAnnotations;
 using Intact.BusinessLogic.Data.Enums;
 
 namespace Intact.BusinessLogic.Models;
 
 public class PostCommand
 {
-    public ushort PlayerIndex { get; init; }
+    [Required]
+    public ushort PlayerIndex { get; set; }
     
-    public CommandType CommandId { get; init; }
+    [Required]
+    public CommandType CommandId { get; set; }
     
-    public string? Value { get; init; }
+    public string? Value { get; set; }
 }
