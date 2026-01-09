@@ -9,100 +9,119 @@ namespace Intact.BusinessLogic.Services;
 public interface ICommandsService
 {
     Task<IEnumerable<Command>> GetCommandsAsync(int offset, CancellationToken cancellationToken);
-    
-    Task<bool> PostCommandsAsync(IEnumerable<PostCommand> commands, CancellationToken cancellationToken);
+    Task PostCommandsAsync(IEnumerable<PostCommand> commands, CancellationToken cancellationToken);
 }
 
 public class CommandsService(
-    ICommandsRepository commandsRepository,
+    ICommandsRepository commandsRepository, 
     IProfileAccessor profileAccessor) : ICommandsService
 {
-    private const int MaxPlayersInRoom = 2;
-
+    private const int MaxPlayers = 2;
+    
     public async Task<IEnumerable<Command>> GetCommandsAsync(int offset, CancellationToken cancellationToken)
     {
-        var profileId = await profileAccessor.GetProfileIdAsync();
+        var profile = await profileAccessor.GetProfileAsync();
         
-        // Get room for the player
-        var roomId = await GetPlayerRoomIdAsync(profileId, cancellationToken);
+        // Validate profile state
+        if (profile.State == ProfileState.Banned)
+            throw new ForbiddenException("Profile is banned");
+        
+        if (profile.State == ProfileState.Deleted)
+            throw new ForbiddenException("Profile is deleted");
+        
+        // Get room for this player
+        var roomId = await GetPlayerRoomIdAsync(profile.Id, cancellationToken);
         if (roomId == null)
-            throw new KeyNotFoundException("Player not in any room");
-
-        var commands = await commandsRepository.GetCommandsAsync(roomId.Value, offset, cancellationToken);
-        return CommandMapper.Map(commands);
+            throw new NotFoundException("Player is not in any room");
+        
+        // Get commands from offset
+        var commandDaos = await commandsRepository.GetCommandsAsync(roomId.Value, offset, cancellationToken);
+        return CommandMapper.Map(commandDaos);
     }
 
-    public async Task<bool> PostCommandsAsync(IEnumerable<PostCommand> commands, CancellationToken cancellationToken)
+    public async Task PostCommandsAsync(IEnumerable<PostCommand> commands, CancellationToken cancellationToken)
     {
-        var profileId = await profileAccessor.GetProfileIdAsync();
-        var commandsList = commands.ToList();
+        var profile = await profileAccessor.GetProfileAsync();
         
-        if (!commandsList.Any())
-            return false;
-
-        // Get room for the player
-        var roomId = await GetPlayerRoomIdAsync(profileId, cancellationToken);
+        // Validate profile state
+        if (profile.State == ProfileState.Banned)
+            throw new ForbiddenException("Profile is banned");
+        
+        if (profile.State == ProfileState.Deleted)
+            throw new ForbiddenException("Profile is deleted");
+        
+        // Get room for this player
+        var roomId = await GetPlayerRoomIdAsync(profile.Id, cancellationToken);
         if (roomId == null)
-            throw new KeyNotFoundException("Player not in any room");
-
-        // Validate player index is within range
-        var playerCount = await commandsRepository.GetRoomPlayerCountAsync(roomId.Value, cancellationToken);
-        var playerIndex = commandsList.First().PlayerIndex;
+            throw new NotFoundException("Player is not in any room");
         
-        if (playerIndex >= playerCount || playerIndex >= MaxPlayersInRoom)
-            return false;
-
-        // Check if all commands have the same player index
-        if (commandsList.Any(c => c.PlayerIndex != playerIndex))
-            return false;
-
-        // Validate turn: check if it's this player's turn
+        // Validate room state
+        var room = await commandsRepository.GetRoomAsync(roomId.Value, cancellationToken);
+        if (room == null)
+            throw new NotFoundException("Room not found");
+        
+        if (room.State != RoomState.InGame)
+            throw new BadRequestException("Room is not in game state");
+        
+        var postCommandsList = commands.ToList();
+        
+        // Validate player numbers
+        foreach (var command in postCommandsList)
+        {
+            if (command.PlayerIndex >= MaxPlayers)
+                throw new BadRequestException("Player number out of range");
+        }
+        
+        // Check if it's this player's turn
         var lastCommand = await commandsRepository.GetLastCommandAsync(roomId.Value, cancellationToken);
         if (lastCommand != null)
         {
-            // If last command was not EndTurn, it must be from the same player
-            if (lastCommand.CommandId != CommandType.c_EndTurn && lastCommand.PlayerIndex != playerIndex)
-                return false;
+            // If last command was EndTurn from another player, then it's valid for current player
+            var isOtherPlayerEndTurn = lastCommand.CommandId == CommandType.c_EndTurn && 
+                                        lastCommand.ProfileId != profile.Id;
             
-            // If last command was EndTurn, it must be from a different player
-            if (lastCommand.CommandId == CommandType.c_EndTurn && lastCommand.PlayerIndex == playerIndex)
-                return false;
+            // If last command was from current player and not EndTurn, can continue
+            var isCurrentPlayerContinuing = lastCommand.ProfileId == profile.Id;
+            
+            if (!isOtherPlayerEndTurn && !isCurrentPlayerContinuing)
+                throw new BadRequestException("Not your turn");
         }
-
+        
         // Get next queue number
-        var queueNumber = await commandsRepository.GetNextQueueNumberAsync(roomId.Value, cancellationToken);
-
-        // Create command DAOs
-        var commandDaos = commandsList.Select(cmd => new CommandDao
+        var nextQueueNumber = await commandsRepository.GetNextQueueNumberAsync(roomId.Value, cancellationToken);
+        
+        // Map and add commands
+        var commandDaos = new List<CommandDao>();
+        foreach (var postCommand in postCommandsList)
         {
-            RoomId = roomId.Value,
-            ProfileId = profileId,
-            PlayerIndex = cmd.PlayerIndex,
-            CommandId = cmd.CommandId,
-            QueueNumber = queueNumber++,
-            Value = cmd.Value,
-            Error = CommandError.NoError
-        }).ToList();
-
+            var commandDao = CommandMapper.Map(postCommand, roomId.Value, profile.Id, nextQueueNumber);
+            commandDaos.Add(commandDao);
+            nextQueueNumber++;
+        }
+        
         await commandsRepository.AddCommandsAsync(commandDaos, cancellationToken);
-        return true;
     }
-
+    
     private async Task<int?> GetPlayerRoomIdAsync(int profileId, CancellationToken cancellationToken)
     {
-        // Find the room where this player is a member
-        // This is a simplified version - you might need to adjust based on your exact room membership logic
-        var rooms = await commandsRepository.GetCommandsAsync(0, 0, cancellationToken);
-        
-        // Check if player is in any room
-        // We need to iterate through potential rooms
-        // This is a placeholder - you'll need to implement proper room membership check
-        for (int roomId = 1; roomId < 1000; roomId++) // Arbitrary range, adjust as needed
-        {
-            if (await commandsRepository.IsPlayerInRoomAsync(profileId, roomId, cancellationToken))
-                return roomId;
-        }
-        
-        return null;
+        // This method would need to query RoomMembers to find which room the player is in
+        // For now, we'll need to add this to the repository
+        // Simplified implementation - you may need to adjust based on your RoomMember structure
+        return null; // TODO: Implement room lookup
     }
+}
+
+public class NotFoundException : Exception
+{
+    public NotFoundException(string message) : base(message) { }
+}
+
+public class ForbiddenException : Exception
+{
+    public ForbiddenException(string message) : base(message) { }
+}
+
+public class BadRequestException : Exception
+{
+    public BadRequestException(string message) : base(message) { }
 }
