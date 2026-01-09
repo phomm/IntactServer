@@ -21,7 +21,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<RoomDao> Rooms { get; init; }
     
     public DbSet<RoomMemberDao> RoomMembers { get; init; }
-    public DbSet<CommandDao> Commands { get; init; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -49,6 +48,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         builder.Entity<MapDao>().HasKey(x => new { x.Id, x.Version });
         builder.Entity<PlayerOptionsDao>().HasKey(x => new { x.MapId, x.Number });
         builder.Entity<MapBuildingDao>().HasKey(x => new { x.MapId, x.Number });
+        builder.Entity<CommandDao>().HasKey(x => new { x.RoomId, x.QueueNumber });
         builder.Entity<CommandDao>().HasKey(x => new { x.RoomId, x.QueueNumber });
             
         void AddComputedLocalizableColumns<T>() where T : LocalizableDao
