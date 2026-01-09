@@ -104,10 +104,7 @@ public class CommandsService(
     
     private async Task<int?> GetPlayerRoomIdAsync(int profileId, CancellationToken cancellationToken)
     {
-        // This method would need to query RoomMembers to find which room the player is in
-        // For now, we'll need to add this to the repository
-        // Simplified implementation - you may need to adjust based on your RoomMember structure
-        return null; // TODO: Implement room lookup
+        return await commandsRepository.GetPlayerRoomIdAsync(profileId, cancellationToken);
     }
 }
 
