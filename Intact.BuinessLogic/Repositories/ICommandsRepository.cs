@@ -16,4 +16,6 @@ public interface ICommandsRepository
     Task<uint> GetNextQueueNumberAsync(int roomId, CancellationToken cancellationToken);
     
     Task AddCommandsAsync(IEnumerable<CommandDao> commands, CancellationToken cancellationToken);
+    
+    Task<int?> GetPlayerRoomIdAsync(int profileId, CancellationToken cancellationToken);
 }
