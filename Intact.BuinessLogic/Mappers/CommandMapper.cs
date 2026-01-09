@@ -1,17 +1,39 @@
 using Intact.BusinessLogic.Data.Models;
 using Intact.BusinessLogic.Models;
-using Riok.Mapperly.Abstractions;
 
 namespace Intact.BusinessLogic.Mappers;
 
-[Mapper]
-public partial class CommandMapper
+public class CommandMapper
 {
-    public partial Command Map(CommandDao dao);
-
-    public static IReadOnlyList<Command> Map(IReadOnlyList<CommandDao> daos)
+    public static Command Map(CommandDao dao)
     {
-        var mapper = new CommandMapper();
-        return daos.Select(mapper.Map).ToList();
+        return new Command
+        {
+            RoomId = dao.RoomId,
+            ProfileId = dao.ProfileId,
+            PlayerIndex = dao.PlayerIndex,
+            CommandId = dao.CommandId,
+            QueueNumber = dao.QueueNumber,
+            Value = dao.Value,
+            Error = dao.Error
+        };
+    }
+    
+    public static IEnumerable<Command> Map(IEnumerable<CommandDao> daos)
+    {
+        return daos.Select(Map);
+    }
+    
+    public static CommandDao Map(PostCommand postCommand, int roomId, int profileId, uint queueNumber)
+    {
+        return new CommandDao
+        {
+            RoomId = roomId,
+            ProfileId = profileId,
+            PlayerIndex = postCommand.PlayerIndex,
+            CommandId = postCommand.CommandId,
+            QueueNumber = queueNumber,
+            Value = postCommand.Value
+        };
     }
 }
