@@ -4,15 +4,17 @@ namespace Intact.BusinessLogic.Models;
 
 public class Command
 {
-    public int ProfileId { get; init; }
+    public int RoomId { get; set; }
     
-    public ushort PlayerIndex { get; init; }
+    public int ProfileId { get; set; }
     
-    public CommandType CommandId { get; init; }
+    public ushort PlayerIndex { get; set; }
     
-    public uint QueueNumber { get; init; }
+    public CommandType CommandId { get; set; }
     
-    public string? Value { get; init; }
+    public uint QueueNumber { get; set; }
     
-    public CommandError Error { get; init; }
+    public string? Value { get; set; }
+    
+    public CommandError Error { get; set; }
 }
