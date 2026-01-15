@@ -8,8 +8,8 @@ namespace Intact.BusinessLogic.Services;
 
 public interface ICommandsService
 {
-    Task<IEnumerable<Command>> GetCommandsAsync(int offset, CancellationToken cancellationToken);
-    Task PostCommandsAsync(IEnumerable<PostCommand> commands, CancellationToken cancellationToken);
+    Task<IEnumerable<Command>> GetCommandsAsync(uint? offset, CancellationToken cancellationToken);
+    Task PostCommandsAsync(IEnumerable<BaseCommand> commands, CancellationToken cancellationToken);
 }
 
 public class CommandsService(
@@ -18,45 +18,27 @@ public class CommandsService(
 {
     private const int MaxPlayers = 2;
     
-    public async Task<IEnumerable<Command>> GetCommandsAsync(int offset, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Command>> GetCommandsAsync(uint? offset, CancellationToken cancellationToken)
     {
         var profile = await profileAccessor.GetProfileAsync();
         
-        // Validate profile state
-        if (profile.State == ProfileState.Banned)
-            throw new ForbiddenException("Profile is banned");
-        
-        if (profile.State == ProfileState.Deleted)
-            throw new ForbiddenException("Profile is deleted");
-        
-        // Get room for this player
-        var roomId = await GetPlayerRoomIdAsync(profile.Id, cancellationToken);
-        if (roomId == null)
-            throw new NotFoundException("Player is not in any room");
+        var roomId = await commandsRepository.GetPlayerRoomIdAsync(profile.Id, cancellationToken) 
+                     ?? throw new NotFoundException("Player is not in any room");
         
         // Get commands from offset
-        var commandDaos = await commandsRepository.GetCommandsAsync(roomId.Value, offset, cancellationToken);
+        var commandDaos = await commandsRepository.GetCommandsAsync(roomId, offset ?? 0, cancellationToken);
         return CommandMapper.Map(commandDaos);
     }
 
-    public async Task PostCommandsAsync(IEnumerable<PostCommand> commands, CancellationToken cancellationToken)
+    public async Task PostCommandsAsync(IEnumerable<BaseCommand> commands, CancellationToken cancellationToken)
     {
         var profile = await profileAccessor.GetProfileAsync();
         
-        // Validate profile state
-        if (profile.State == ProfileState.Banned)
-            throw new ForbiddenException("Profile is banned");
-        
-        if (profile.State == ProfileState.Deleted)
-            throw new ForbiddenException("Profile is deleted");
-        
-        // Get room for this player
-        var roomId = await GetPlayerRoomIdAsync(profile.Id, cancellationToken);
-        if (roomId == null)
-            throw new NotFoundException("Player is not in any room");
+        var roomId = await commandsRepository.GetPlayerRoomIdAsync(profile.Id, cancellationToken)
+                     ?? throw new NotFoundException("Player is not in any room");
         
         // Validate room state
-        var room = await commandsRepository.GetRoomAsync(roomId.Value, cancellationToken);
+        var room = await commandsRepository.GetRoomAsync(roomId, cancellationToken);
         if (room == null)
             throw new NotFoundException("Room not found");
         
@@ -73,7 +55,7 @@ public class CommandsService(
         }
         
         // Check if it's this player's turn
-        var lastCommand = await commandsRepository.GetLastCommandAsync(roomId.Value, cancellationToken);
+        var lastCommand = await commandsRepository.GetLastCommandAsync(roomId, cancellationToken);
         if (lastCommand != null)
         {
             // If last command was EndTurn from another player, then it's valid for current player
@@ -88,23 +70,18 @@ public class CommandsService(
         }
         
         // Get next queue number
-        var nextQueueNumber = await commandsRepository.GetNextQueueNumberAsync(roomId.Value, cancellationToken);
+        var nextQueueNumber = lastCommand != null ? lastCommand.QueueNumber + 1 : 0;
         
         // Map and add commands
         var commandDaos = new List<CommandDao>();
         foreach (var postCommand in postCommandsList)
         {
-            var commandDao = CommandMapper.Map(postCommand, roomId.Value, profile.Id, nextQueueNumber);
+            var commandDao = CommandMapper.Map(postCommand, roomId, profile.Id, nextQueueNumber);
             commandDaos.Add(commandDao);
             nextQueueNumber++;
         }
         
         await commandsRepository.AddCommandsAsync(commandDaos, cancellationToken);
-    }
-    
-    private async Task<int?> GetPlayerRoomIdAsync(int profileId, CancellationToken cancellationToken)
-    {
-        return await commandsRepository.GetPlayerRoomIdAsync(profileId, cancellationToken);
     }
 }
 

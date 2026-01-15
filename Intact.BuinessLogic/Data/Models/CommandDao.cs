@@ -4,36 +4,21 @@ using Intact.BusinessLogic.Data.Enums;
 
 namespace Intact.BusinessLogic.Data.Models;
 
-public class CommandDao
+public record CommandDao
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; init; }
+    public required int RoomId { get; init; }
     
-    [Required]
-    public int RoomId { get; init; }
+    public required int ProfileId { get; init; }
     
-    [Required]
-    public int ProfileId { get; init; }
+    public required ushort PlayerIndex { get; set; }
     
-    [Required]
-    public ushort PlayerIndex { get; set; }
+    public required CommandType CommandId { get; set; }
     
-    [Required]
-    public CommandType CommandId { get; set; }
-    
-    [Required]
-    public uint QueueNumber { get; init; }
+    [Key]
+    public required uint QueueNumber { get; init; }
     
     public string? Value { get; set; }
     
-    [Required]
     public CommandError Error { get; set; } = CommandError.NoError;
-    
-    // Navigation properties
-    [ForeignKey(nameof(RoomId))]
-    public RoomDao? Room { get; set; }
-    
-    [ForeignKey(nameof(ProfileId))]
-    public ProfileDao? Profile { get; set; }
 }

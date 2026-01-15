@@ -1,5 +1,6 @@
 using Intact.BusinessLogic.Data;
 using Intact.BusinessLogic.Data.Config;
+using Intact.BusinessLogic.Repositories;
 using Intact.BusinessLogic.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

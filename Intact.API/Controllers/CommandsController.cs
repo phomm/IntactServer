@@ -15,7 +15,7 @@ public class CommandsController(ICommandsService commandsService) : ControllerBa
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCommandsAsync([FromQuery] int offset, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetCommandsAsync([FromQuery] uint? offset = 0, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -46,7 +46,7 @@ public class CommandsController(ICommandsService commandsService) : ControllerBa
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> PostCommandsAsync([FromBody] IEnumerable<PostCommand> commands, CancellationToken cancellationToken)
+    public async Task<IActionResult> PostCommandsAsync([FromBody] IEnumerable<BaseCommand> commands, CancellationToken cancellationToken)
     {
         try
         {

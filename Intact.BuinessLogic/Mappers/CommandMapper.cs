@@ -9,8 +9,6 @@ public class CommandMapper
     {
         return new Command
         {
-            RoomId = dao.RoomId,
-            ProfileId = dao.ProfileId,
             PlayerIndex = dao.PlayerIndex,
             CommandId = dao.CommandId,
             QueueNumber = dao.QueueNumber,
@@ -24,16 +22,16 @@ public class CommandMapper
         return daos.Select(Map);
     }
     
-    public static CommandDao Map(PostCommand postCommand, int roomId, int profileId, uint queueNumber)
+    public static CommandDao Map(BaseCommand baseCommand, int roomId, int profileId, uint queueNumber)
     {
         return new CommandDao
         {
             RoomId = roomId,
             ProfileId = profileId,
-            PlayerIndex = postCommand.PlayerIndex,
-            CommandId = postCommand.CommandId,
+            PlayerIndex = baseCommand.PlayerIndex,
+            CommandId = baseCommand.CommandId,
             QueueNumber = queueNumber,
-            Value = postCommand.Value
+            Value = baseCommand.Value
         };
     }
 }
