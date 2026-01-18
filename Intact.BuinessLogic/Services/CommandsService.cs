@@ -42,15 +42,15 @@ public class CommandsService(
         if (room == null)
             throw new NotFoundException("Room not found");
         
-        if (room.State != RoomState.InGame)
-            throw new BadRequestException("Room is not in game state");
+        if (room.State != RoomState.InGame && room.State != RoomState.Opened)
+            throw new BadRequestException("Room is not in game or opened state");
         
         var postCommandsList = commands.ToList();
         
         // Validate player numbers
         foreach (var command in postCommandsList)
         {
-            if (command.PlayerIndex >= MaxPlayers)
+            if (command.PlayerIndex > MaxPlayers)
                 throw new BadRequestException("Player number out of range");
         }
         
