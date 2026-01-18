@@ -67,7 +67,7 @@ public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAcc
     {
         var profileId = await profileAccessor.GetProfileIdAsync();
         if (await GetAvailabilityAsync(id, cancellationToken) &&
-            !await appDbContext.RoomMembers.Where(x => x.ProfileId == profileId).AnyAsync(cancellationToken))
+            !await appDbContext.RoomMembers.AnyAsync(x => x.ProfileId == profileId, cancellationToken))
         {
             await AddMemberAsync(profileId, id, cancellationToken);
             await appDbContext.SaveChangesAsync(cancellationToken);
@@ -91,10 +91,10 @@ public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAcc
     {
         var profileId = await profileAccessor.GetProfileIdAsync();
         await appDbContext.RoomMembers
-            .Where(x => x.ProfileId == profileId)
+            .Where(x => x.ProfileId == profileId && x.RoomId == id)
             .ExecuteDeleteAsync(cancellationToken);
     }
 
-    private Task<int> GetPlayersCount(int id, CancellationToken cancellationToken) => appDbContext.RoomMembers
-            .Select(x => x.RoomId == id).CountAsync(cancellationToken: cancellationToken);
+    private Task<int> GetPlayersCount(int id, CancellationToken cancellationToken) => 
+        appDbContext.RoomMembers.CountAsync(x => x.RoomId == id, cancellationToken);
 }
