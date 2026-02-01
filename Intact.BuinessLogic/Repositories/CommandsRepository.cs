@@ -19,8 +19,7 @@ public interface ICommandsRepository
 
 public class CommandsRepository(AppDbContext context) : ICommandsRepository
 {
-    public async Task<IEnumerable<CommandDao>> GetCommandsAsync(int roomId, uint offset,
-        CancellationToken cancellationToken)
+    public async Task<IEnumerable<CommandDao>> GetCommandsAsync(int roomId, uint offset, CancellationToken cancellationToken)
     {
         return await context.Set<CommandDao>()
             .Where(c => c.RoomId == roomId && c.QueueNumber >= offset)

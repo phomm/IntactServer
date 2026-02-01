@@ -27,5 +27,9 @@ public enum CommandType
     c_SetReplay = 22,
     c_ServerCmd = 23,
     c_ShotFailed = 24,
-    c_UnitSwap = 25
+    c_UnitSwap = 25,
+    c_ChangeMap = 26, 
+    c_SelectMap = 27, 
+    c_FightEnter = 28, 
+    c_BuyChanged = 29
 }

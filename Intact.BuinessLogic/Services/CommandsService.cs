@@ -45,18 +45,15 @@ public class CommandsService(
         if (room.State != RoomState.InGame && room.State != RoomState.Opened)
             throw new BadRequestException("Room is not in game or opened state");
         
-        var postCommandsList = commands.ToList();
-        
         // Validate player numbers
-        foreach (var command in postCommandsList)
+        if (commands.Any(c => c.PlayerIndex > MaxPlayers))
         {
-            if (command.PlayerIndex > MaxPlayers)
                 throw new BadRequestException("Player number out of range");
         }
         
         // Check if it's this player's turn
         var lastCommand = await commandsRepository.GetLastCommandAsync(roomId, cancellationToken);
-        if (lastCommand != null)
+        if (lastCommand != null  && commands.All(c => !c.IsPlayerTurnCommand()))
         {
             // If last command was EndTurn from another player, then it's valid for current player
             var isOtherPlayerEndTurn = lastCommand.CommandId == CommandType.c_EndTurn && 
@@ -74,7 +71,7 @@ public class CommandsService(
         
         // Map and add commands
         var commandDaos = new List<CommandDao>();
-        foreach (var postCommand in postCommandsList)
+        foreach (var postCommand in commands)
         {
             var commandDao = CommandMapper.Map(postCommand, roomId, profile.Id, nextQueueNumber);
             commandDaos.Add(commandDao);
