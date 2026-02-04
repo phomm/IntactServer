@@ -48,12 +48,12 @@ public class CommandsService(
         // Validate player numbers
         if (commands.Any(c => c.PlayerIndex > MaxPlayers))
         {
-                throw new BadRequestException("Player number out of range");
+            throw new BadRequestException("Player number out of range");
         }
         
         // Check if it's this player's turn
         var lastCommand = await commandsRepository.GetLastCommandAsync(roomId, cancellationToken);
-        if (lastCommand != null  && commands.All(c => !c.IsPlayerTurnCommand()))
+        if (lastCommand != null && commands.Any(c => c.IsPlayerTurnCommand()))
         {
             // If last command was EndTurn from another player, then it's valid for current player
             var isOtherPlayerEndTurn = lastCommand.CommandId == CommandType.c_EndTurn && 

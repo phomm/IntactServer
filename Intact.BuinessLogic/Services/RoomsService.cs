@@ -79,6 +79,7 @@ public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAcc
 
     private async Task AddMemberAsync(int profileId, int id, CancellationToken cancellationToken)
     {
+        await ExitAllRoomsAsync(profileId, cancellationToken);
         var roomMemberDao = new RoomMemberDao
         {
             RoomId = id,
@@ -92,6 +93,13 @@ public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAcc
         var profileId = await profileAccessor.GetProfileIdAsync();
         await appDbContext.RoomMembers
             .Where(x => x.ProfileId == profileId && x.RoomId == id)
+            .ExecuteDeleteAsync(cancellationToken);
+    }
+
+    private async Task ExitAllRoomsAsync(int profileId, CancellationToken cancellationToken)
+    {
+        await appDbContext.RoomMembers
+            .Where(x => x.ProfileId == profileId)
             .ExecuteDeleteAsync(cancellationToken);
     }
 
