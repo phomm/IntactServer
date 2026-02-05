@@ -65,12 +65,11 @@ public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAcc
 
     public async Task<bool> JoinAsync(int id, CancellationToken cancellationToken)
     {
-        var profileId = await profileAccessor.GetProfileIdAsync();
-        if (await GetAvailabilityAsync(id, cancellationToken) &&
-            !await appDbContext.RoomMembers.AnyAsync(x => x.ProfileId == profileId, cancellationToken))
+        if (await GetAvailabilityAsync(id, cancellationToken))            
         {
+            var profileId = await profileAccessor.GetProfileIdAsync();
             await AddMemberAsync(profileId, id, cancellationToken);
-            await appDbContext.SaveChangesAsync(cancellationToken);
+            await appDbContext.SaveChangesAsync(cancellationToken);            
             return true;
         }
 
@@ -79,13 +78,13 @@ public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAcc
 
     private async Task AddMemberAsync(int profileId, int id, CancellationToken cancellationToken)
     {
-        await ExitAllRoomsAsync(profileId, cancellationToken);
+        await ExitAllOtherRoomsAsync(id, profileId, cancellationToken);
         var roomMemberDao = new RoomMemberDao
         {
             RoomId = id,
             ProfileId = profileId,
         };
-        await appDbContext.RoomMembers.AddAsync(roomMemberDao, cancellationToken);
+        await appDbContext.RoomMembers.AddAsync(roomMemberDao, cancellationToken);        
     }
 
     public async Task ExitAsync(int id, CancellationToken cancellationToken)
@@ -94,13 +93,19 @@ public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAcc
         await appDbContext.RoomMembers
             .Where(x => x.ProfileId == profileId && x.RoomId == id)
             .ExecuteDeleteAsync(cancellationToken);
+        await appDbContext.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task ExitAllRoomsAsync(int profileId, CancellationToken cancellationToken)
+    private async Task ExitAllOtherRoomsAsync(int roomId, int profileId, CancellationToken cancellationToken)
     {
         await appDbContext.RoomMembers
             .Where(x => x.ProfileId == profileId)
             .ExecuteDeleteAsync(cancellationToken);
+        await appDbContext.SaveChangesAsync(cancellationToken);
+        // Close any rooms that have no members left after the deletions above
+        await appDbContext.Rooms
+            .Where(r => r.Id != roomId && !appDbContext.RoomMembers.Any(m => m.RoomId == r.Id))
+            .ExecuteUpdateAsync(c => c.SetProperty(x => x.State, RoomState.Archived), cancellationToken);
     }
 
     private Task<int> GetPlayersCount(int id, CancellationToken cancellationToken) => 
