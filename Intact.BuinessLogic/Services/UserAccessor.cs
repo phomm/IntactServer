@@ -12,9 +12,8 @@ public interface IUserAccessor
 
 public class UserAccessor(IHttpContextAccessor httpContextAccessor) : IUserAccessor
 {
-    public Guid GetUserId() =>
-        Guid.Parse(GetUserIdStr());
+    public Guid GetUserId() => Guid.Parse(GetUserIdStr());
 
-    public string GetUserIdStr() => httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)
+    public string GetUserIdStr() => httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier)
         ?? throw new AuthenticationException("HttpContext dont return user id!");
 }

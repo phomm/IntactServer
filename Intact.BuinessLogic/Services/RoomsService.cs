@@ -28,7 +28,7 @@ public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAcc
     {
         return RoomMapper.Map(await appDbContext.Rooms
             .Where(room => room.State == RoomState.Opened)
-            .GroupJoin(appDbContext.RoomMembers, room => room.Id, roomMember => roomMember.RoomId, 
+            .GroupJoin(appDbContext.RoomMembers.Where(m => !m.Archived), room => room.Id, roomMember => roomMember.RoomId,
                 (room, roomMembers) => new { room, roomMembers})
             .Where(x => x.roomMembers.Count() < MaxPlayers)
             .Select(x => x.room)
@@ -65,12 +65,11 @@ public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAcc
 
     public async Task<bool> JoinAsync(int id, CancellationToken cancellationToken)
     {
-        var profileId = await profileAccessor.GetProfileIdAsync();
-        if (await GetAvailabilityAsync(id, cancellationToken) &&
-            !await appDbContext.RoomMembers.Where(x => x.ProfileId == profileId).AnyAsync(cancellationToken))
+        if (await GetAvailabilityAsync(id, cancellationToken))            
         {
+            var profileId = await profileAccessor.GetProfileIdAsync();
             await AddMemberAsync(profileId, id, cancellationToken);
-            await appDbContext.SaveChangesAsync(cancellationToken);
+            await appDbContext.SaveChangesAsync(cancellationToken);            
             return true;
         }
 
@@ -79,22 +78,37 @@ public class RoomsService(AppDbContext appDbContext, IProfileAccessor profileAcc
 
     private async Task AddMemberAsync(int profileId, int id, CancellationToken cancellationToken)
     {
+        await ExitAllOtherRoomsAsync(id, profileId, cancellationToken);
         var roomMemberDao = new RoomMemberDao
         {
             RoomId = id,
             ProfileId = profileId,
+            Archived = false,
         };
-        await appDbContext.RoomMembers.AddAsync(roomMemberDao, cancellationToken);
+        await appDbContext.RoomMembers.AddAsync(roomMemberDao, cancellationToken);        
     }
 
     public async Task ExitAsync(int id, CancellationToken cancellationToken)
     {
         var profileId = await profileAccessor.GetProfileIdAsync();
         await appDbContext.RoomMembers
-            .Where(x => x.ProfileId == profileId)
-            .ExecuteDeleteAsync(cancellationToken);
+            .Where(x => x.ProfileId == profileId && x.RoomId == id)
+            .ExecuteUpdateAsync(c => c.SetProperty(x => x.Archived, true), cancellationToken);
+        await appDbContext.SaveChangesAsync(cancellationToken);
     }
 
-    private Task<int> GetPlayersCount(int id, CancellationToken cancellationToken) => appDbContext.RoomMembers
-            .Select(x => x.RoomId == id).CountAsync(cancellationToken: cancellationToken);
+    private async Task ExitAllOtherRoomsAsync(int roomId, int profileId, CancellationToken cancellationToken)
+    {
+        await appDbContext.RoomMembers
+            .Where(x => x.ProfileId == profileId)
+            .ExecuteUpdateAsync(c => c.SetProperty(x => x.Archived, true), cancellationToken);
+        await appDbContext.SaveChangesAsync(cancellationToken);
+        // Close any rooms that have no members left after the deletions above
+        await appDbContext.Rooms
+            .Where(r => r.Id != roomId && !appDbContext.RoomMembers.Any(m => m.RoomId == r.Id && !m.Archived))
+            .ExecuteUpdateAsync(c => c.SetProperty(x => x.State, RoomState.Archived), cancellationToken);
+    }
+
+    private Task<int> GetPlayersCount(int id, CancellationToken cancellationToken) => 
+        appDbContext.RoomMembers.CountAsync(x => x.RoomId == id && !x.Archived, cancellationToken);
 }

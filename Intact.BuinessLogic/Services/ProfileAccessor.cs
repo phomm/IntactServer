@@ -1,5 +1,6 @@
 using System.Security.Authentication;
 using Intact.BusinessLogic.Data;
+using Intact.BusinessLogic.Data.Enums;
 using Intact.BusinessLogic.Data.RedisCache;
 using Intact.BusinessLogic.Mappers;
 using Intact.BusinessLogic.Models;
@@ -20,9 +21,14 @@ public class ProfileAccessor(IHttpContextAccessor httpContextAccessor, AppDbCont
     
     public async Task<Profile> GetProfileAsync()
     {
-        return await redisCache.GetAsync<Profile>(CacheSet, GetUserIdStr())
-            ?? new ProfileMapper().Map(await context.Profiles.OrderByDescending(x => x.LastPlayed).FirstOrDefaultAsync() 
-                ?? throw new AuthenticationException());
+        var userId = GetUserId();
+        return await redisCache.GetAsync<Profile>(CacheSet, userId.ToString())
+               ?? new ProfileMapper().Map(
+                   await context.Profiles
+                   .Where(x => x.UserId == userId && x.State == ProfileState.Active)
+                   .OrderByDescending(x => x.LastPlayed)
+                   .FirstOrDefaultAsync() 
+                                          ?? throw new AuthenticationException());
     }
 
     public async Task<int> GetProfileIdAsync() => (await GetProfileAsync()).Id;
