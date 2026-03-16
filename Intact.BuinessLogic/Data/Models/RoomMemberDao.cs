@@ -9,4 +9,5 @@ public class RoomMemberDao
     public int RoomId { get; init; }
 
     public int ProfileId { get; init; }
+    public bool Archived { get; set; } = false;
 }

@@ -49,8 +49,8 @@ public class CommandsRepository(AppDbContext context) : ICommandsRepository
     public async Task<int?> GetPlayerRoomIdAsync(int profileId, CancellationToken cancellationToken)
     {
         var roomMember = await context.RoomMembers
-            .FirstOrDefaultAsync(rm => rm.ProfileId == profileId, cancellationToken);
-        
+            .FirstOrDefaultAsync(rm => rm.ProfileId == profileId && !rm.Archived, cancellationToken);
+
         return roomMember?.RoomId;
     }
 }

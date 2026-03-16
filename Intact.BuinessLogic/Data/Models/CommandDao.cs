@@ -20,5 +20,5 @@ public record CommandDao
     
     public string? Value { get; set; }
     
-    public CommandError Error { get; set; } = CommandError.NoError;
+    public CommandError Error { get; set; } = CommandError.AllOk;
 }
